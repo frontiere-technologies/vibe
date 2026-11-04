@@ -13,7 +13,7 @@ Read also the ./README.md file. For the vibe-coding environment setup (Superpowe
 
 ## Commands
 
-Not defined yet: there is no code in `sources/` yet. When the first service is added, fill in this section from `vibe/AGENTS.template.md`.
+Not defined yet: there is no code in `sources/` yet.
 
 ## Stack
 

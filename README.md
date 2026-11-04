@@ -29,7 +29,7 @@ docs/second-brain/
 
 ## Install
 
-> For the full vibe-coding environment (Superpowers, agents, skills, MCP servers, `AGENTS.md` template), see [`vibe/README.md`](vibe/README.md).
+> For the full vibe-coding environment (Superpowers, agents, skills, MCP servers, `AGENTS.md`), see [`vibe/README.md`](vibe/README.md).
 
 **Requires:** [Claude Code](https://claude.ai/code), [Codex](https://openai.com/codex), [Antigravity](https://antigravity.google), [OpenCode](https://opencode.ai), [Gemini CLI](https://github.com/google-gemini/gemini-cli), or any agent that reads a config file.
 

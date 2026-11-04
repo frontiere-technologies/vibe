@@ -12,10 +12,10 @@ This guide walks through setting up a working environment for Vibe Coding on thi
 
 1. [ ] Install prerequisites (`git`, `gh`, an AI coding CLI)
 2. [ ] Install the mandatory Superpowers plugin
-3. [ ] Install project agents into `.claude/agents/` or equivalent
+3. [ ] Install project agents (subagents) into each CLI's agents folder
 4. [ ] Install project skills into `.agents/skills/`
 5. [ ] Verify MCP servers in `.mcp.json`
-6. [ ] Set up the AI instructions file for this repo (`AGENTS.md`), starting from `vibe/AGENTS.template.md`
+6. [ ] Set up the AI instructions file for this repo (`AGENTS.md`)
 
 ---
 
@@ -26,14 +26,14 @@ This guide walks through setting up a working environment for Vibe Coding on thi
 - Optional: [`markitdown`](https://github.com/microsoft/markitdown) (`pip install 'markitdown[all]'`), to ingest `.docx`, `.pptx`, `.xlsx` and other binary files into the second brain (see `docs/second-brain/SCHEMA.md`)
 - Optional: [`uv`](https://docs.astral.sh/uv/), if the project has Python code (e.g. e2e tests in `sources/tests/e2e/`) — run it through `uv run …` rather than invoking `python`/`pip` directly
 
-| Tool | Config dir | Instructions file | Skills |
-|---|---|---|---|
-| Claude Code | `.claude/` | `CLAUDE.md` (→ `@AGENTS.md`) | `.claude/skills/` (symlink to `.agents/skills/`) |
-| OpenAI Codex | `.codex/` | `AGENTS.md` | `.agents/skills/` |
-| Google Antigravity (`agy`) | `.agents/` | `AGENTS.md` | `.agents/skills/` |
-| OpenCode | `.opencode/` | `AGENTS.md` | `.agents/skills/` |
-| GitHub Copilot | `.github/` | `AGENTS.md` or `COPILOT-INSTRUCTIONS.md` | own folder — check its docs |
-| Gemini CLI | `.gemini/` | `GEMINI.md` (→ `@AGENTS.md`) | own folder — check its docs |
+| Tool | Config dir | Instructions file | Skills | Agents (subagents) |
+|---|---|---|---|---|
+| Claude Code | `.claude/` | `CLAUDE.md` (→ `@AGENTS.md`) | `.claude/skills/` (symlink to `.agents/skills/`) | `.claude/agents/<name>.md` (Markdown + YAML frontmatter) |
+| OpenAI Codex | `.codex/` | `AGENTS.md` | `.agents/skills/` | `.codex/agents/<name>.toml` (TOML: `name`, `description`, `developer_instructions`) |
+| Google Antigravity (`agy`) | `.agents/` | `AGENTS.md` | `.agents/skills/` | check its docs |
+| OpenCode | `.opencode/` | `AGENTS.md` | `.agents/skills/` | `.opencode/agents/<name>.md` (Markdown + YAML frontmatter, `mode: subagent`) |
+| GitHub Copilot | `.github/` | `AGENTS.md` or `COPILOT-INSTRUCTIONS.md` | own folder — check its docs | own folder — check its docs |
+| Gemini CLI | `.gemini/` | `GEMINI.md` (→ `@AGENTS.md`) | own folder — check its docs | own folder — check its docs |
 
 Each tool reads its own instructions file at startup. Keep one canonical file — `AGENTS.md` at the repo root, next to `README.md` — and make every other instructions file a one-line import of it (`CLAUDE.md` and `GEMINI.md` in this repo contain just `@AGENTS.md`), instead of duplicating content.
 
@@ -73,7 +73,9 @@ Use this sequence as the default for features and bug fixes; skip steps only for
 
 ## 3. Install project agents
 
-Claude Code agents go in `.claude/agents/` (or the equivalent config dir from the table in step 1). None are installed in this repo yet; the reviewers used by the [quality review process](#quality-review-process) are:
+Agents (subagents) are specialised assistants the main agent delegates to, each with its own instructions and context. Unlike skills, there is no shared format across CLIs: each tool reads its own folder and format (see the *Agents* column in the table in step 1), so an agent needs one definition per CLI you use.
+
+The reviewers used by the [quality review process](#quality-review-process) are `architect-reviewer`, `code-reviewer` and `ui-ux-tester`. None are installed in this repo yet. Their reference definitions come from the [VoltAgent subagents collection](https://github.com/VoltAgent/awesome-claude-code-subagents/tree/main/categories), written in Claude Code's format, so for Claude Code they can be copied as they are:
 
 ```bash
 mkdir -p .claude/agents
@@ -82,9 +84,9 @@ curl -sL https://raw.githubusercontent.com/VoltAgent/awesome-claude-code-subagen
 curl -sL https://raw.githubusercontent.com/VoltAgent/awesome-claude-code-subagents/refs/heads/main/categories/04-quality-security/ui-ux-tester.md -o .claude/agents/ui-ux-tester.md
 ```
 
-Do not install the [VoltAgent subagents marketplace](https://github.com/VoltAgent/awesome-claude-code-subagents/tree/main/categories) as a whole — copy only the agent definitions actually needed into the repository.
+For the other CLIs, convert each definition to the tool's format: keep the name, description and instructions (the Markdown body), and map the frontmatter to the fields that tool expects. An AI coding CLI can do the conversion for you.
 
-For other CLIs, equivalent agent definitions go in the tool-specific config directory listed in the table in step 1.
+Do not install a subagent collection as a whole — copy only the agent definitions actually needed into the repository.
 
 ---
 
@@ -131,7 +133,7 @@ GitHub, Supabase, Mail, Calendar, Google Drive and others may be useful for your
 - **Stack** — a one-line summary of the tech stack, so the assistant doesn't have to infer it from the manifests.
 - **The second brain** — how to use the wiki as knowledge, and where its maintenance rules are.
 
-Start from [`AGENTS.template.md`](AGENTS.template.md) in this folder: copy it to the repo root as `AGENTS.md`, fill in the `<placeholders>` for **Commands** and **Stack**, and keep its other sections — *Layout*, *Using the second brain*, *Tasks as checkboxes* and *Commit AI-tooling folders to Git* — verbatim: they are project-independent conventions, not examples to adapt.
+To start a new repo, copy this repo's `AGENTS.md` to its root, fill in **Commands** and **Stack** once the project has code, and keep the other sections — *Layout*, *Using the second brain*, *Tasks as checkboxes* and *Commit AI-tooling folders to Git* — as they are: they are project-independent conventions, not examples to adapt.
 
 NOTE:
 - 27/Jun/2026: The *Tasks as checkboxes* convention still does not work reliably. Sometimes the assistant forgets to tick the boxes.
