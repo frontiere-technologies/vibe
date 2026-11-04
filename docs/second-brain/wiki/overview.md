@@ -12,6 +12,6 @@ last_updated: ""
 
 No sources ingested yet. Add your first source with:
 
-```bash
-python tools/ingest.py raw/your-source.md
+```
+ingest docs/second-brain/raw/your-source.md
 ```

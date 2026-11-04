@@ -4,6 +4,6 @@ Append-only chronological record of all operations.
 
 Format: `## [YYYY-MM-DD] <operation> | <title>`
 
-Parse recent entries: `grep "^## \[" wiki/log.md | tail -10`
+Parse recent entries: `grep "^## \[" docs/second-brain/wiki/log.md | tail -10`
 
 ---

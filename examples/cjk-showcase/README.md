@@ -11,4 +11,4 @@ The agent naturally supports processing Chinese content. With the CJK query bug 
 - `wiki/entities/杨帆.md`: Auto-extracted Chinese entity page.
 - `wiki/concepts/AI转型.md`: Auto-extracted Chinese concept page.
 
-Try running `python tools/query.py "关于AI转型的建议"` from the root directory after moving these to your main knowledge base to see how semantic extraction and keyword matching behave in non-English contexts!
+Try asking the agent `query: 关于AI转型的建议` after moving these into `docs/second-brain/` (keeping the `raw/` and `wiki/` structure) to see how semantic extraction and keyword matching behave in non-English contexts!

@@ -4,44 +4,48 @@
 
 > Based on [SamurAIGPT/llm-wiki-agent](https://github.com/SamurAIGPT/llm-wiki-agent) (MIT).
 
-**A coding agent skill.** Drop source documents into `raw/` and tell the agent to ingest them — it reads them, extracts knowledge, and builds a persistent interlinked wiki. Every new source makes the wiki richer. You never write it.
+**A coding agent skill.** Drop source documents into `docs/second-brain/raw/` and tell the agent to ingest them — it reads them, extracts knowledge, and builds a persistent interlinked wiki. Every new source makes the wiki richer. You never write it.
 
 > Most knowledge tools make you search your own notes. This one reads everything you've collected and writes a structured wiki that compounds over time — cross-references already built, contradictions already flagged, synthesis already done.
 
 ```
-ingest raw/papers/attention-is-all-you-need.md
+ingest docs/second-brain/raw/papers/attention-is-all-you-need.md
 ```
 
 ```
-wiki/
-├── index.md          catalog of all pages — updated on every ingest
-├── log.md            append-only record of every operation
-├── overview.md       living synthesis across all sources
-├── sources/          one summary page per source document
-├── entities/         people, companies, projects — auto-created
-├── concepts/         ideas, frameworks, methods — auto-created
-└── syntheses/        query answers filed back as wiki pages
-graph/
-├── graph.json        persistent node/edge data (SHA256-cached)
-└── graph.html        interactive vis.js visualization — open in any browser
+docs/second-brain/
+├── SCHEMA.md             wiki rules and workflows — read on demand
+├── raw/                  your source documents — drop files here
+├── wiki/
+│   ├── index.md          catalog of all pages — updated on every ingest
+│   ├── log.md            append-only record of every operation
+│   ├── overview.md       living synthesis across all sources
+│   ├── sources/          one summary page per source document
+│   ├── entities/         people, companies, projects — auto-created
+│   ├── concepts/         ideas, frameworks, methods — auto-created
+│   └── syntheses/        query answers filed back as wiki pages
+└── reports/              saved health and lint reports, one file per date
 ```
 
 ## Install
 
-**Requires:** [Claude Code](https://claude.ai/code), [Codex](https://openai.com/codex), [Gemini CLI](https://github.com/google-gemini/gemini-cli), or any agent that reads a config file.
+> For the full vibe-coding environment (Superpowers, agents, skills, MCP servers, `AGENTS.md` template), see [`vibe/README.md`](vibe/README.md).
+
+**Requires:** [Claude Code](https://claude.ai/code), [Codex](https://openai.com/codex), [Antigravity](https://antigravity.google), [OpenCode](https://opencode.ai), [Gemini CLI](https://github.com/google-gemini/gemini-cli), or any agent that reads a config file.
 
 ```bash
 git clone https://github.com/stefanutti/vibe.git
 cd vibe
 ```
 
-Open in your agent — no API key or Python setup needed:
+Open in your agent — no API key or Python setup needed (wiki rules are in `docs/second-brain/SCHEMA.md`, read on demand):
 
 ```bash
-claude      # reads CLAUDE.md + .claude/commands/ (slash commands available)
-codex       # reads AGENTS.md
-opencode    # reads AGENTS.md
-gemini      # reads GEMINI.md
+claude      # reads CLAUDE.md (→ AGENTS.md) + .claude/skills (→ .agents/skills)
+codex       # reads AGENTS.md + .agents/skills
+agy         # reads AGENTS.md + .agents/skills
+opencode    # reads AGENTS.md + .agents/skills
+gemini      # reads GEMINI.md (→ AGENTS.md)
 ```
 
 ## Usage
@@ -49,25 +53,34 @@ gemini      # reads GEMINI.md
 All agents understand natural language and shorthand triggers:
 
 ```
-ingest raw/papers/my-paper.md              # ingest a markdown source
-ingest report.pdf                          # auto-converts to .md, then ingests
-ingest slides.pptx notes.docx              # batch, mixed formats
+ingest docs/second-brain/raw/papers/my-paper.md              # ingest a markdown source
+ingest report.pdf                          # PDFs are read directly
 query: what are the main themes?           # synthesize answer from wiki pages
+health                                     # fast structural check (empty pages, index, log)
 lint                                       # find orphans, contradictions, gaps
-build graph                                # build graph.html from all wikilinks
 ```
 
 Plain English works too:
 ```
-"Ingest this paper: raw/papers/llama2.md"
+"Ingest this paper: docs/second-brain/raw/papers/llama2.md"
 "What does the wiki say about attention mechanisms?"
 "Check for contradictions across sources"
-"Build the knowledge graph and tell me the most connected nodes"
 ```
 
-**Claude Code** also provides `/wiki-ingest`, `/wiki-query`, `/wiki-lint`, `/wiki-graph` as slash commands (via `.claude/commands/`). These are Claude Code-specific — other agents use the natural language triggers above, which work identically.
+The workflows are also packaged as [Agent Skills](https://agentskills.io) in `.agents/skills/` — one folder shared by every agent (`.claude/skills` is a symlink to it):
 
-Works with markdown, PDF, DOCX, PPTX, XLSX, HTML, TXT, CSV, JSON, XML, RST, EPUB, and more. Non-markdown files are auto-converted via [markitdown](https://github.com/microsoft/markitdown) at ingest time — no separate step needed.
+| Agent | How to invoke |
+|---|---|
+| Claude Code | `/wiki-ingest`, `/wiki-query`, `/wiki-health`, `/wiki-lint` |
+| Antigravity (`agy`) | same slash commands |
+| Codex | `$wiki-ingest` (or pick from `/skills`) |
+| OpenCode | ask in natural language — the agent loads the matching skill |
+
+Every agent can also pick a skill on its own when your request matches it, and the natural language triggers above always work. The `/wiki-…` examples below use the slash form.
+
+> On Windows, clone with `git config core.symlinks true` (and Developer Mode enabled) so `.claude/skills` is a real symlink.
+
+Works with markdown, PDF and other text formats directly. Office and media files (DOCX, PPTX, XLSX, EPUB, audio) need a markdown version first — see [Multi-Format Ingest](#multi-format-ingest).
 
 ## What You Get
 
@@ -77,11 +90,9 @@ Works with markdown, PDF, DOCX, PPTX, XLSX, HTML, TXT, CSV, JSON, XML, RST, EPUB
 
 **Concept pages** — auto-created for every key idea or framework. Cross-referenced to every source that discusses them.
 
-**Living overview** — `wiki/overview.md` is revised on every ingest to reflect the current synthesis across everything you've read.
+**Living overview** — `docs/second-brain/wiki/overview.md` is revised on every ingest to reflect the current synthesis across everything you've read.
 
 **Contradiction flags** — when a new source contradicts an existing claim, it's flagged at ingest time, not buried until query time.
-
-**Knowledge graph** — `graph.html` shows every wiki page as a node, every `[[wikilink]]` as an edge, and Claude-inferred implicit relationships as dotted edges. Community detection clusters related topics.
 
 **Lint reports** — orphan pages, broken links, missing entity pages, data gaps with suggested sources to fill them.
 
@@ -92,9 +103,9 @@ Works with markdown, PDF, DOCX, PPTX, XLSX, HTML, TXT, CSV, JSON, XML, RST, EPUB
 Going deep on a topic over weeks — reading papers, articles, reports.
 
 ```
-/wiki-ingest raw/papers/attention-is-all-you-need.md
-/wiki-ingest raw/papers/llama2.md
-/wiki-ingest raw/papers/rag-survey.md
+/wiki-ingest docs/second-brain/raw/papers/attention-is-all-you-need.md
+/wiki-ingest docs/second-brain/raw/papers/llama2.md
+/wiki-ingest docs/second-brain/raw/papers/rag-survey.md
 
 # Wiki builds entity pages (Meta AI, Google Brain) and
 # concept pages (Attention, RLHF, Context Window) automatically.
@@ -115,15 +126,13 @@ By the end you have a structured, interlinked reference — not a folder of PDFs
 File each chapter as you go. Build out pages for characters, themes, arguments.
 
 ```
-/wiki-ingest raw/book/chapter-01.md
-/wiki-ingest raw/book/chapter-02.md
+/wiki-ingest docs/second-brain/raw/book/chapter-01.md
+/wiki-ingest docs/second-brain/raw/book/chapter-02.md
 
 # Wiki creates entity and theme pages automatically.
 
 /wiki-query "How has the protagonist's motivation evolved?"
 /wiki-query "What contradictions exist in the author's argument so far?"
-
-/wiki-graph   # → graph.html shows every character/theme and how they connect
 ```
 
 Think fan wikis like Tolkien Gateway — built as you read, with the agent doing all the cross-referencing.
@@ -135,9 +144,9 @@ Think fan wikis like Tolkien Gateway — built as you read, with the agent doing
 Track goals, health, habits, self-improvement — file journal entries, articles, podcast notes.
 
 ```
-/wiki-ingest raw/journal/2026-01-week1.md
-/wiki-ingest raw/articles/huberman-sleep-protocol.md
-/wiki-ingest raw/articles/atomic-habits-summary.md
+/wiki-ingest docs/second-brain/raw/journal/2026-01-week1.md
+/wiki-ingest docs/second-brain/raw/articles/huberman-sleep-protocol.md
+/wiki-ingest docs/second-brain/raw/articles/atomic-habits-summary.md
 
 /wiki-query "What patterns show up in my journal entries about energy?"
 /wiki-query "What habits have I tried and what was the outcome?"
@@ -152,9 +161,9 @@ The wiki builds a structured picture over time. Concepts like "Sleep", "Exercise
 Feed in meeting transcripts, project docs, customer calls.
 
 ```
-/wiki-ingest raw/meetings/q1-planning-transcript.md
-/wiki-ingest raw/docs/product-roadmap-2026.md
-/wiki-ingest raw/calls/customer-interview-acme.md
+/wiki-ingest docs/second-brain/raw/meetings/q1-planning-transcript.md
+/wiki-ingest docs/second-brain/raw/docs/product-roadmap-2026.md
+/wiki-ingest docs/second-brain/raw/calls/customer-interview-acme.md
 
 /wiki-query "What feature requests have come up most across customer calls?"
 /wiki-query "What decisions were made in Q1 and what was the rationale?"
@@ -173,8 +182,8 @@ The wiki stays current because the agent does the maintenance no one wants to do
 Track a company, market, or technology over time.
 
 ```
-/wiki-ingest raw/competitors/openai-announcements.md
-/wiki-ingest raw/market/ai-funding-report-q1.md
+/wiki-ingest docs/second-brain/raw/competitors/openai-announcements.md
+/wiki-ingest docs/second-brain/raw/market/ai-funding-report-q1.md
 
 /wiki-query "How do OpenAI and Anthropic differ on safety approach?"
 /wiki-query "Which companies announced multimodal models in the last 6 months?"
@@ -182,24 +191,18 @@ Track a company, market, or technology over time.
 # → agent shows the answer, then asks if you want to save it as a synthesis page
 ```
 
-## The Graph
+## AGENTS.md and SCHEMA.md
 
-Two-pass build:
+The instructions are split so that agents only load what they need:
 
-1. **Deterministic** — parses all `[[wikilinks]]` across wiki pages → edges tagged `EXTRACTED`
-2. **Semantic** — agent infers implicit relationships not captured by wikilinks → edges tagged `INFERRED` (with confidence score) or `AMBIGUOUS`
+- **`AGENTS.md`** — loaded on every interaction. Short: the repository layout, how to use the wiki as knowledge while coding (read `docs/second-brain/wiki/index.md`, then only the relevant pages), and where the maintenance rules are. `CLAUDE.md` and `GEMINI.md` contain only `@AGENTS.md`, which Claude Code and Gemini CLI resolve as an import.
+- **`docs/second-brain/SCHEMA.md`** — read only for wiki work (ingest, query, health, lint): directory layout, page formats, templates, workflows, naming conventions, index and log format. This is the file to edit to customize the wiki for your domain. It is deliberately not named `AGENTS.md`/`CLAUDE.md`, so no agent loads it automatically when reading wiki files.
 
-Louvain community detection clusters nodes by topic. SHA256 cache means only changed pages are reprocessed. Output is a self-contained `graph.html` — no server, opens in any browser.
-
-## CLAUDE.md / AGENTS.md
-
-The schema file tells the agent how to maintain the wiki — page formats, ingest/query/lint/graph workflows, naming conventions. This is the key config file. Edit it to customize behavior for your domain.
-
-| Agent | Schema file |
-|---|---|
-| Claude Code | `CLAUDE.md` |
-| Codex / OpenCode | `AGENTS.md` |
-| Gemini CLI | `GEMINI.md` |
+| Agent | Always reads | Reads for wiki work |
+|---|---|---|
+| Claude Code | `CLAUDE.md` → `AGENTS.md` | skills → `SCHEMA.md` |
+| Codex / OpenCode / Antigravity | `AGENTS.md` | skills → `SCHEMA.md` |
+| Gemini CLI | `GEMINI.md` → `AGENTS.md` | `SCHEMA.md` (as `AGENTS.md` instructs) |
 
 ## What Makes This Different from RAG
 
@@ -220,11 +223,11 @@ If you want to keep the LLM Wiki Agent repository separate from your main person
 1. Keep your working agent repository at e.g., `~/vibe`
 2. Create a symlink from your main Obsidian vault:
    ```bash
-   ln -sfn ~/vibe/wiki ~/your-obsidian-vault/wiki
+   ln -sfn ~/vibe/docs/second-brain/wiki ~/your-obsidian-vault/wiki
    ```
-3. Use the [Obsidian Web Clipper](https://obsidian.md/clipper) or write directly to `raw/` in the agent repo to queue items for ingestion.
+3. Use the [Obsidian Web Clipper](https://obsidian.md/clipper) or write directly to `docs/second-brain/raw/` in the agent repo to queue items for ingestion.
 
-> **Note:** If you ever move your local repo directory, remember to update the symlink, otherwise the `wiki/` directory will appear missing in Obsidian.
+> **Note:** If you ever move your local repo directory, remember to update the symlink, otherwise the `docs/second-brain/wiki/` directory will appear missing in Obsidian.
 
 ### Recommended .obsidian Config
 - **Graph View:** Filter out `index.md` and `log.md` (e.g. `-file:index.md -file:log.md`) to avoid them becoming gravity wells in your Obsidian graph.
@@ -232,71 +235,34 @@ If you want to keep the LLM Wiki Agent repository separate from your main person
 
 ## Multi-Format Ingest
 
-Drop any supported file directly into `ingest` — no separate conversion step needed:
+The agent reads these directly:
+`.md` `.pdf` `.txt` `.html` `.htm` `.csv` `.tsv` `.json` `.xml` `.yaml` `.yml` `.rst` `.ipynb`
 
-```bash
-# These all work — auto-converted at ingest time
+```
 ingest report.pdf
-ingest meeting-notes.docx
-ingest slides.pptx
-ingest data.xlsx
 ingest page.html
-ingest raw/mixed-folder/          # recursively finds all supported files
 ```
 
-**Supported formats:**
-`.md` `.pdf` `.docx` `.pptx` `.xlsx` `.xls` `.html` `.htm` `.txt` `.csv` `.json` `.xml` `.rst` `.rtf` `.epub` `.ipynb` `.yaml` `.yml` `.tsv` `.wav` `.mp3`
-
-Non-markdown files are auto-converted via [markitdown](https://github.com/microsoft/markitdown). Use `--no-convert` to skip auto-conversion and process only `.md` files.
-
-### arXiv Papers (Advanced)
-
-For arXiv papers, use `tools/pdf2md.py` for higher-fidelity conversion:
+Binary office and media formats (`.docx`, `.pptx`, `.xlsx`, `.xls`, `.epub`, `.rtf`, `.wav`, `.mp3`) must be converted to markdown first. If [markitdown](https://github.com/microsoft/markitdown) is installed (`pip install 'markitdown[all]'`), the agent converts them for you:
 
 ```bash
-python tools/pdf2md.py 2401.12345                      # by arXiv ID
-python tools/pdf2md.py https://arxiv.org/abs/2401.12345 # by URL
-python tools/pdf2md.py paper.pdf --backend marker       # complex multi-column PDFs
+markitdown docs/second-brain/raw/meeting-notes.docx -o docs/second-brain/raw/meeting-notes.md
 ```
 
-Then ingest the resulting `.md`:
-```
-ingest raw/papers/my-paper.md
-```
-
-### Batch Directory Conversion (Advanced)
-
-To pre-convert an entire directory (useful for bulk imports):
-```bash
-python tools/file_to_md.py --input_dir raw/imports/
-python tools/file_to_md.py --input_dir raw/imports/ --delete_source  # remove originals
-```
-
-### Optional Dependencies
-
-| Package | Install | Used for |
-|---|---|---|
-| [markitdown](https://github.com/microsoft/markitdown) | `pip install markitdown` | Auto-conversion of non-.md files (required for multi-format ingest) |
-| [arxiv2md](https://github.com/ryansingman/arxiv2md) | `pip install arxiv2markdown` | arXiv papers via structured source |
-| [Marker](https://github.com/VikParuchuri/marker) | `pip install marker-pdf` | Complex academic PDFs with multi-column layouts |
-| [PyMuPDF4LLM](https://github.com/pymupdf/RAG) | `pip install pymupdf4llm` | Fast PDF extraction (no GPU needed) |
-| [tqdm](https://github.com/tqdm/tqdm) | `pip install tqdm` | Progress bar for batch directory conversion |
+Otherwise, export the file to markdown or PDF yourself and ingest that.
 
 ## Tips
 
-- Just drop files (PDF, DOCX, etc.) into `raw/` and `ingest` them — conversion is automatic
-- For arXiv papers, `tools/pdf2md.py` gives higher-fidelity output than generic markitdown conversion
+- Just drop files (markdown, PDF, text) into `docs/second-brain/raw/` and `ingest` them
 - Query answers are shown first — the agent then asks if you want to file them as synthesis pages. Your explorations compound just like ingested sources
 - The wiki is a git repo — version history for free
-- Standalone Python scripts in `tools/` work without a coding agent (require `ANTHROPIC_API_KEY`)
 
 ## Tech Stack
 
-NetworkX + Louvain + Claude + vis.js. No server, no database, runs entirely locally. Everything is plain markdown files.
+Your coding agent (Claude Code, Codex, Gemini CLI, …) plus plain markdown files. No scripts, no server, no database.
 
 ## Related
 
-- [graphify](https://github.com/safishamsi/graphify) — graph-based knowledge extraction skill (inspiration for the graph layer)
 - [Vannevar Bush's Memex (1945)](https://en.wikipedia.org/wiki/Memex) — the original vision this resembles
 
 ## License
