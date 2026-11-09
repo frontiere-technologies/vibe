@@ -6,16 +6,95 @@ This guide walks through setting up a working environment for Vibe Coding on thi
 
 ![Vibe coding workflow: reviews and ideas become markdown action items, then go through pre-processing and the Superpowers cycle](vibe-coding-workflow.jpg)
 
+Once set up, try it hands-on with the [tutorial](tutorial/README.md).
+
 ---
 
 ## Setup checklist
 
+0. [ ] Bootstrap the repository (new project from this template, or an existing repository)
 1. [ ] Install prerequisites (`git`, `gh`, an AI coding CLI)
-2. [ ] Install the mandatory Superpowers plugin
+2. [ ] Install the highly recommended Superpowers plugin
 3. [ ] Install project agents (subagents) into each CLI's agents folder
 4. [ ] Install project skills into `.agents/skills/`
 5. [ ] Verify MCP servers in `.mcp.json`
 6. [ ] Set up the AI instructions file for this repo (`AGENTS.md`)
+7. [ ] Verify the setup
+
+---
+
+## 0. Bootstrap the repository
+
+Pick the path that matches your case, then continue with step 1.
+
+### A. New project from this template
+
+```bash
+git clone https://github.com/frontiere-technologies/vibe.git my-project
+cd my-project
+rm -rf .git && git init    # optional: start with a fresh history
+```
+
+Then remove what belongs to the template, not to your project:
+
+- `vibe/tutorial/` — hands-on lessons and their sample source (a 3.7 MB PDF); delete it once you no longer need it
+- the root `README.md` — it describes the template: replace it with your project's own README, and link this guide from it
+- `LICENSE` — replace it with your project's licence
+- `sources/` — keep the service-based layout or replace it with your project's folders (see *Layout* in `AGENTS.md`)
+
+Keep `THIRD_PARTY_NOTICES.md`. The second brain and the `wiki-*` skills derive from [SamurAIGPT/llm-wiki-agent](https://github.com/SamurAIGPT/llm-wiki-agent), released under the MIT licence, whose only condition is that its copyright and licence notice stay in every copy. Your project can use any licence; the notice file is what keeps it compliant.
+
+### B. Existing repository
+
+Clone this template next to the target repository, then run from the root of the target repository:
+
+```bash
+TEMPLATE=../vibe    # path to the cloned template
+
+# Instructions files (cp -n keeps files that already exist)
+cp -n "$TEMPLATE"/AGENTS.md "$TEMPLATE"/CLAUDE.md "$TEMPLATE"/GEMINI.md .
+
+# Shared skills, and the symlink Claude Code reads them through
+mkdir -p .agents .claude
+cp -R "$TEMPLATE"/.agents/skills .agents/
+ln -s ../.agents/skills .claude/skills
+
+# Claude Code project settings (enables Superpowers)
+cp -n "$TEMPLATE"/.claude/settings.json .claude/
+
+# Empty second brain: rules plus wiki skeleton, no sources
+mkdir -p docs/second-brain/raw docs/second-brain/reports docs/second-brain/wiki
+cp "$TEMPLATE"/docs/second-brain/SCHEMA.md docs/second-brain/
+cp "$TEMPLATE"/docs/second-brain/wiki/index.md "$TEMPLATE"/docs/second-brain/wiki/log.md "$TEMPLATE"/docs/second-brain/wiki/overview.md docs/second-brain/wiki/
+touch docs/second-brain/raw/.gitkeep docs/second-brain/reports/.gitkeep
+
+# Licence notice for the second brain and the wiki skills (required, see below)
+cp -n "$TEMPLATE"/THIRD_PARTY_NOTICES.md .
+
+# Optional: keep this guide in the repository (without the tutorial and its sample PDF)
+cp -R "$TEMPLATE"/vibe . && rm -rf vibe/tutorial
+```
+
+`cp -n` does not overwrite: if the repository already had `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, `.claude/settings.json` or `THIRD_PARTY_NOTICES.md`, the template version is not copied (on macOS `cp -n` then exits with status 1; that is expected). Merge them by hand:
+
+- Move existing rules into `AGENTS.md`, and keep `CLAUDE.md` and `GEMINI.md` as one-line `@AGENTS.md` imports.
+- Add `"superpowers@claude-plugins-official": true` under `enabledPlugins` in the existing settings.
+- Append the *llm-wiki-agent* section of the template's `THIRD_PARTY_NOTICES.md` to the existing notices file. The second brain and the `wiki-*` skills derive from [SamurAIGPT/llm-wiki-agent](https://github.com/SamurAIGPT/llm-wiki-agent) (MIT): its notice must travel with them, whatever the repository's own licence.
+
+Do not copy `sources/`: describe the repository's real folders in the *Layout* section of `AGENTS.md` instead (step 6). Commit the new files, including the `.claude/skills` symlink.
+
+### Symlinks on Windows
+
+`.claude/skills` is a symlink to `.agents/skills`. On Windows, Git creates real symlinks only with `core.symlinks=true` and Developer Mode enabled (or administrator rights). Otherwise it checks the symlink out as a small text file containing `../.agents/skills`, and Claude Code does not see the skills.
+
+To fix it, enable Developer Mode, then from Git Bash run:
+
+```bash
+git config core.symlinks true
+rm .claude/skills && git checkout -- .claude/skills
+```
+
+For new clones, `git clone -c core.symlinks=true <url>` creates the symlink directly.
 
 ---
 
@@ -41,11 +120,11 @@ Keep `AGENTS.md` short: it is loaded on every interaction. Rules needed only for
 
 ---
 
-## 2. Install the mandatory Superpowers plugin
+## 2. Install the highly recommended Superpowers plugin
 
 Install the Superpowers plugin (multi-platform): https://github.com/obra/superpowers
 
-On Claude Code it is enabled per-repo via `.claude/settings.json` (already done in this repo):
+On Claude Code it is enabled per-repo via `.claude/settings.json` (already done in this repo, and copied by step 0):
 
 ```json
 {
@@ -139,6 +218,20 @@ To start a new repo, copy this repo's `AGENTS.md` to its root and fill in the se
 
 NOTE:
 - 27/Jun/2026: The *Tasks as checkboxes* convention still does not work reliably. Sometimes the assistant forgets to tick the boxes.
+
+---
+
+## 7. Verify the setup
+
+Run these checks from the repository root after the previous steps, and tick the setup checklist as each one passes.
+
+1. **Skills symlink.** `ls .claude/skills/` lists `wiki-health`, `wiki-ingest`, `wiki-lint` and `wiki-query`. If it fails, or shows a file instead of a folder, see *Symlinks on Windows* in step 0.
+2. **GitHub CLI.** `gh auth status` reports a logged-in account.
+3. **Instructions file.** Start the AI coding CLI and ask: *"Which instructions file did you load, and what are the sections marked Fill in per project?"* The answer must come from `AGENTS.md`, either directly or through `CLAUDE.md`/`GEMINI.md`.
+4. **Skills and Superpowers.** Ask: *"Which skills are available?"* The list must include the four `wiki-*` skills and, if installed, the Superpowers skills (`brainstorming`, `writing-plans`, `test-driven-development`, …). In Claude Code, typing `/` shows them as slash commands.
+5. **Second brain.** Run `/wiki-health` (in Codex, `$wiki-health`; in any CLI, just `health`). On a new repository it reports an empty wiki with no errors.
+6. **Agents** (if installed in step 3). Ask the CLI to list its subagents: `architect-reviewer`, `code-reviewer` and `ui-ux-tester` must appear.
+7. **MCP servers** (if configured in step 5). In Claude Code, `claude mcp list` shows each server in `.mcp.json` as connected; other CLIs have an equivalent command.
 
 ---
 

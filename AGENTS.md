@@ -10,8 +10,6 @@ The sections marked *Fill in per project* start as "Not defined yet" and are com
 
 The recommended environment is described in `vibe/README.md`: the Superpowers plugin (SDD + TDD workflow), project agents and skills, and MCP servers. It is optional; when present, use it for any non-trivial change.
 
-If the `vibe/` folder or the Superpowers plugin is missing, do not fail and do not invent the missing files: carry on without them, and once per session, before the first non-trivial change, recommend the user to set them up.
-
 ## Layout
 
 *Fill in per project.* Always present:
