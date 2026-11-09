@@ -128,12 +128,14 @@ GitHub, Supabase, Mail, Calendar, Google Drive and others may be useful for your
 `AGENTS.md` at the repo root is the canonical instructions file — every AI coding CLI reads it, either directly or through a one-line import (see step 1). It must include:
 
 - **A pointer to `README.md`** — so the project overview isn't duplicated across instruction files.
-- **Layout** — where code (`sources/`, see `sources/README.md`) and knowledge (`docs/second-brain/`) live.
+- **Vibe-coding setup** — a pointer to this guide; optional but recommended, so the file still works in a repo without `vibe/` or Superpowers.
+- **Layout** — where knowledge (`docs/second-brain/`) and code live (`sources/` for service-based systems, see `sources/README.md`; other folders for other kinds of project).
 - **Commands** — how to run dev/build/lint/clean for the app, and how to run the test suite.
 - **Stack** — a one-line summary of the tech stack, so the assistant doesn't have to infer it from the manifests.
+- **Conventions**, **Testing**, **Boundaries** — the technical constraints: architectural rules, approved libraries, test policy, and what the assistant must not touch.
 - **The second brain** — how to use the wiki as knowledge, and where its maintenance rules are.
 
-To start a new repo, copy this repo's `AGENTS.md` to its root, fill in **Commands** and **Stack** once the project has code, and keep the other sections — *Layout*, *Using the second brain*, *Tasks as checkboxes* and *Commit AI-tooling folders to Git* — as they are: they are project-independent conventions, not examples to adapt.
+To start a new repo, copy this repo's `AGENTS.md` to its root and fill in the sections marked *Fill in per project* (the code part of **Layout**, **Commands**, **Stack**, **Conventions**, **Testing**, **Boundaries**). Keep the other sections — *Vibe-coding setup*, *Using the second brain*, *Tasks as checkboxes* and *Commit AI-tooling folders to Git* — as they are: they are project-independent conventions, not examples to adapt. Rules that apply to only one part of the code (one service, one app) go in an `AGENTS.md` inside that folder.
 
 NOTE:
 - 27/Jun/2026: The *Tasks as checkboxes* convention still does not work reliably. Sometimes the assistant forgets to tick the boxes.
