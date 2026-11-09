@@ -159,6 +159,6 @@ This is the habit to keep: when the agent breaks a rule, fix the rule, not only 
 | Isolated branch | git worktree | Work you could merge, open as a PR, or throw away |
 | Tests as definition of done | `sources/libraries/trl/tests/` | Proof, shown before every "done" |
 
-To reset and run the lesson again on a fresh copy, start from setup step 0, path A.
+To reset and run the lesson again on a fresh copy, start again from setup step 0.
 
 **Next:** lesson 02 (planned) — reviewing this code with the reviewer agents.

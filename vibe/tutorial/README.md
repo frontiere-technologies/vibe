@@ -6,7 +6,7 @@ The thread running through all of them: let the agent write the code, but keep i
 
 ## Before you start
 
-- Setup steps 0–2 of [`../README.md`](../README.md) done, Superpowers included: the lessons use its workflow for every change (path A, *new project from this template*, is the quickest)
+- Setup steps 0–2 of [`../README.md`](../README.md) done, Superpowers included: the lessons use its workflow for every change
 - Claude Code as the reference CLI; other CLIs work with the same prompts (skills are `$wiki-ingest` in Codex, plain `ingest …` anywhere)
 - `python3` (3.9 or later) for the lesson code — standard library only, nothing to install
 

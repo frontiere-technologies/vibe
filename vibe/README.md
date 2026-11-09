@@ -12,7 +12,7 @@ Once set up, try it hands-on with the [tutorial](tutorial/README.md).
 
 ## Setup checklist
 
-0. [ ] Bootstrap the repository (new project from this template, or an existing repository)
+0. [ ] Bootstrap the repository from this template
 1. [ ] Install prerequisites (`git`, `gh`, an AI coding CLI)
 2. [ ] Install the highly recommended Superpowers plugin
 3. [ ] Install project agents (subagents) into each CLI's agents folder
@@ -25,9 +25,7 @@ Once set up, try it hands-on with the [tutorial](tutorial/README.md).
 
 ## 0. Bootstrap the repository
 
-Pick the path that matches your case, then continue with step 1.
-
-### A. New project from this template
+Start a new project from this template:
 
 ```bash
 git clone https://github.com/frontiere-technologies/vibe.git my-project
@@ -43,45 +41,6 @@ Then remove what belongs to the template, not to your project:
 - `sources/` — keep the service-based layout or replace it with your project's folders (see *Layout* in `AGENTS.md`)
 
 Keep `THIRD_PARTY_NOTICES.md`. The second brain and the `wiki-*` skills derive from [SamurAIGPT/llm-wiki-agent](https://github.com/SamurAIGPT/llm-wiki-agent), released under the MIT licence, whose only condition is that its copyright and licence notice stay in every copy. Your project can use any licence; the notice file is what keeps it compliant.
-
-### B. Existing repository
-
-Clone this template next to the target repository, then run from the root of the target repository:
-
-```bash
-TEMPLATE=../vibe    # path to the cloned template
-
-# Instructions files (cp -n keeps files that already exist)
-cp -n "$TEMPLATE"/AGENTS.md "$TEMPLATE"/CLAUDE.md "$TEMPLATE"/GEMINI.md .
-
-# Shared skills, and the symlink Claude Code reads them through
-mkdir -p .agents .claude
-cp -R "$TEMPLATE"/.agents/skills .agents/
-ln -s ../.agents/skills .claude/skills
-
-# Claude Code project settings (enables Superpowers)
-cp -n "$TEMPLATE"/.claude/settings.json .claude/
-
-# Empty second brain: rules plus wiki skeleton, no sources
-mkdir -p docs/second-brain/raw docs/second-brain/reports docs/second-brain/wiki
-cp "$TEMPLATE"/docs/second-brain/SCHEMA.md docs/second-brain/
-cp "$TEMPLATE"/docs/second-brain/wiki/index.md "$TEMPLATE"/docs/second-brain/wiki/log.md "$TEMPLATE"/docs/second-brain/wiki/overview.md docs/second-brain/wiki/
-touch docs/second-brain/raw/.gitkeep docs/second-brain/reports/.gitkeep
-
-# Licence notice for the second brain and the wiki skills (required, see below)
-cp -n "$TEMPLATE"/THIRD_PARTY_NOTICES.md .
-
-# Optional: keep this guide in the repository (without the tutorial and its sample PDF)
-cp -R "$TEMPLATE"/vibe . && rm -rf vibe/tutorial
-```
-
-`cp -n` does not overwrite: if the repository already had `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, `.claude/settings.json` or `THIRD_PARTY_NOTICES.md`, the template version is not copied (on macOS `cp -n` then exits with status 1; that is expected). Merge them by hand:
-
-- Move existing rules into `AGENTS.md`, and keep `CLAUDE.md` and `GEMINI.md` as one-line `@AGENTS.md` imports.
-- Add `"superpowers@claude-plugins-official": true` under `enabledPlugins` in the existing settings.
-- Append the *llm-wiki-agent* section of the template's `THIRD_PARTY_NOTICES.md` to the existing notices file. The second brain and the `wiki-*` skills derive from [SamurAIGPT/llm-wiki-agent](https://github.com/SamurAIGPT/llm-wiki-agent) (MIT): its notice must travel with them, whatever the repository's own licence.
-
-Do not copy `sources/`: describe the repository's real folders in the *Layout* section of `AGENTS.md` instead (step 6). Commit the new files, including the `.claude/skills` symlink.
 
 ### Symlinks on Windows
 
