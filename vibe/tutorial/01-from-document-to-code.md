@@ -6,6 +6,12 @@ You will ingest the NASA Systems Engineering Handbook, ask the wiki about Techno
 
 Prompts to type into the CLI are in quotes; shell commands are in code blocks. Exact wiki page names and wording will differ from run to run.
 
+Everything this lesson creates is thrown away at the end, so start on a throwaway branch (see [the tutorial's README](README.md#run-each-lesson-on-a-throwaway-branch)):
+
+```bash
+git switch -c tutorial/01
+```
+
 ---
 
 ## Step 1 — Give the agent some knowledge
@@ -132,7 +138,7 @@ python3 -m unittest discover -s sources/libraries -t sources/libraries
 
 When all tasks are done, `finishing-a-development-branch` runs the whole test suite again and asks what to do with the branch: merge it back locally, push it and open a pull request, or keep it as it is for later. Discarding the work is never offered: it happens only if you ask for it explicitly.
 
-For this lesson choose **merge locally**. The agent merges, re-runs the tests on the merged result, and cleans up the worktree.
+For this lesson choose **merge locally**. The merge target is `tutorial/01`, the branch the worktree started from, not your project's branch. The agent merges, re-runs the tests on the merged result, and cleans up the worktree.
 
 **Look at:** `git log --oneline` shows one small commit per task, and `docs/superpowers/` holds the design and the plan. Both are committed: they are the record of why the code is the way it is (see *Commit AI-tooling folders to Git* in `AGENTS.md`).
 
@@ -159,6 +165,14 @@ This is the habit to keep: when the agent breaks a rule, fix the rule, not only 
 | Isolated branch | git worktree | Work you could merge, open as a PR, or throw away |
 | Tests as definition of done | `sources/libraries/trl/tests/` | Proof, shown before every "done" |
 
-To reset and run the lesson again on a fresh copy, start again from setup step 0.
+When you are done, throw the lesson away and go back to a clean project:
+
+```bash
+git switch -
+git branch -D tutorial/01
+git worktree prune
+```
+
+To run the lesson again, start a new `tutorial/01` branch.
 
 **Next:** lesson 02 (planned) — reviewing this code with the reviewer agents.

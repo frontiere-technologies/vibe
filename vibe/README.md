@@ -14,7 +14,7 @@ Once set up, try it hands-on with the [tutorial](tutorial/README.md).
 
 0. [ ] Bootstrap the repository from this template
 1. [ ] Install prerequisites (`git`, `gh`, an AI coding CLI)
-2. [ ] Install the highly recommended Superpowers plugin
+2. [ ] Install the recommended Superpowers plugin
 3. [ ] Install project agents (subagents) into each CLI's agents folder
 4. [ ] Install project skills into `.agents/skills/`
 5. [ ] Verify MCP servers in `.mcp.json`
@@ -33,12 +33,13 @@ cd my-project
 rm -rf .git && git init    # optional: start with a fresh history
 ```
 
-Then remove what belongs to the template, not to your project:
+The clone is ready to use: the second brain is empty, `AGENTS.md` has its project sections still to fill in, and no sample code or data is left over. Then adapt what still describes the template rather than your project:
 
-- `vibe/tutorial/` — hands-on lessons and their sample source (a 3.7 MB PDF); delete it once you no longer need it
 - the root `README.md` — it describes the template: replace it with your project's own README, and link this guide from it
 - `LICENSE` — replace it with your project's licence
 - `sources/` — keep the service-based layout or replace it with your project's folders (see *Layout* in `AGENTS.md`)
+
+Keep the `vibe/` folder: this guide and the [tutorial](tutorial/README.md) stay with the project. Run the tutorial lessons only on a throwaway branch, never on the branch you build the project on (see the tutorial's README).
 
 Keep `THIRD_PARTY_NOTICES.md`. The second brain and the `wiki-*` skills derive from [SamurAIGPT/llm-wiki-agent](https://github.com/SamurAIGPT/llm-wiki-agent), released under the MIT licence, whose only condition is that its copyright and licence notice stay in every copy. Your project can use any licence; the notice file is what keeps it compliant.
 
@@ -79,7 +80,7 @@ Keep `AGENTS.md` short: it is loaded on every interaction. Rules needed only for
 
 ---
 
-## 2. Install the highly recommended Superpowers plugin
+## 2. Install the recommended Superpowers plugin
 
 Install the Superpowers plugin (multi-platform): https://github.com/obra/superpowers
 

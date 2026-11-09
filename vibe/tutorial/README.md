@@ -10,6 +10,20 @@ The thread running through all of them: let the agent write the code, but keep i
 - Claude Code as the reference CLI; other CLIs work with the same prompts (skills are `$wiki-ingest` in Codex, plain `ingest …` anywhere)
 - `python3` (3.9 or later) for the lesson code — standard library only, nothing to install
 
+## Run each lesson on a throwaway branch
+
+A lesson changes the repository: it fills the wiki, writes rules into `AGENTS.md`, adds code, specs and plans. None of that belongs to your project, so start every lesson on its own branch and delete the branch at the end:
+
+```bash
+git switch -c tutorial/01          # before the lesson, from the branch you build on
+# … follow the lesson …
+git switch -                       # back to the branch you started from
+git branch -D tutorial/01          # throw the lesson away
+git worktree prune                 # forget worktrees the lesson left behind, if any
+```
+
+Never merge a tutorial branch into your project's branches. When a lesson asks you to merge (e.g. at the end of the Superpowers workflow), the merge target is the tutorial branch itself, so everything is still thrown away with it.
+
 ## Sample source
 
 `examples/nasa_systems_engineering_handbook_0.pdf` is the NASA Systems Engineering Handbook (SP-2016-6105 Rev2, 297 pages), from https://www.nasa.gov/wp-content/uploads/2018/09/nasa_systems_engineering_handbook_0.pdf. Lessons copy it into `docs/second-brain/raw/` before ingesting it; it is not part of the project knowledge until then.
