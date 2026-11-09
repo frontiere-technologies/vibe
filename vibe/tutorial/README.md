@@ -6,7 +6,7 @@ The thread running through all of them: let the agent write the code, but keep i
 
 ## Before you start
 
-- Setup steps 0–2 of [`../README.md`](../README.md) done (path A, *new project from this template*, is the quickest)
+- Setup steps 0–2 of [`../README.md`](../README.md) done, Superpowers included: the lessons use its workflow for every change (path A, *new project from this template*, is the quickest)
 - Claude Code as the reference CLI; other CLIs work with the same prompts (skills are `$wiki-ingest` in Codex, plain `ingest …` anywhere)
 - `python3` (3.9 or later) for the lesson code — standard library only, nothing to install
 
@@ -18,12 +18,12 @@ The thread running through all of them: let the agent write the code, but keep i
 
 | # | Lesson | Time | What you learn |
 |---|---|---|---|
-| 01 | [From a document to tested code](01-from-document-to-code.md) | ~30 min | Ingest a source, query the wiki, set constraints in `AGENTS.md`, plan with checkboxes, implement test-first, check the agent stays inside the rules |
+| 01 | [From a document to tested code](01-from-document-to-code.md) | ~45 min | Ingest a source, query the wiki, set constraints in `AGENTS.md`, then the Superpowers workflow: design, plan, isolated branch, test-first implementation, finish; check the agent stays inside the rules |
 
 Planned:
 
 - 02 — Quality reviews with the reviewer agents (`code-reviewer`, `architect-reviewer`, `ui-ux-tester`)
-- 03 — The full Superpowers cycle on a real feature (brainstorm → plan → worktree → TDD → review → merge)
+- 03 — Superpowers in depth: changing an existing feature, systematic debugging, receiving code review, parallel agents
 - 04 — Connecting MCP servers (GitHub, documentation, data)
 - 05 — Same repository, different CLIs (Claude Code, Codex, Gemini CLI) on the same `AGENTS.md`
 - 06 — A complete app: rebuilding a small version of the Mission Readiness Map

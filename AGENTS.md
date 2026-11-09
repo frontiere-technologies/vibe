@@ -69,7 +69,7 @@ Wiki maintenance requests — `ingest <file>`, `query: <question>`, `health`, `l
 
 ## Tasks as checkboxes
 
-**Scope:** applies only to markdown files written under `./docs` (`docs/**/*.md`), except the second brain (`docs/second-brain/`), which follows `docs/second-brain/SCHEMA.md`. Markdown files outside `./docs` are exempt.
+**Scope:** applies only to markdown files written under `./docs` (`docs/**/*.md`), with two exceptions: the second brain (`docs/second-brain/`), which follows `docs/second-brain/SCHEMA.md`, and the Superpowers specs and plans (`docs/superpowers/`), which follow the format of the Superpowers skills that write them. Markdown files outside `./docs` are exempt.
 
 When generating a markdown file under `./docs` that lists actions, tasks, or items to address (reports, plans, reviews), always use unchecked checkboxes (`- [ ]`) per item, with a summary of findings/recommendations up front. Keep IDs and titles consistent across sections for traceability, e.g.:
 

@@ -1,8 +1,8 @@
 # 01 — From a document to tested code
 
-**Time:** about 30 minutes · **Needs:** setup steps 0–2, `python3` · **Result:** a small Python library, written by the agent from knowledge it extracted itself, inside rules you wrote
+**Time:** about 45 minutes · **Needs:** setup steps 0–2 (Superpowers included), `python3` · **Result:** a small Python library, designed, planned and built test-first through the Superpowers workflow, from knowledge the agent extracted itself, inside rules you wrote
 
-You will ingest the NASA Systems Engineering Handbook, ask the wiki about Technology Readiness Levels (TRL), then have the agent build a tiny TRL calculator. The calculator is not the point: the point is watching where the agent takes its knowledge from, and whether it respects your constraints.
+You will ingest the NASA Systems Engineering Handbook, ask the wiki about Technology Readiness Levels (TRL), then have the agent build a tiny TRL calculator through the Superpowers workflow: design, plan, isolated branch, test-driven implementation, finish. The calculator is not the point: the point is watching where the agent takes its knowledge from, how Superpowers keeps you in charge of every decision, and whether the agent respects your constraints.
 
 Prompts to type into the CLI are in quotes; shell commands are in code blocks. Exact wiki page names and wording will differ from run to run.
 
@@ -64,27 +64,63 @@ Python 3.9+ (the version macOS ships), standard library only.
 
 **Why:** this is the part that turns vibe coding into controlled coding. The agent reads `AGENTS.md` on every interaction, so these rules apply to everything that follows, without repeating them in each prompt.
 
-## Step 4 — Ask for a plan, not for code
+Commit the wiki and the rules before going on:
 
-> "Using the wiki, write a plan in docs/plans/trl-calculator-plan.md for a small library `trl` that: lists the nine TRL levels with their definitions; turns the answers to a yes/no questionnaire into a TRL (questions go from TRL 9 down to TRL 2, the first yes gives the TRL, all no gives TRL 1, missing answers give no result); and tells whether a TRL meets a target. Don't write code yet."
+```bash
+git add -A && git commit -m "Ingest the NASA SE Handbook and set the project rules"
+```
 
-**Expect:** a Markdown plan with a summary first and one unchecked item per task, in the format `- [ ] ID=..., Severity=..., Complexity=..., Priority=..., Estimate=..., Title=..., Fix description=...` — that format comes from the *Tasks as checkboxes* rule in `AGENTS.md`, not from your prompt.
+Superpowers builds on a separate branch, usually in a git worktree created from the last commit: anything left uncommitted here (the wiki, the new rules) would not be there.
 
-**Check:** the TRL definitions in the plan should match the wiki, and the agent should say which wiki pages it used. Edit the plan by hand if you disagree with anything: it is the contract for the next step.
+## Step 4 — Describe what you want, not how to build it
 
-## Step 5 — Implement test-first
+Start a new session, so the agent loads the rules you just wrote, and describe the feature in plain words:
 
-> "Implement docs/plans/trl-calculator-plan.md item by item, test-first. Tick each item when it is done and tested."
+> "I'd like a small library that tells me the Technology Readiness Level of a component from a short yes/no questionnaire, and whether it meets a target TRL. Use what the wiki says about TRL."
 
-With Superpowers installed, the agent may start its own workflow (plan, worktree, TDD); let it run, and answer its questions.
+Superpowers starts its `brainstorming` skill. It does not write code: it asks questions, one at a time, to find out what you actually want. It also tells you that you can skip the questions; don't, the conversation is the point of this step.
+
+Answer with your decisions as they come up, for example:
+
+- the questions go from TRL 9 down to TRL 2; the first yes gives the TRL, all no gives TRL 1
+- an incomplete questionnaire gives no result rather than a guess
+- the target defaults to TRL 6, the level NASA typically expects at the preliminary design review
 
 **Expect:**
 
-- `sources/libraries/trl/` with the code and `sources/libraries/trl/tests/` with the tests
-- tests written before the code — the agent should show them failing first
-- each plan item ticked as `- [✅]` as soon as it is done, not all at the end
+- a design document in `docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md`: intent, goals and non-goals, constraints, your decisions, and what is left to the builder
+- a fresh subagent reviewing it before you see it, and at most one round of follow-up questions
+- no code until you approve the document: that is a hard gate in the skill
 
-Run the tests yourself:
+**Check:** the TRL definitions must match the wiki, and the agent should say which wiki pages it used. The constraints must include the rules from `AGENTS.md` (standard library only, tests first) without you mentioning them. If something is wrong, say so: the document changes before anything is built.
+
+## Step 5 — Review the plan
+
+Approve the design. Superpowers moves on to `writing-plans` and saves an implementation plan to `docs/superpowers/plans/YYYY-MM-DD-<feature>.md`.
+
+**Expect:** a list of the files to create, then small tasks; each task has checkbox steps — write the failing test, run it and see it fail, implement, run it and see it pass, commit. File locations and the test command should come from your `AGENTS.md` (`sources/libraries/trl/`, `__init__.py` in both folders, `python3 -m unittest …`).
+
+The agent then asks you to review the plan and choose how to run it:
+
+- **Subagent-driven** — a fresh subagent implements each task and a fresh reviewer checks it before the next one
+- **Native** — the agent implements every task itself, with one review of the whole branch at the end
+
+Both work for a plan this size. Pick *Subagent-driven* to watch the per-task reviews, *Native* to go faster.
+
+## Step 6 — Build test-first on an isolated branch
+
+Before touching code, the `using-git-worktrees` skill asks whether to work in an isolated worktree. Say yes: the work happens on its own branch and your checkout stays untouched until you decide.
+
+Then let it run. Answer when it asks, and interrupt if it drifts from the plan.
+
+**Expect:**
+
+- for every task, a test written and run **before** the code, shown failing (red), then passing (green), then a commit
+- the plan's checkboxes ticked as each step is done
+- with *Subagent-driven*, a short review after each task, and the agent fixing what the reviewer found
+- before saying it is done, the agent runs the tests and shows you the output (`verification-before-completion`): evidence, not claims
+
+Run the tests yourself, from the worktree folder the agent reports:
 
 ```bash
 python3 -m unittest discover -s sources/libraries -t sources/libraries
@@ -92,13 +128,21 @@ python3 -m unittest discover -s sources/libraries -t sources/libraries
 
 **Check:** the output must say `Ran N tests` with N greater than zero. `Ran 0 tests … OK` means `unittest` found nothing, usually because an `__init__.py` is missing: a green result that proves nothing, and a good thing to point out to the agent.
 
-## Step 6 — Test the boundaries
+## Step 7 — Finish the branch
+
+When all tasks are done, `finishing-a-development-branch` runs the whole test suite again and asks what to do with the branch: merge it back locally, push it and open a pull request, or keep it as it is for later. Discarding the work is never offered: it happens only if you ask for it explicitly.
+
+For this lesson choose **merge locally**. The agent merges, re-runs the tests on the merged result, and cleans up the worktree.
+
+**Look at:** `git log --oneline` shows one small commit per task, and `docs/superpowers/` holds the design and the plan. Both are committed: they are the record of why the code is the way it is (see *Commit AI-tooling folders to Git* in `AGENTS.md`).
+
+## Step 8 — Test the boundaries
 
 Now ask for something that breaks a rule:
 
-> "Add a function that plots the TRL distribution of a list of components as a bar chart with matplotlib."
+> "Add a bar chart of the TRL distribution of a list of components, using matplotlib."
 
-**Expect:** matplotlib is not an approved library, so the agent should stop and ask before adding it, or propose a standard-library alternative (for example a text bar chart). If it just installs matplotlib, the rule was not clear enough: make the *Conventions* wording stronger and try again in a new session.
+**Expect:** Superpowers starts brainstorming again, and the conflict should come up there, before any code: matplotlib is not an approved library, so the agent should point it out and ask, or propose a standard-library alternative (for example a text bar chart). If the design document lists matplotlib without comment, the rule was not clear enough: make the *Conventions* wording stronger and try again in a new session.
 
 This is the habit to keep: when the agent breaks a rule, fix the rule, not only the code.
 
@@ -110,8 +154,10 @@ This is the habit to keep: when the agent breaks a rule, fix the rule, not only 
 |---|---|---|
 | Project knowledge | `docs/second-brain/` | Answers grounded in a source, with citations |
 | Technical constraints | `AGENTS.md` | Stack, layout, approved libraries, test policy applied without repeating them |
-| Plans as checklists | `docs/plans/` | A reviewable contract before code, and visible progress |
-| Tests as definition of done | `sources/libraries/trl/tests/` | Proof the code does what the plan says |
+| Design before code | `docs/superpowers/specs/` | Your decisions written down and approved before anything was built |
+| Plan as a checklist | `docs/superpowers/plans/` | Small, verifiable tasks, and visible progress |
+| Isolated branch | git worktree | Work you could merge, open as a PR, or throw away |
+| Tests as definition of done | `sources/libraries/trl/tests/` | Proof, shown before every "done" |
 
 To reset and run the lesson again on a fresh copy, start from setup step 0, path A.
 
