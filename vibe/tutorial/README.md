@@ -26,7 +26,20 @@ Never merge a tutorial branch into your project's branches. When a lesson asks y
 
 ## Sample source
 
-`examples/nasa_systems_engineering_handbook_0.pdf` is the NASA Systems Engineering Handbook (SP-2016-6105 Rev2, 297 pages), from https://www.nasa.gov/wp-content/uploads/2018/09/nasa_systems_engineering_handbook_0.pdf. Lessons copy it into `docs/second-brain/raw/` before ingesting it; it is not part of the project knowledge until then.
+`examples/nasa_systems_engineering_handbook_0_excerpt_TRL.pdf` is a 15-page excerpt of the NASA Systems Engineering Handbook (SP-2016-6105 Rev2), with what the lessons need and nothing more (page numbers of the original PDF):
+
+- pages 1–2 — cover and imprint, to identify the document
+- page 8 — Preface: what the handbook is and how it evolved
+- pages 11–12 — 1.0 Introduction: purpose and scope
+- page 19 — Table 2.2-1, *Project Life Cycle Phases*: the phases the key decision points sit between
+- page 205 — Glossary: the definition of TRL, and that a TRL of 6 is typically required
+- pages 216–223 — Appendix G, *Technology Assessment/Insertion*: the TRL scale, the TRL questionnaire, how integration and heritage affect a TRL, and the readiness required at each key decision point
+
+Keeping only those pages makes ingesting quick.
+
+`examples/nasa_systems_engineering_handbook_0.pdf` is the full handbook (297 pages), from https://www.nasa.gov/wp-content/uploads/2018/09/nasa_systems_engineering_handbook_0.pdf. It is kept for reference only: the lessons do not ingest it.
+
+Lessons copy the excerpt into `docs/second-brain/raw/` before ingesting it; it is not part of the project knowledge until then.
 
 ## Lessons
 

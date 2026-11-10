@@ -138,6 +138,7 @@ Installed in this repo:
 Recommended:
 
 - `webapp-testing` → https://github.com/anthropics/skills/tree/main/skills/webapp-testing (Playwright-based frontend verification)
+- `python-pro` → https://github.com/Jeffallan/claude-skills/tree/main/skills/python-pro (Python 3.11+: type hints, async, pytest, mypy strict, black and ruff)
 
 For Copilot and Gemini CLI, which use their own folders, see the table in step 1.
 

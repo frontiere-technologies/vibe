@@ -2,7 +2,7 @@
 
 **Time:** about 45 minutes · **Needs:** setup steps 0–2 (Superpowers included), `python3` · **Result:** a small Python library, designed, planned and built test-first through the Superpowers workflow, from knowledge the agent extracted itself, inside rules you wrote
 
-You will ingest the NASA Systems Engineering Handbook, ask the wiki about Technology Readiness Levels (TRL), then have the agent build a tiny TRL calculator through the Superpowers workflow: design, plan, isolated branch, test-driven implementation, finish. The calculator is not the point: the point is watching where the agent takes its knowledge from, how Superpowers keeps you in charge of every decision, and whether the agent respects your constraints.
+You will ingest a short excerpt of the NASA Systems Engineering Handbook, focused on TRL, ask the wiki about Technology Readiness Levels (TRL), then have the agent build a tiny TRL calculator through the Superpowers workflow: design, plan, isolated branch, test-driven implementation, finish. The calculator is not the point: the point is watching where the agent takes its knowledge from, how Superpowers keeps you in charge of every decision, and whether the agent respects your constraints.
 
 Prompts to type into the CLI are in quotes; shell commands are in code blocks. Exact wiki page names and wording will differ from run to run.
 
@@ -20,20 +20,20 @@ Copy the sample source into the second brain:
 
 ```bash
 mkdir -p docs/second-brain/raw/examples
-cp vibe/tutorial/examples/nasa_systems_engineering_handbook_0.pdf docs/second-brain/raw/examples/
+cp vibe/tutorial/examples/nasa_systems_engineering_handbook_0_excerpt_TRL.pdf docs/second-brain/raw/examples/
 ```
 
 Start the CLI from the repository root and ingest it:
 
-> `/wiki-ingest docs/second-brain/raw/examples/nasa_systems_engineering_handbook_0.pdf`
+> `/wiki-ingest docs/second-brain/raw/examples/nasa_systems_engineering_handbook_0_excerpt_TRL.pdf`
 
-The PDF has 297 pages, so this takes a few minutes. Then check the result:
+The excerpt has 15 pages (an overview of the handbook plus its TRL glossary entry and appendix), so this takes a few minutes at most. Then check the result:
 
 > `/wiki-health`
 
-**Expect:** a summary page in `docs/second-brain/wiki/sources/`, a few dozen pages in `entities/` and `concepts/` (one of them on TRL), `index.md` and `log.md` updated, and a health report with no errors.
+**Expect:** a summary page in `docs/second-brain/wiki/sources/`, a handful of pages in `entities/` and `concepts/` (one of them on TRL), `index.md` and `log.md` updated, and a health report with no errors.
 
-**Look at:** open `docs/second-brain/wiki/index.md` and one concept page. This is now the project's memory: any later session reads it instead of the 297-page PDF.
+**Look at:** open `docs/second-brain/wiki/index.md` and one concept page. This is now the project's memory: any later session reads it instead of the PDF.
 
 ## Step 2 — Ask the wiki
 
