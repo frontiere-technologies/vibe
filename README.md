@@ -1,8 +1,6 @@
-# LLM Wiki Agent
+# Vibe — project template with a second brain
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-
-> Based on [SamurAIGPT/llm-wiki-agent](https://github.com/SamurAIGPT/llm-wiki-agent) (MIT). See [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md) for the parts derived from it.
 
 **A coding agent skill.** Drop source documents into `docs/second-brain/raw/` and tell the agent to ingest them — it reads them, extracts knowledge, and builds a persistent interlinked wiki. Every new source makes the wiki richer. You never write it.
 
@@ -206,7 +204,7 @@ The instructions are split so that agents only load what they need:
 
 ## What Makes This Different from RAG
 
-| RAG | LLM Wiki Agent |
+| RAG | Second brain |
 |---|---|
 | Re-derives knowledge every query | Compiles once, keeps current |
 | Raw chunks as retrieval unit | Structured wiki pages |
@@ -219,7 +217,7 @@ The instructions are split so that agents only load what they need:
 The wiki is designed to be browsed seamlessly in [Obsidian](https://obsidian.md). Since the agent maintains consistent `[[wikilinks]]`, you get a naturally growing knowledge graph in your vault.
 
 ### Vault Symlink Pattern
-If you want to keep the LLM Wiki Agent repository separate from your main personal vault, use symlinks:
+If you want to keep this repository separate from your main personal vault, use symlinks:
 1. Keep your working agent repository at e.g., `~/vibe`
 2. Create a symlink from your main Obsidian vault:
    ```bash

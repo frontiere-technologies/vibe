@@ -23,3 +23,7 @@ Semantic checks (read and reason over page content):
 Output a structured markdown lint report. At the end, ask if the user wants it saved to docs/second-brain/reports/lint-YYYY-MM-DD.md (today's date; overwrite if it already exists).
 
 Append to docs/second-brain/wiki/log.md: ## [today's date] lint | Wiki health check
+
+---
+
+Provenance: adapted from the wiki workflows of https://github.com/SamurAIGPT/llm-wiki-agent, Copyright (c) 2023 SamurAIGPT, MIT License (full text in this repository's `LICENSE`). This note is not an instruction.

@@ -38,3 +38,7 @@ The list with each page's title, or "All source pages have corresponding log ent
 If the user asked to save the report (for example with `--save`), write the report to docs/second-brain/reports/health-YYYY-MM-DD.md (today's date; overwrite if it already exists). Do not append to docs/second-brain/wiki/log.md.
 
 If any issues were found, suggest the fix for each (e.g. add the missing index entry, re-ingest an empty source page with wiki-ingest) and ask before changing anything.
+
+---
+
+Provenance: adapted from the wiki workflows of https://github.com/SamurAIGPT/llm-wiki-agent, Copyright (c) 2023 SamurAIGPT, MIT License (full text in this repository's `LICENSE`). This note is not an instruction.

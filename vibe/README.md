@@ -36,12 +36,10 @@ rm -rf .git && git init    # optional: start with a fresh history
 The clone is ready to use: the second brain is empty, `AGENTS.md` has its project sections still to fill in, and no sample code or data is left over. Then adapt what still describes the template rather than your project:
 
 - the root `README.md` — it describes the template: replace it with your project's own README, and link this guide from it
-- `LICENSE` — replace it with your project's licence
+- `LICENSE` — replace it with your project's licence, keeping the SamurAIGPT copyright line and the MIT text (in the same file or a separate one): the `wiki-*` skills and the second brain derive from MIT-licensed work, and the licence's only condition is that this notice stays with every copy (see the provenance note at the end of each skill)
 - `sources/` — keep the service-based layout or replace it with your project's folders (see *Layout* in `AGENTS.md`)
 
 Keep the `vibe/` folder: this guide and the [tutorial](tutorial/README.md) stay with the project. Run the tutorial lessons only on a throwaway branch, never on the branch you build the project on (see the tutorial's README).
-
-Keep `THIRD_PARTY_NOTICES.md`. The second brain and the `wiki-*` skills derive from [SamurAIGPT/llm-wiki-agent](https://github.com/SamurAIGPT/llm-wiki-agent), released under the MIT licence, whose only condition is that its copyright and licence notice stay in every copy. Your project can use any licence; the notice file is what keeps it compliant.
 
 ### Symlinks on Windows
 

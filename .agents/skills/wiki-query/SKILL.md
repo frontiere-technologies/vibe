@@ -17,3 +17,7 @@ Follow the Query Workflow defined in docs/second-brain/SCHEMA.md:
 5. Ask the user if they want the answer saved as docs/second-brain/wiki/syntheses/<slug>.md
 
 If the wiki is empty, say so and suggest ingesting a source first (wiki-ingest).
+
+---
+
+Provenance: adapted from the wiki workflows of https://github.com/SamurAIGPT/llm-wiki-agent, Copyright (c) 2023 SamurAIGPT, MIT License (full text in this repository's `LICENSE`). This note is not an instruction.

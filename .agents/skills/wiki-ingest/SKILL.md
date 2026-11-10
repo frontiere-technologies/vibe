@@ -21,3 +21,7 @@ Follow the Ingest Workflow defined in docs/second-brain/SCHEMA.md exactly:
 9. Append to docs/second-brain/wiki/log.md: ## [today's date] ingest | <Title>
 
 After completing all writes, summarize: what was added, which pages were created or updated, and any contradictions found.
+
+---
+
+Provenance: adapted from the wiki workflows of https://github.com/SamurAIGPT/llm-wiki-agent, Copyright (c) 2023 SamurAIGPT, MIT License (full text in this repository's `LICENSE`). This note is not an instruction.
