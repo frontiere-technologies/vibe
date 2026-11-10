@@ -6,10 +6,6 @@ Read also the ./README.md file.
 
 The sections marked *Fill in per project* start as "Not defined yet" and are completed for each project. A folder of the code (e.g. a service) can add its own `AGENTS.md` with rules that apply only there; those rules add to this file and win where they are more specific.
 
-## Vibe-coding setup (optional, recommended)
-
-The recommended environment is described in `vibe/README.md`: the Superpowers plugin (SDD + TDD workflow), project agents and skills, and MCP servers. It is optional; when present, use it for any non-trivial change.
-
 ## Layout
 
 *Fill in per project.* Always present:
@@ -66,19 +62,6 @@ When a task needs project or domain context (designing, coding, reviewing, answe
 Do not modify anything under `docs/second-brain/` while doing other work unless the user asks. If the wiki looks wrong or is missing something, tell the user.
 
 Wiki maintenance requests — `ingest <file>`, `query: <question>`, `health`, `lint`, or the same in plain words — follow `docs/second-brain/SCHEMA.md`. Read that file first; it is not loaded automatically. The same workflows are Agent Skills in `.agents/skills/` (`wiki-ingest`, `wiki-query`, `wiki-health`, `wiki-lint`). Codex, Antigravity and OpenCode read that folder directly; `.claude/skills` is a symlink to it for Claude Code. In Claude Code and Antigravity they are slash commands (`/wiki-ingest`, …); in Codex mention them with `$wiki-ingest`.
-
-## Tasks as checkboxes
-
-**Scope:** applies only to markdown files written under `./docs` (`docs/**/*.md`), with two exceptions: the second brain (`docs/second-brain/`), which follows `docs/second-brain/SCHEMA.md`, and the Superpowers specs and plans (`docs/superpowers/`), which follow the format of the Superpowers skills that write them. Markdown files outside `./docs` are exempt.
-
-When generating a markdown file under `./docs` that lists actions, tasks, or items to address (reports, plans, reviews), always use unchecked checkboxes (`- [ ]`) per item, with a summary of findings/recommendations up front. Keep IDs and titles consistent across sections for traceability, e.g.:
-
-- [ ] ID=CRIT-1, Severity=Critical, Complexity=Low, Priority=P0, Estimate=minutes, Title=Title A, Fix description=Description of the fix to be implemented for CRIT-1, updated as tasks are completed.
-- [ ] ID=HIGH-1, Severity=High, Complexity=Low, Priority=P1, Estimate=hours, Title=Title C, Fix description=Description of the fix to be implemented for HIGH-1, updated as tasks are completed.
-
-`Estimate` is one of `minutes`, `hours`, `days`, `weeks`, `months`: how long a vibe-coding system (Claude, ChatGPT, …) is expected to take to complete the item end to end, not how long a human developer would take. It is a different axis from `Complexity`, which describes the change itself: a mechanical rename across hundreds of files is Low complexity and still an `hours` estimate.
-
-If the originating request came from a `.md` file under `./docs` with checkboxes, mark the corresponding checkbox `- [✅]` as soon as that work is done — regardless of whether it was done: via a workflow (like Superpowers implementation), a direct command, a bug fix, or delegated to a subagent. Do this per item, not in one batch at the end. Only mark items actually completed and tested.
 
 ## Commit AI-tooling folders to Git
 

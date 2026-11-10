@@ -6,7 +6,7 @@ This guide walks through setting up a working environment for Vibe Coding on thi
 
 ![Vibe coding workflow: reviews and ideas become markdown action items, then go through pre-processing and the Superpowers cycle](vibe-coding-workflow.jpg)
 
-Once set up, try it hands-on with the [tutorial](tutorial/README.md).
+How to use the project's knowledge base is in [second-brain.md](second-brain.md). Once set up, try it hands-on with the [tutorial](tutorial/README.md).
 
 ---
 
@@ -35,11 +35,11 @@ rm -rf .git && git init    # optional: start with a fresh history
 
 The clone is ready to use: the second brain is empty, `AGENTS.md` has its project sections still to fill in, and no sample code or data is left over. Then adapt what still describes the template rather than your project:
 
-- the root `README.md` — it describes the template: replace it with your project's own README, and link this guide from it
+- the root `README.md` — a skeleton for your project's README: fill in its sections
 - `LICENSE` — replace it with your project's licence, keeping the SamurAIGPT copyright line and the MIT text (in the same file or a separate one): the `wiki-*` skills and the second brain derive from MIT-licensed work, and the licence's only condition is that this notice stays with every copy (see the provenance note at the end of each skill)
 - `sources/` — keep the service-based layout or replace it with your project's folders (see *Layout* in `AGENTS.md`)
 
-Keep the `vibe/` folder: this guide and the [tutorial](tutorial/README.md) stay with the project. Run the tutorial lessons only on a throwaway branch, never on the branch you build the project on (see the tutorial's README).
+Keep the `vibe/` folder: this guide, the [second brain guide](second-brain.md) and the [tutorial](tutorial/README.md) stay with the project. Run the tutorial lessons only on a throwaway branch, never on the branch you build the project on (see the tutorial's README).
 
 ### Symlinks on Windows
 
@@ -165,17 +165,13 @@ GitHub, Supabase, Mail, Calendar, Google Drive and others may be useful for your
 `AGENTS.md` at the repo root is the canonical instructions file — every AI coding CLI reads it, either directly or through a one-line import (see step 1). It must include:
 
 - **A pointer to `README.md`** — so the project overview isn't duplicated across instruction files.
-- **Vibe-coding setup** — a pointer to this guide; optional but recommended, so the file still works in a repo without `vibe/` or Superpowers.
 - **Layout** — where knowledge (`docs/second-brain/`) and code live (`sources/` for service-based systems, see `sources/README.md`; other folders for other kinds of project).
 - **Commands** — how to run dev/build/lint/clean for the app, and how to run the test suite.
 - **Stack** — a one-line summary of the tech stack, so the assistant doesn't have to infer it from the manifests.
 - **Conventions**, **Testing**, **Boundaries** — the technical constraints: architectural rules, approved libraries, test policy, and what the assistant must not touch.
 - **The second brain** — how to use the wiki as knowledge, and where its maintenance rules are.
 
-To start a new repo, copy this repo's `AGENTS.md` to its root and fill in the sections marked *Fill in per project* (the code part of **Layout**, **Commands**, **Stack**, **Conventions**, **Testing**, **Boundaries**). Keep the other sections — *Vibe-coding setup*, *Using the second brain*, *Tasks as checkboxes* and *Commit AI-tooling folders to Git* — as they are: they are project-independent conventions, not examples to adapt. Rules that apply to only one part of the code (one service, one app) go in an `AGENTS.md` inside that folder.
-
-NOTE:
-- 27/Jun/2026: The *Tasks as checkboxes* convention still does not work reliably. Sometimes the assistant forgets to tick the boxes.
+To start a new repo, copy this repo's `AGENTS.md` to its root and fill in the sections marked *Fill in per project* (the code part of **Layout**, **Commands**, **Stack**, **Conventions**, **Testing**, **Boundaries**). Keep the other sections — *Using the second brain* and *Commit AI-tooling folders to Git* — as they are: they are project-independent conventions, not examples to adapt. Rules that apply to only one part of the code (one service, one app) go in an `AGENTS.md` inside that folder.
 
 ---
 
