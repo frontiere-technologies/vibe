@@ -27,7 +27,7 @@ docs/second-brain/
 
 ## Getting started
 
-**Requires:** [Claude Code](https://claude.ai/code), [Codex](https://openai.com/codex), [Antigravity](https://antigravity.google), [OpenCode](https://opencode.ai), [Gemini CLI](https://github.com/google-gemini/gemini-cli), or any agent that reads a config file. To set up the repository, follow step 0 of [README.md](README.md).
+**Requires:** [Claude Code](https://claude.ai/code), [Codex](https://openai.com/codex), [Antigravity](https://antigravity.google), [OpenCode](https://opencode.ai), [Gemini CLI](https://github.com/google-gemini/gemini-cli), or any agent that reads a config file. To set up the repository, follow steps 0 and 1 of [README.md](README.md).
 
 Open the repository root in your agent — no API key or Python setup needed (wiki rules are in `docs/second-brain/SCHEMA.md`, read on demand):
 

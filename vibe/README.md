@@ -12,8 +12,8 @@ How to use the project's knowledge base is in [second-brain.md](second-brain.md)
 
 ## Setup checklist
 
-0. [ ] Bootstrap the repository from this template
-1. [ ] Install prerequisites (`git`, `gh`, an AI coding CLI)
+0. [ ] Install prerequisites (`git`, `gh`, an AI coding CLI)
+1. [ ] Bootstrap the repository from this template
 2. [ ] Install the recommended Superpowers plugin
 3. [ ] Install project agents (subagents) into each CLI's agents folder
 4. [ ] Install project skills into `.agents/skills/`
@@ -23,7 +23,29 @@ How to use the project's knowledge base is in [second-brain.md](second-brain.md)
 
 ---
 
-## 0. Bootstrap the repository
+## 0. Install prerequisites
+
+- `git` and `gh` (for PRs)
+- One AI coding CLI, configured per the table below
+- Optional: [`markitdown`](https://github.com/microsoft/markitdown) (`pip install 'markitdown[all]'`), to ingest `.docx`, `.pptx`, `.xlsx` and other binary files into the second brain (see `docs/second-brain/SCHEMA.md`)
+- Optional: [`uv`](https://docs.astral.sh/uv/), if the project has Python code (e.g. e2e tests in `sources/tests/e2e/`) — run it through `uv run …` rather than invoking `python`/`pip` directly
+
+| Tool | Config dir | Instructions file | Skills | Agents (subagents) |
+|---|---|---|---|---|
+| Claude Code | `.claude/` | `CLAUDE.md` (→ `@AGENTS.md`) | `.claude/skills/` (symlink to `.agents/skills/`) | `.claude/agents/<name>.md` (Markdown + YAML frontmatter) |
+| OpenAI Codex | `.codex/` | `AGENTS.md` | `.agents/skills/` | `.codex/agents/<name>.toml` (TOML: `name`, `description`, `developer_instructions`) |
+| Google Antigravity (`agy`) | `.agents/` | `AGENTS.md` | `.agents/skills/` | check its docs |
+| OpenCode | `.opencode/` | `AGENTS.md` | `.agents/skills/` | `.opencode/agents/<name>.md` (Markdown + YAML frontmatter, `mode: subagent`) |
+| GitHub Copilot | `.github/` | `AGENTS.md` or `COPILOT-INSTRUCTIONS.md` | own folder — check its docs | own folder — check its docs |
+| Gemini CLI | `.gemini/` | `GEMINI.md` (→ `@AGENTS.md`) | own folder — check its docs | own folder — check its docs |
+
+Each tool reads its own instructions file at startup. Keep one canonical file — `AGENTS.md` at the repo root, next to `README.md` — and make every other instructions file a one-line import of it (`CLAUDE.md` and `GEMINI.md` in this repo contain just `@AGENTS.md`), instead of duplicating content.
+
+Keep `AGENTS.md` short: it is loaded on every interaction. Rules needed only for specific work go in files read on demand — in this repo the second-brain rules live in `docs/second-brain/SCHEMA.md` and are read by the `wiki-*` skills.
+
+---
+
+## 1. Bootstrap the repository
 
 Start a new project from this template:
 
@@ -56,33 +78,11 @@ For new clones, `git clone -c core.symlinks=true <url>` creates the symlink dire
 
 ---
 
-## 1. Install prerequisites
-
-- `git` and `gh` (for PRs)
-- One AI coding CLI, configured per the table below
-- Optional: [`markitdown`](https://github.com/microsoft/markitdown) (`pip install 'markitdown[all]'`), to ingest `.docx`, `.pptx`, `.xlsx` and other binary files into the second brain (see `docs/second-brain/SCHEMA.md`)
-- Optional: [`uv`](https://docs.astral.sh/uv/), if the project has Python code (e.g. e2e tests in `sources/tests/e2e/`) — run it through `uv run …` rather than invoking `python`/`pip` directly
-
-| Tool | Config dir | Instructions file | Skills | Agents (subagents) |
-|---|---|---|---|---|
-| Claude Code | `.claude/` | `CLAUDE.md` (→ `@AGENTS.md`) | `.claude/skills/` (symlink to `.agents/skills/`) | `.claude/agents/<name>.md` (Markdown + YAML frontmatter) |
-| OpenAI Codex | `.codex/` | `AGENTS.md` | `.agents/skills/` | `.codex/agents/<name>.toml` (TOML: `name`, `description`, `developer_instructions`) |
-| Google Antigravity (`agy`) | `.agents/` | `AGENTS.md` | `.agents/skills/` | check its docs |
-| OpenCode | `.opencode/` | `AGENTS.md` | `.agents/skills/` | `.opencode/agents/<name>.md` (Markdown + YAML frontmatter, `mode: subagent`) |
-| GitHub Copilot | `.github/` | `AGENTS.md` or `COPILOT-INSTRUCTIONS.md` | own folder — check its docs | own folder — check its docs |
-| Gemini CLI | `.gemini/` | `GEMINI.md` (→ `@AGENTS.md`) | own folder — check its docs | own folder — check its docs |
-
-Each tool reads its own instructions file at startup. Keep one canonical file — `AGENTS.md` at the repo root, next to `README.md` — and make every other instructions file a one-line import of it (`CLAUDE.md` and `GEMINI.md` in this repo contain just `@AGENTS.md`), instead of duplicating content.
-
-Keep `AGENTS.md` short: it is loaded on every interaction. Rules needed only for specific work go in files read on demand — in this repo the second-brain rules live in `docs/second-brain/SCHEMA.md` and are read by the `wiki-*` skills.
-
----
-
 ## 2. Install the recommended Superpowers plugin
 
 Install the Superpowers plugin (multi-platform): https://github.com/obra/superpowers
 
-On Claude Code it is enabled per-repo via `.claude/settings.json` (already done in this repo, and copied by step 0):
+On Claude Code it is enabled per-repo via `.claude/settings.json` (already done in this repo, and copied by step 1):
 
 ```json
 {
@@ -110,7 +110,7 @@ Use this sequence as the default for features and bug fixes; skip steps only for
 
 ## 3. Install project agents
 
-Agents (subagents) are specialised assistants the main agent delegates to, each with its own instructions and context. Unlike skills, there is no shared format across CLIs: each tool reads its own folder and format (see the *Agents* column in the table in step 1), so an agent needs one definition per CLI you use.
+Agents (subagents) are specialised assistants the main agent delegates to, each with its own instructions and context. Unlike skills, there is no shared format across CLIs: each tool reads its own folder and format (see the *Agents* column in the table in step 0), so an agent needs one definition per CLI you use.
 
 The reviewers used by the [quality review process](#quality-review-process) are `architect-reviewer`, `code-reviewer` and `ui-ux-tester`. None are installed in this repo yet. Their reference definitions come from the [VoltAgent subagents collection](https://github.com/VoltAgent/awesome-claude-code-subagents/tree/main/categories), written in Claude Code's format, so for Claude Code they can be copied as they are:
 
@@ -140,7 +140,7 @@ Recommended:
 - `webapp-testing` → https://github.com/anthropics/skills/tree/main/skills/webapp-testing (Playwright-based frontend verification)
 - `python-pro` → https://github.com/Jeffallan/claude-skills/tree/main/skills/python-pro (Python 3.11+: type hints, async, pytest, mypy strict, black and ruff)
 
-For Copilot and Gemini CLI, which use their own folders, see the table in step 1.
+For Copilot and Gemini CLI, which use their own folders, see the table in step 0.
 
 ---
 
@@ -163,7 +163,7 @@ GitHub, Supabase, Mail, Calendar, Google Drive and others may be useful for your
 
 ## 6. Setup of the AI instructions file for this repo
 
-`AGENTS.md` at the repo root is the canonical instructions file — every AI coding CLI reads it, either directly or through a one-line import (see step 1). It must include:
+`AGENTS.md` at the repo root is the canonical instructions file — every AI coding CLI reads it, either directly or through a one-line import (see step 0). It must include:
 
 - **A pointer to `README.md`** — so the project overview isn't duplicated across instruction files.
 - **Layout** — where knowledge (`docs/second-brain/`) and code live (`sources/` for service-based systems, see `sources/README.md`; other folders for other kinds of project).
@@ -180,7 +180,7 @@ To start a new repo, copy this repo's `AGENTS.md` to its root and fill in the se
 
 Run these checks from the repository root after the previous steps, and tick the setup checklist as each one passes.
 
-1. **Skills symlink.** `ls .claude/skills/` lists `wiki-health`, `wiki-ingest`, `wiki-lint` and `wiki-query`. If it fails, or shows a file instead of a folder, see *Symlinks on Windows* in step 0.
+1. **Skills symlink.** `ls .claude/skills/` lists `wiki-health`, `wiki-ingest`, `wiki-lint` and `wiki-query`. If it fails, or shows a file instead of a folder, see *Symlinks on Windows* in step 1.
 2. **GitHub CLI.** `gh auth status` reports a logged-in account.
 3. **Instructions file.** Start the AI coding CLI and ask: *"Which instructions file did you load, and what are the sections marked Fill in per project?"* The answer must come from `AGENTS.md`, either directly or through `CLAUDE.md`/`GEMINI.md`.
 4. **Skills and Superpowers.** Ask: *"Which skills are available?"* The list must include the four `wiki-*` skills and, if installed, the Superpowers skills (`brainstorming`, `writing-plans`, `test-driven-development`, …). In Claude Code, typing `/` shows them as slash commands.
