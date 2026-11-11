@@ -165,7 +165,7 @@ This is the habit to keep: when the agent breaks a rule, fix the rule, not only 
 | Isolated branch | git worktree | Work you could merge, open as a PR, or throw away |
 | Tests as definition of done | `sources/libraries/trl/tests/` | Proof, shown before every "done" |
 
-When you are done, throw the lesson away and go back to a clean project:
+If you go on to lesson 02, keep this branch: lesson 02 starts from it. Otherwise, when you are done, throw the lesson away and go back to a clean project:
 
 ```bash
 git switch -
@@ -175,4 +175,4 @@ git worktree prune
 
 To run the lesson again, start a new `tutorial/01` branch.
 
-**Next:** lesson 02 (planned) — reviewing this code with the reviewer agents.
+**Next:** [lesson 02](02-from-document-to-web-app.md) — the same knowledge as a responsive web app, with a simulated back end that follows this library's contracts.
