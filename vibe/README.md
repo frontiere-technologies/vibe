@@ -44,6 +44,34 @@ All of it is committed to Git: the environment is part of the project, not of on
 7. [ ] Set permissions and ignore local files
 8. [ ] Verify the setup
 
+## Setup run by the AI coding CLI
+
+The steps can be followed by hand, or run by the AI coding CLI itself: it reads this guide, runs the commands, and asks the developer for every decision. Only what the CLI cannot do on its own stays with the developer.
+
+Before the CLI can take over, the developer installs `git` and one AI coding CLI and logs in to it (a CLI cannot install itself), then clones the template and starts the CLI in it:
+
+```bash
+git clone https://github.com/frontiere-technologies/vibe.git my-project
+cd my-project
+claude      # or: codex, gemini, opencode, …
+```
+
+The setup starts with one prompt:
+
+> "Run the setup from `vibe/README.md`, step by step. Ask me whenever you need to decide something, and stop when an action of mine is needed."
+
+The prompt works in any language, for example in Italian: *"Esegui il setup partendo da `vibe/README.md`, passo per passo. Fammi le domande quando devi decidere qualcosa, e fermati quando serve un'azione mia."*
+
+What happens next:
+
+- **Questions.** The CLI asks for every decision, one at a time: a fresh Git history or not, the licence, the layout of `sources/`, the sections of `AGENTS.md` (stack, commands, approved libraries, tests, boundaries), which skills, agents and MCP servers to add.
+- **Pauses for the developer.** The CLI stops for what only the developer can do: the interactive logins (`gh auth login`), the tokens of the MCP servers (set as environment variables, never written to a file), and the restart after step 2, because plugins and skills are loaded only when a session starts.
+- **Commits.** Each step ends with a commit, so the work done so far is safe and a new session can see where the setup stands.
+- **Resuming.** After the restart, or in any later session, the setup continues with: *"Continue the setup from `vibe/README.md`: check which steps are already done and go on from there."*
+- **Final checks.** The checks of step 8 that ask the CLI what it loaded are meaningful only in a new session, started after the last commit.
+
+The same prompt works for a developer joining an existing project: the CLI finds steps 1 and 3–7 already in the repository and only checks them.
+
 ---
 
 ## 0. Install the prerequisites
