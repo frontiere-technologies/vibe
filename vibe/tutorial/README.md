@@ -6,7 +6,7 @@ The thread running through all of them: let the agent write the code, but keep i
 
 ## Before you start
 
-- Setup steps 0–2 of [`../README.md`](../README.md) done, Superpowers included: the lessons use its workflow for every change
+- Setup steps 0–2 of [`../README.md`](../README.md) done, Superpowers included: the lessons use its workflow for every change (lesson 00 needs only steps 0–1)
 - Claude Code as the reference CLI; other CLIs work with the same prompts (skills are `$wiki-ingest` in Codex, plain `ingest …` anywhere)
 - `python3` (3.9 or later) for the lesson code — standard library only, nothing to install
 - for lesson 02: Flutter stable 3.x and Chrome (`flutter doctor` shows both with a green tick)
@@ -27,7 +27,9 @@ Lesson 02 builds on lesson 01: it starts from `tutorial/01` instead, so keep tha
 
 Never merge a tutorial branch into your project's branches. When a lesson asks you to merge (e.g. at the end of the Superpowers workflow), the merge target is the tutorial branch itself, so everything is still thrown away with it.
 
-## Sample source
+## Sample sources
+
+`examples/release-process.md` is a one-page fictional text (how a small team ships a change to its service), used by lesson 00.
 
 `examples/nasa_systems_engineering_handbook_0_excerpt_TRL.pdf` is a 15-page excerpt of the NASA Systems Engineering Handbook (SP-2016-6105 Rev2), with what the lessons need and nothing more (page numbers of the original PDF):
 
@@ -48,6 +50,7 @@ Lessons copy the excerpt into `docs/second-brain/raw/` before ingesting it; it i
 
 | # | Lesson | Time | What you learn |
 |---|---|---|---|
+| 00 | [First steps with the wiki](00-first-steps-with-the-wiki.md) | ~10 min | Ingest a one-page text, look at the pages it becomes, ask the wiki a question; no code |
 | 01 | [From a document to tested code](01-from-document-to-code.md) | ~45 min | Ingest a source, query the wiki, set constraints in `AGENTS.md`, then the Superpowers workflow: design, plan, isolated branch, test-first implementation, finish; check the agent stays inside the rules |
 | 02 | [From a document to a web app](02-from-document-to-web-app.md) | ~90 min | Add a second stack (Flutter) to `AGENTS.md` with its own allow-list and layers; a responsive web app with a simulated back end that follows the library's contracts, seed content, tests at three widths; check design requests do not break the rules |
 
