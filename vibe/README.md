@@ -17,7 +17,7 @@ The agent is free to write code, within four boundaries. Each one has a fixed pl
 | **Knowledge** | What the project is about: domain, decisions, source documents | `docs/second-brain/` — a wiki the agent writes and keeps up to date |
 | **Rules** | Stack, commands, layout, conventions, approved libraries, test policy, boundaries | `AGENTS.md` — read by the agent on every interaction |
 | **Workflow** | How a change is made: design, plan, isolated branch, test-first build, review, finish | The Superpowers plugin; specs and plans saved in `docs/superpowers/` |
-| **Tools** | Specialised abilities: skills, subagents (reviewers), MCP servers | `.agents/skills/`, each CLI's agents folder, the MCP configuration |
+| **Tools** | Specialised abilities: skills, subagents (reviewers), MCP servers | `.agents/skills/`, `.agents/agents/`, the MCP configuration |
 
 All of it is committed to Git: the environment is part of the project, not of one developer's machine, so every developer and every CLI works the same way. Only personal settings and secrets stay out (see [Shared and personal files](#shared-and-personal-files)).
 
@@ -83,12 +83,12 @@ This step installs the tools every developer needs:
 
 | CLI | Install and docs | Config dir | Instructions file | Skills | Agents (subagents) | MCP servers |
 |---|---|---|---|---|---|---|
-| Claude Code | [claude.ai/code](https://claude.ai/code) | `.claude/` | `CLAUDE.md` (→ `@AGENTS.md`) | `.claude/skills/` (symlink to `.agents/skills/`) | `.claude/agents/<name>.md` (Markdown + YAML frontmatter) | `.mcp.json` |
-| OpenAI Codex | [github.com/openai/codex](https://github.com/openai/codex) | `.codex/` | `AGENTS.md` | `.agents/skills/` | `.codex/agents/<name>.toml` (TOML: `name`, `description`, `developer_instructions`) | `config.toml`, `[mcp_servers]` tables |
+| Claude Code | [claude.ai/code](https://claude.ai/code) | `.claude/` | `CLAUDE.md` (→ `@AGENTS.md`) | `.claude/skills/` (symlink to `.agents/skills/`) | `.claude/agents/` (symlink to `.agents/agents/`) | `.mcp.json` |
+| OpenAI Codex | [github.com/openai/codex](https://github.com/openai/codex) | `.codex/` | `AGENTS.md` | `.agents/skills/` | `.codex/agents/<name>.toml` (TOML: `name`, `description`, `developer_instructions`), converted from `.agents/agents/` | `config.toml`, `[mcp_servers]` tables |
 | Google Antigravity (`agy`) | [antigravity.google](https://antigravity.google) | `.agents/` | `AGENTS.md` | `.agents/skills/` | check its docs | check its docs |
-| OpenCode | [opencode.ai](https://opencode.ai) | `.opencode/` | `AGENTS.md` | `.agents/skills/` | `.opencode/agents/<name>.md` (Markdown + YAML frontmatter, `mode: subagent`) | `opencode.json`, `mcp` key |
-| GitHub Copilot CLI | [github.com/github/copilot-cli](https://github.com/github/copilot-cli) | `.github/` | `AGENTS.md` or `COPILOT-INSTRUCTIONS.md` | own folder — check its docs | own folder — check its docs | check its docs |
-| Gemini CLI | [github.com/google-gemini/gemini-cli](https://github.com/google-gemini/gemini-cli) | `.gemini/` | `GEMINI.md` (→ `@AGENTS.md`) | own folder — check its docs | own folder — check its docs | `.gemini/settings.json`, `mcpServers` key |
+| OpenCode | [opencode.ai](https://opencode.ai) | `.opencode/` | `AGENTS.md` | `.agents/skills/` | `.opencode/agents/` (symlink to `.agents/agents/`; needs `mode: subagent`) | `opencode.json`, `mcp` key |
+| GitHub Copilot CLI | [github.com/github/copilot-cli](https://github.com/github/copilot-cli) | `.github/` | `AGENTS.md` or `COPILOT-INSTRUCTIONS.md` | own folder — check its docs | `.github/agents/<name>.agent.md` — check its docs | check its docs |
+| Gemini CLI | [github.com/google-gemini/gemini-cli](https://github.com/google-gemini/gemini-cli) | `.gemini/` | `GEMINI.md` (→ `@AGENTS.md`) | own folder — check its docs | `.gemini/agents/<name>.md` (Markdown + YAML, `name` required) | `.gemini/settings.json`, `mcpServers` key |
 
 The CLIs change often: where a cell and the tool's docs disagree, the docs win, and the table should be updated.
 
@@ -98,7 +98,6 @@ Optional tools:
 
 - [`markitdown`](https://github.com/microsoft/markitdown) (`pip install 'markitdown[all]'`), to ingest `.docx`, `.pptx`, `.xlsx` and other binary files into the second brain (see `docs/second-brain/SCHEMA.md`)
 - [`uv`](https://docs.astral.sh/uv/), if the project has Python code; Python is then run through `uv run …` rather than by calling `python`/`pip` directly
-- the toolchain of the project's stack (Node, Python, Flutter, Docker, …), as listed in the *Stack* and *Commands* sections of `AGENTS.md` once they are filled in
 
 A quick check of what is installed:
 
@@ -135,16 +134,16 @@ git add -A && git commit -m "Start the project from the vibe template"
 
 ### Symlinks on Windows
 
-`.claude/skills` is a symlink to `.agents/skills`. On Windows, Git creates real symlinks only with `core.symlinks=true` and Developer Mode enabled (or administrator rights). Otherwise it checks the symlink out as a small text file containing `../.agents/skills`, and Claude Code does not see the skills.
+`.claude/skills` and `.claude/agents` are symlinks to `.agents/skills` and `.agents/agents`. On Windows, Git creates real symlinks only with `core.symlinks=true` and Developer Mode enabled (or administrator rights). Otherwise it checks each symlink out as a small text file containing its target (`../.agents/skills`), and Claude Code sees neither the skills nor the agents.
 
 The fix is to enable Developer Mode, then run from Git Bash:
 
 ```bash
 git config core.symlinks true
-rm .claude/skills && git checkout -- .claude/skills
+rm .claude/skills .claude/agents && git checkout -- .claude/skills .claude/agents
 ```
 
-For new clones, `git clone -c core.symlinks=true <url>` creates the symlink directly.
+The same applies to any other symlink added later, such as `.opencode/agents`. For new clones, `git clone -c core.symlinks=true <url>` creates the symlinks directly.
 
 ---
 
@@ -236,22 +235,51 @@ A skill is added by copying its whole folder (`SKILL.md` and everything next to 
 
 ## 5. Add the project agents (subagents)
 
-A subagent is a specialised assistant the main agent hands a task to. It has its own instructions and starts with a clean context, so it can, for example, review code without the bias of having written it. Subagents have no shared format: each CLI reads its own folder and format (see the *Agents* column in step 0), so an agent needs one definition per CLI in use.
+A subagent is a specialised assistant the main agent hands a task to. It has its own instructions and starts with a clean context, so it can, for example, review code without the bias of having written it.
 
-The recommended set is the three reviewers of the [quality reviews](#quality-reviews): `code-reviewer`, `architect-reviewer`, and `ui-ux-tester` for projects with a UI. Their reference definitions are in the [VoltAgent subagents collection](https://github.com/VoltAgent/awesome-claude-code-subagents/tree/main/categories), in Claude Code's format. The download is pinned to a commit rather than `main`, so it is clear what was installed and nothing changes underneath:
+**One folder for the agents.** Agent definitions live in `.agents/agents/<name>.md`, next to `.agents/skills/`: one Markdown file per agent, with a YAML frontmatter and the instructions as its body. Each CLI reads them from its own folder (see the *Agents* column in step 0), which is a symlink to `.agents/agents/` wherever the format allows it:
+
+- Claude Code reads `.claude/agents`, a symlink already in the template
+- OpenCode reads `.opencode/agents`, a symlink created when OpenCode is used:
+
+```bash
+mkdir -p .opencode && ln -s ../.agents/agents .opencode/agents
+```
+
+Unlike `.agents/skills/`, which the CLIs read as a standard, `.agents/agents/` is a convention of this template, held together by the symlinks.
+
+**A frontmatter the CLIs share.** The CLIs agree on the Markdown body, not on the frontmatter: tool names, permissions and models differ from one CLI to the next. A shared definition therefore keeps only the fields they have in common:
+
+```markdown
+---
+name: code-reviewer
+description: Reviews code changes for correctness, security and maintainability. Use after a feature or a fix is implemented.
+mode: subagent
+---
+
+You are a senior code reviewer. …
+```
+
+`name` and `description` tell every CLI what the agent is and when to use it; `mode: subagent` is needed by OpenCode. Without `tools` and `model`, each CLI gives the agent its default tools and model. The price is that the tools of an agent cannot be restricted in the shared file: a reviewer that must only read says so in its instructions.
+
+**The recommended reviewers.** The recommended set is the three reviewers of the [quality reviews](#quality-reviews): `code-reviewer`, `architect-reviewer`, and `ui-ux-tester` for projects with a UI. Their reference definitions are in the [VoltAgent subagents collection](https://github.com/VoltAgent/awesome-claude-code-subagents/tree/main/categories), in Claude Code's format. The download is pinned to a commit rather than `main`, so it is clear what was installed and nothing changes underneath:
 
 ```bash
 REF=main    # replace with a commit SHA of the collection
 BASE=https://raw.githubusercontent.com/VoltAgent/awesome-claude-code-subagents/$REF/categories/04-quality-security
-mkdir -p .claude/agents
+mkdir -p .agents/agents
 for agent in code-reviewer architect-reviewer ui-ux-tester; do
-  curl -fsSL "$BASE/$agent.md" -o ".claude/agents/$agent.md"
+  curl -fsSL "$BASE/$agent.md" -o ".agents/agents/$agent.md"
 done
 ```
 
-Each definition is read before it is committed: the tools it may use are checked, and what does not apply to the project is removed.
+Each definition is then reduced to the shared frontmatter (`tools` and `model` removed, `mode: subagent` added), and read before it is committed: what does not apply to the project is removed from its instructions.
 
-**Other CLIs:** each definition is converted to the tool's format, keeping the name, the description and the instructions (the Markdown body), and mapping the frontmatter to the fields that tool expects. An AI coding CLI can do the conversion.
+**Other CLIs:**
+
+- Codex reads TOML files from `.codex/agents/`, so it cannot share the Markdown files. Each definition gets a converted copy, `.codex/agents/<name>.toml`, with `name`, `description`, and the Markdown body as `developer_instructions`. The Markdown file stays the source: the copy is regenerated whenever it changes, and an AI coding CLI can do the conversion.
+- Gemini CLI reads Markdown files from `.gemini/agents/`. A `.gemini/agents` symlink to `.agents/agents` should work, but it has not been tried with the shared frontmatter: `/agents` in Gemini CLI shows whether the agents are loaded.
+- GitHub Copilot uses `.agent.md` files in `.github/agents/`; check its docs.
 
 Only the agents the project actually uses are added, one file each; a whole collection is never installed.
 
@@ -330,7 +358,7 @@ Both `.gitignore` and `.claude/settings.json` are committed.
 
 These checks run from the repository root after the previous steps; each one that passes ticks the setup checklist.
 
-1. **Skills symlink.** `ls .claude/skills/` lists `wiki-health`, `wiki-ingest`, `wiki-lint`, `wiki-query` and the skills added in step 4. If it fails, or shows a file instead of a folder, see *Symlinks on Windows* in step 1.
+1. **Symlinks.** `ls .claude/skills/` lists `wiki-health`, `wiki-ingest`, `wiki-lint`, `wiki-query` and the skills added in step 4; `ls .claude/agents/` lists the agents added in step 5. If either fails, or shows a file instead of a folder, see *Symlinks on Windows* in step 1.
 2. **GitHub CLI.** `gh auth status` reports a logged-in account.
 3. **Instructions file.** In the AI coding CLI, the question *"Which instructions file did you load, and which sections are still Not defined yet?"* gets an answer that comes from `AGENTS.md`, directly or through `CLAUDE.md`/`GEMINI.md`.
 4. **Rules applied.** The question *"Which libraries may you add to this project?"* gets the allow-list of `AGENTS.md` back, or the answer that there is none yet.
@@ -372,8 +400,8 @@ The findings are new work items: they go back to the first point of the loop.
 |---|---|
 | `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, nested `AGENTS.md` files | `.claude/settings.local.json` and the other CLIs' personal settings |
 | `.claude/settings.json` (plugins, permissions) | user configuration (`~/.claude/`, `~/.codex/`, …) |
-| `.agents/skills/`, the `.claude/skills` symlink | credentials and API keys, `.env` files |
-| each CLI's agents folder (`.claude/agents/`, `.codex/agents/`, …) | worktrees (`.claude/worktrees/`, `.worktrees/`) |
+| `.agents/skills/` and `.agents/agents/`, with their symlinks (`.claude/skills`, `.claude/agents`, `.opencode/agents`, …) | credentials and API keys, `.env` files |
+| converted agent copies (`.codex/agents/`) | worktrees (`.claude/worktrees/`, `.worktrees/`) |
 | `.mcp.json` and the other CLIs' project MCP files, without secrets | build output and dependency folders |
 | `docs/second-brain/`, `docs/superpowers/`, `docs/reviews/` | |
 
@@ -394,7 +422,7 @@ The rule behind the left column is in `AGENTS.md` (*Commit AI-tooling folders to
 
 | Symptom | Likely cause | Fix |
 |---|---|---|
-| The CLI does not see the `wiki-*` skills | `.claude/skills` is a text file instead of a symlink (Windows) | *Symlinks on Windows* in step 1 |
+| The CLI does not see the `wiki-*` skills or the agents | `.claude/skills` or `.claude/agents` is a text file instead of a symlink (Windows) | *Symlinks on Windows* in step 1 |
 | The agent ignores a rule | the rule is vague, or the session started before it was written | sharpen the rule, commit it, start a new session |
 | Superpowers' worktree does not have the latest changes | the worktree starts from the last commit | commit before starting a change |
 | Tests are green but prove nothing (`Ran 0 tests`) | the test runner found no tests (a missing `__init__.py`, a wrong path) | check the test count in the output, and point it out to the agent |
