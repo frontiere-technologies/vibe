@@ -1,2 +1,14 @@
-# macOS Finder metadata
+# OS metadata
 .DS_Store
+Thumbs.db
+
+# AI coding tools: personal settings and local worktrees
+.claude/settings.local.json
+.claude/worktrees/
+.worktrees/
+
+# Secrets: real values stay local, templates are committed
+.env
+.env.*
+!.env*.example
+!.env*.template

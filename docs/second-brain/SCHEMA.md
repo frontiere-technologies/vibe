@@ -37,7 +37,9 @@ last_updated: YYYY-MM-DD
 ---
 ```
 
-Use `[[PageName]]` wikilinks to link to other wiki pages.
+Source pages use the [Source Page Format](#source-page-format) instead, which records the source file and date.
+
+Use `[[PageName]]` wikilinks to link to other wiki pages. `[[PageName]]` is the file `PageName.md` in any folder under `docs/second-brain/wiki/`, so a page name is unique across `sources/`, `entities/`, `concepts/` and `syntheses/`.
 
 ---
 
@@ -66,8 +68,9 @@ Steps (in order):
 title: "Source Title"
 type: source
 tags: []
-date: YYYY-MM-DD
+date: YYYY-MM-DD          # date of the source document, if known
 source_file: docs/second-brain/raw/...
+last_updated: YYYY-MM-DD  # date of the ingest
 ---
 
 ## Summary
@@ -90,25 +93,51 @@ source_file: docs/second-brain/raw/...
 
 ### Domain-Specific Templates
 
-If the source falls into a specific domain (e.g., personal diary, meeting notes), the agent should use a specialized template instead of the default generic one above:
+If the source is of a specific kind (e.g. a specification, a decision record, meeting notes), the agent uses the matching template below instead of the generic one above. Projects add templates of their own here.
 
-#### Diary / Journal Template
+#### Specification / Requirements Template
 ```markdown
 ---
-title: "YYYY-MM-DD Diary"
+title: "Specification Title"
 type: source
-tags: [diary]
+tags: [spec]
 date: YYYY-MM-DD
+source_file: docs/second-brain/raw/...
+last_updated: YYYY-MM-DD
 ---
-## Event Summary
+## Summary
 ...
-## Key Decisions
+## Scope
 ...
-## Energy & Mood
+## Requirements
+- REQ-1: ...
+## Constraints & Assumptions
+...
+## Open Questions
 ...
 ## Connections
 ...
-## Shifts & Contradictions
+```
+
+#### Decision Record Template
+```markdown
+---
+title: "Decision: <short title>"
+type: source
+tags: [decision]
+date: YYYY-MM-DD
+source_file: docs/second-brain/raw/...
+last_updated: YYYY-MM-DD
+---
+## Context
+...
+## Decision
+...
+## Alternatives Considered
+...
+## Consequences
+...
+## Connections
 ...
 ```
 
@@ -119,6 +148,8 @@ title: "Meeting Title"
 type: source
 tags: [meeting]
 date: YYYY-MM-DD
+source_file: docs/second-brain/raw/...
+last_updated: YYYY-MM-DD
 ---
 ## Goal
 ...
@@ -140,7 +171,7 @@ Steps:
 1. Read `docs/second-brain/wiki/index.md` to identify relevant pages
 2. Read those pages
 3. Synthesize an answer with inline citations as `[[PageName]]` wikilinks
-4. Ask the user if they want the answer filed as `docs/second-brain/wiki/syntheses/<slug>.md`
+4. Ask the user if they want the answer filed as `docs/second-brain/wiki/syntheses/<slug>.md`. If they do: write the page (`type: synthesis`), add it to `index.md` under Syntheses, and append to `log.md`: `## [YYYY-MM-DD] query | <Title>`. An answer that is not filed changes nothing and is not logged.
 
 ---
 
@@ -157,7 +188,7 @@ Check for:
 - **Sparse pages** — pages with fewer than 2 outbound `[[wikilinks]]` (link density budget)
 - **Data gaps** — questions the wiki can't answer; suggest new sources
 
-Output a lint report and ask if the user wants it saved to `docs/second-brain/reports/lint-YYYY-MM-DD.md` (today's date; overwrite if it already exists).
+Output a lint report and ask if the user wants it saved to `docs/second-brain/reports/lint-YYYY-MM-DD.md` (today's date; overwrite if it already exists). Append to `log.md`: `## [YYYY-MM-DD] lint | Wiki lint`. Fixes are proposed, not applied: ask before changing any page.
 
 ---
 
@@ -166,11 +197,11 @@ Output a lint report and ask if the user wants it saved to `docs/second-brain/re
 Triggered by: *"health"*
 
 Fast structural integrity checks — mechanical, no judgment of page content, safe to run every session. Scope: every `.md` file under `docs/second-brain/wiki/` except `index.md` and `log.md`.
-- **Empty / stub files** — after removing the YAML frontmatter and trimming whitespace, a page with no body is empty and one under 100 characters is a stub (rate-limit damage)
+- **Empty / stub files** — after removing the YAML frontmatter and trimming whitespace, a page with no body is empty and one under 100 characters is a stub (usually a write that was cut short)
 - **Index sync** — `.md` link targets in `docs/second-brain/wiki/index.md` vs actual files on disk (ignore `overview.md`): stale entries and pages missing from the index
 - **Log coverage** — pages in `docs/second-brain/wiki/sources/` with no `## [YYYY-MM-DD] ingest | <Title>` line in `docs/second-brain/wiki/log.md`, where `<Title>` matches (case-insensitive) the frontmatter title or the filename with `-`/`_` turned into spaces
 
-Output a health report. If the user asks to save it, write it to `docs/second-brain/reports/health-YYYY-MM-DD.md` (today's date; overwrite if it already exists).
+Output a health report. If the user asks to save it, write it to `docs/second-brain/reports/health-YYYY-MM-DD.md` (today's date; overwrite if it already exists). Health changes nothing and is not logged.
 
 ### Health vs Lint Boundary
 
@@ -190,8 +221,8 @@ Output a health report. If the user asks to save it, write it to `docs/second-br
 ## Naming Conventions
 
 - Source slugs: `kebab-case` matching source filename
-- Entity pages: `TitleCase.md` (e.g. `OpenAI.md`, `SamAltman.md`)
-- Concept pages: `TitleCase.md` (e.g. `ReinforcementLearning.md`, `RAG.md`)
+- Entity pages: `TitleCase.md` (e.g. `PaymentsTeam.md`, `OrdersApi.md`)
+- Concept pages: `TitleCase.md` (e.g. `TechnologyReadinessLevel.md`, `DataRetention.md`)
 
 ## Index Format
 
@@ -222,4 +253,4 @@ Each entry starts with `## [YYYY-MM-DD] <operation> | <title>` so it's grep-pars
 grep "^## \[" docs/second-brain/wiki/log.md | tail -10
 ```
 
-Operations: `ingest`, `query`, `health`, `lint`
+Logged operations — only those that change the wiki or review it: `ingest`, `query` (only when the answer is filed as a synthesis page), `lint`. `health` is not logged.

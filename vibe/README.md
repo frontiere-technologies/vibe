@@ -48,10 +48,10 @@ All of it is committed to Git: the environment is part of the project, not of on
 
 The steps can be followed by hand, or run by the AI coding CLI itself: it reads this guide, runs the commands, and asks the developer for every decision. Only what the CLI cannot do on its own stays with the developer.
 
-Before the CLI can take over, the developer installs `git` and one AI coding CLI and logs in to it (a CLI cannot install itself), then clones the template and starts the CLI in it:
+Before the CLI can take over, the developer installs `git`, `gh` and one AI coding CLI and logs in to them (a CLI cannot install itself), then creates the project's repository from the template (step 1) and starts the CLI in it:
 
 ```bash
-git clone https://github.com/frontiere-technologies/vibe.git my-project
+gh repo create my-project --template frontiere-technologies/vibe --private --clone
 cd my-project
 claude      # or: codex, gemini, opencode, …
 ```
@@ -64,7 +64,7 @@ The prompt works in any language, for example in Italian: *"Esegui il setup part
 
 What happens next:
 
-- **Questions.** The CLI asks for every decision, one at a time: a fresh Git history or not, the licence, the layout of `sources/`, the sections of `AGENTS.md` (stack, commands, approved libraries, tests, boundaries), which skills, agents and MCP servers to add.
+- **Questions.** The CLI asks for every decision, one at a time: the licence, the layout of `sources/`, the sections of `AGENTS.md` (stack, commands, approved libraries, tests, boundaries), which skills, agents and MCP servers to add.
 - **Pauses for the developer.** The CLI stops for what only the developer can do: the interactive logins (`gh auth login`), the tokens of the MCP servers (set as environment variables, never written to a file), and the restart after step 2, because plugins and skills are loaded only when a session starts.
 - **Commits.** Each step ends with a commit, so the work done so far is safe and a new session can see where the setup stands.
 - **Resuming.** After the restart, or in any later session, the setup continues with: *"Continue the setup from `vibe/README.md`: check which steps are already done and go on from there."*
@@ -110,15 +110,35 @@ claude --version        # or: codex --version, gemini --version, opencode --vers
 
 ## 1. Bootstrap the repository
 
-A new project starts as a clone of this template:
+This repository is a [GitHub template](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template): a new project gets its own repository, created from the template's files, with a fresh history of its own (one initial commit) and no link back to the template.
+
+From the command line, with `gh` logged in:
+
+```bash
+gh repo create my-project --template frontiere-technologies/vibe --private --clone
+cd my-project
+```
+
+- `my-project` is created under the logged-in account; `my-org/my-project` creates it under an organisation.
+- `--private` can be `--public` or `--internal` (organisations only); `gh` needs one of them when it is given the name on the command line.
+- `--clone` clones the new repository into `./my-project`. Without it, the repository is only created on GitHub, and is cloned later with `gh repo clone my-project`.
+- Only the template's default branch is copied; the template's other branches, if any, are not.
+
+The same can be done on GitHub: **Use this template → Create a new repository** on the template's page, then `gh repo clone <owner>/my-project`.
+
+Outside GitHub (GitLab, Bitbucket, a local-only project), or with `git` alone, the template is cloned and given a fresh history by hand, then pushed to the project's own remote, an empty repository created beforehand on the hosting service:
 
 ```bash
 git clone https://github.com/frontiere-technologies/vibe.git my-project
 cd my-project
-rm -rf .git && git init    # optional: start with a fresh history
+rm -rf .git && git init && git add -A && git commit -m "Start the project from the vibe template"
+git remote add origin <url-of-the-empty-repository>
+git push -u origin HEAD
 ```
 
-The clone is ready to use: the second brain is empty, `AGENTS.md` has its project sections still to fill in, and there is no sample code or data. What still describes the template rather than the project is then adapted:
+A local-only project skips the last two lines.
+
+The new repository is ready to use: the second brain is empty, `AGENTS.md` has its project sections still to fill in, and there is no sample code or data. What still describes the template rather than the project is then adapted:
 
 - the root `README.md` — a skeleton for the project's README, whose sections are filled in
 - `LICENSE` — replaced with the project's licence, keeping the SamurAIGPT copyright line and the MIT text (in the same file or a separate one): the `wiki-*` skills and the second brain derive from MIT-licensed work, and the licence's only condition is that this notice stays with every copy (see the provenance note at the end of each skill)
@@ -126,10 +146,10 @@ The clone is ready to use: the second brain is empty, `AGENTS.md` has its projec
 
 The `vibe/` folder stays: this guide, the [second brain guide](second-brain.md) and the [tutorial](tutorial/README.md) remain part of the project. Tutorial lessons run only on a throwaway branch, never on the branch the project is built on (see the tutorial's README).
 
-The starting point is committed before the agent changes anything, so every later change can be compared with it:
+The template as it was copied is already the first commit of the new repository, so every later change can be compared with it. The adaptations above are committed on top of it, before the agent starts on the project's own work:
 
 ```bash
-git add -A && git commit -m "Start the project from the vibe template"
+git add -A && git commit -m "Adapt the vibe template to the project"
 ```
 
 ### Symlinks on Windows
@@ -143,7 +163,7 @@ git config core.symlinks true
 rm .claude/skills .claude/agents && git checkout -- .claude/skills .claude/agents
 ```
 
-The same applies to any other symlink added later, such as `.opencode/agents`. For new clones, `git clone -c core.symlinks=true <url>` creates the symlinks directly.
+The same applies to any other symlink added later, such as `.opencode/agents`. For new clones, `git clone -c core.symlinks=true <url>` (or `gh repo clone <owner>/my-project -- -c core.symlinks=true`) creates the symlinks directly; in that case the repository is created with `gh repo create` without `--clone`, then cloned this way.
 
 ---
 
@@ -317,7 +337,7 @@ Servers can be found in the [MCP registry](https://registry.modelcontextprotocol
 
 The agent runs commands on the developer's machine. This step decides what it may do without asking, and keeps personal and generated files out of Git.
 
-**Permissions.** In Claude Code, the project's rules are in `.claude/settings.json`, next to the plugin setting. The commands the agent runs all the time (tests, linters) are allowed, so it does not stop to ask, and reading secrets is denied:
+**Permissions.** In Claude Code, the project's rules are in `.claude/settings.json`, next to the plugin setting. The template already denies two things every project needs denied: reading files with real secret values (`.env`, `.env.local`, `.env.production`, …; the committed templates `.env.example` and `.env.template` stay readable), and editing the source documents in `docs/second-brain/raw/`, which are immutable. What this step adds is an `allow` list: the commands the agent runs all the time (tests, linters), so it does not stop to ask:
 
 ```json
 {
@@ -326,16 +346,24 @@ The agent runs commands on the developer's machine. This step decides what it ma
   },
   "permissions": {
     "allow": ["Bash(python3 -m unittest:*)", "Bash(flutter test:*)"],
-    "deny": ["Read(./.env)", "Read(./.env.*)"]
+    "deny": [
+      "Read(./**/.env)",
+      "Read(./**/.env.local)",
+      "Read(./**/.env.*.local)",
+      "Read(./**/.env.development)",
+      "Read(./**/.env.staging)",
+      "Read(./**/.env.production)",
+      "Edit(./docs/second-brain/raw/**)"
+    ]
   }
 }
 ```
 
-The allowed commands are those of the *Commands* section of `AGENTS.md`. Personal preferences go in `.claude/settings.local.json`, which is not committed. The agent is not run with all permission checks turned off on a developer's own machine; fully unattended runs belong in a container or a disposable cloud environment.
+The allowed commands are those of the *Commands* section of `AGENTS.md`; a project with other secret files (keys, certificates, `secrets.*`) adds them to `deny`. The deny rules cover the agent's file tools, not every shell command, so they are a safety net, not a guarantee. Personal preferences go in `.claude/settings.local.json`, which is not committed. The agent is not run with all permission checks turned off on a developer's own machine; fully unattended runs belong in a container or a disposable cloud environment.
 
 **Other CLIs:** they have equivalent approval and sandbox modes, described in their docs.
 
-**Ignored files.** `.gitignore` lists the local files the AI tools create:
+**Ignored files.** The template's `.gitignore` already lists the local files the AI tools create and the files with real secret values; the templates (`.env.example`, `.env.test.example`, `.env.template`, …) stay committed:
 
 ```gitignore
 # AI coding tools: personal settings and local worktrees
@@ -343,14 +371,14 @@ The allowed commands are those of the *Commands* section of `AGENTS.md`. Persona
 .claude/worktrees/
 .worktrees/
 
-# secrets
+# Secrets: real values stay local, templates are committed
 .env
 .env.*
-!.env.template
-!.env.example
+!.env*.example
+!.env*.template
 ```
 
-Both `.gitignore` and `.claude/settings.json` are committed.
+This step adds what the project's stack generates (build output, dependency folders, IDE files) and the personal settings of any other CLI in use. Both `.gitignore` and `.claude/settings.json` are committed.
 
 ---
 

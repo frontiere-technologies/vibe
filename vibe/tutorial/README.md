@@ -31,7 +31,7 @@ Never merge a tutorial branch into your project's branches. When a lesson asks y
 
 `examples/release-process.md` is a one-page fictional text (how a small team ships a change to its service), used by lesson 00.
 
-`examples/nasa_systems_engineering_handbook_0_excerpt_TRL.pdf` is a 15-page excerpt of the NASA Systems Engineering Handbook (SP-2016-6105 Rev2), with what the lessons need and nothing more (page numbers of the original PDF):
+`examples/nasa_systems_engineering_handbook_0_excerpt_TRL.pdf` is a 15-page excerpt of the [NASA Systems Engineering Handbook (SP-2016-6105 Rev2)](https://www.nasa.gov/wp-content/uploads/2018/09/nasa_systems_engineering_handbook_0.pdf), with what the lessons need and nothing more (page numbers of the original PDF):
 
 - pages 1–2 — cover and imprint, to identify the document
 - page 8 — Preface: what the handbook is and how it evolved
@@ -42,7 +42,7 @@ Never merge a tutorial branch into your project's branches. When a lesson asks y
 
 Keeping only those pages makes ingesting quick.
 
-`examples/nasa_systems_engineering_handbook_0.pdf` is the full handbook (297 pages), from https://www.nasa.gov/wp-content/uploads/2018/09/nasa_systems_engineering_handbook_0.pdf. It is kept for reference only: the lessons do not ingest it.
+The original document, the full handbook (297 pages, about 4 MB), is not kept in the repository. It can be downloaded from NASA: [nasa_systems_engineering_handbook_0.pdf](https://www.nasa.gov/wp-content/uploads/2018/09/nasa_systems_engineering_handbook_0.pdf). It is for reference only: the lessons do not ingest it.
 
 Lessons copy the excerpt into `docs/second-brain/raw/` before ingesting it; it is not part of the project knowledge until then.
 

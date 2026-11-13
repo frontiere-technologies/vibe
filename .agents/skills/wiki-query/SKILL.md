@@ -14,7 +14,7 @@ Follow the Query Workflow defined in docs/second-brain/SCHEMA.md:
 2. Read those pages (up to ~10 most relevant)
 3. Synthesize a thorough markdown answer with [[PageName]] wikilink citations
 4. Include a ## Sources section at the end listing pages you drew from
-5. Ask the user if they want the answer saved as docs/second-brain/wiki/syntheses/<slug>.md
+5. Ask the user if they want the answer saved as docs/second-brain/wiki/syntheses/<slug>.md. If they do: write the page (type: synthesis), add it to index.md under Syntheses, and append to docs/second-brain/wiki/log.md: ## [today's date] query | <Title>. If they do not, change nothing.
 
 If the wiki is empty, say so and suggest ingesting a source first (wiki-ingest).
 

@@ -19,8 +19,11 @@ Follow the Ingest Workflow defined in docs/second-brain/SCHEMA.md exactly:
 7. Create/update concept pages (docs/second-brain/wiki/concepts/) for key ideas and frameworks
 8. Flag any contradictions with existing wiki content
 9. Append to docs/second-brain/wiki/log.md: ## [today's date] ingest | <Title>
+10. Post-ingest validation: check that every [[wikilink]] in the new and updated pages points to an existing page, and that every new page is listed in index.md; fix what is missing
 
-After completing all writes, summarize: what was added, which pages were created or updated, and any contradictions found.
+Never modify the source file in docs/second-brain/raw/: it is immutable.
+
+After completing all writes, summarize: what was added, which pages were created or updated, any contradictions found, and the result of the validation.
 
 ---
 
