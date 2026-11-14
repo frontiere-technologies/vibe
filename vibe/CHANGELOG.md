@@ -2,6 +2,8 @@
 
 What each version of the template changes for a project, newest first. A project records the version it came from in `.vibe-template`, and the `vibe-update` skill brings it to a later one (see *Keeping the environment up to date* in [the guide](README.md)).
 
+**Maintainer rule:** the template's default branch changes only at a release: every merge into it bumps `version` in `.vibe-template`, adds a CHANGELOG entry and is tagged `v<version>`; work in progress lives on other branches. A project created between releases would otherwise get false conflicts on update.
+
 Versions follow [semantic versioning](https://semver.org) and are tags `v<version>` of the template repository. Each version has a heading `## <version> — <YYYY-MM-DD>` and two lists: *Changes*, and *By hand*, what a project must do itself because an update does not do it.
 
 ## 0.1.0 — 2026-11-14

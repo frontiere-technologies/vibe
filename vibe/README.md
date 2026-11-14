@@ -472,6 +472,8 @@ The rule behind the left column is in `AGENTS.md` (*Commit AI-tooling folders to
   - leaves out the paths the project deleted, such as `vibe/tutorial/`, unless the developer wants them back;
   - asks before committing, and never pushes.
 
+For the template's maintainers: the template's default branch changes only at a release: every merge into it bumps `version` in `.vibe-template`, adds a CHANGELOG entry and is tagged `v<version>`; work in progress lives on other branches. A project created between releases would otherwise get false conflicts on update.
+
 ---
 
 ## Troubleshooting
