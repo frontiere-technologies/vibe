@@ -81,7 +81,7 @@ check_no_secrets_tracked() {
       settings.local.json) add_problem "$f is tracked" ;;
     esac
   done <<EOF
-$(git ls-files)
+$(git -c core.quotePath=false ls-files)
 EOF
   report no-secrets-tracked "$problems"
 }
@@ -138,7 +138,7 @@ check_links() {
 $(awk '/^[[:space:]]*```/ { fence = !fence; next } !fence { gsub(/`[^`]*`/, ""); print }' "$file" | grep -o '\]([^)]*)')
 EOF
   done <<EOF
-$(git ls-files '*.md')
+$(git -c core.quotePath=false ls-files '*.md')
 EOF
   report links "$problems"
 }

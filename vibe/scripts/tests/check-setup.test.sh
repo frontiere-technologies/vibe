@@ -89,6 +89,15 @@ case_env_tracked() {
   expect_result env-tracked 1 'FAIL no-secrets-tracked:' '.env'
 }
 
+case_env_tracked_non_ascii() {
+  fresh_clone || return
+  mkdir -p "$clone/café"
+  echo "SECRET=1" > "$clone/café/.env"
+  git -C "$clone" add -f "café/.env" && gitc -C "$clone" commit -q -m "track env in a non-ASCII folder"
+  run_check "$clone"
+  expect_result env-tracked-non-ascii 1 'FAIL no-secrets-tracked:' '.env'
+}
+
 case_broken_link() {
   fresh_clone || return
   printf '\n[x](does-not-exist.md)\n' >> "$clone/README.md"
@@ -134,6 +143,7 @@ case_symlink_as_file
 case_missing_import
 case_env_ignored_template
 case_env_tracked
+case_env_tracked_non_ascii
 case_broken_link
 case_link_in_fence_and_anchor
 case_link_in_inline_code
