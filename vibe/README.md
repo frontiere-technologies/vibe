@@ -169,6 +169,8 @@ The same applies to any other symlink added later, such as `.opencode/agents`. F
 
 ## 2. Install the Superpowers workflow plugin
 
+Verified with Superpowers 7.0.0.
+
 [Superpowers](https://github.com/obra/superpowers) provides the workflow used for every non-trivial change: design before code, and tests before code.
 
 In Claude Code, the plugin is enabled for the project in `.claude/settings.json`, which is committed:
@@ -208,17 +210,21 @@ Its sections:
 | Section | Content | In a new project |
 |---|---|---|
 | Pointer to `README.md` | So the project overview is not duplicated | already there |
-| **Layout** | Where knowledge and code live (`sources/` for service-based systems, see `sources/README.md`; other folders for other kinds of project) | the code part is filled in |
+| **Layout** | Where knowledge and code live; the code folders are chosen at setup from `vibe/layouts.md` | the code folders are filled in |
 | **Commands** | Install, run, build, lint, format, test, and from which folder | filled in |
 | **Stack** | Languages and versions, frameworks, runtime, in one or two lines | filled in |
-| **Conventions** | Architectural layers and allowed dependencies, patterns, naming, the allow-list of approved libraries | filled in |
-| **Testing** | Required kinds of test, where they live, what is written test-first, the checks a change must pass | filled in |
-| **Boundaries** | What the agent must not touch, or only after asking | project rules added; the two rules already there stay |
+| **Conventions** | Architectural layers and allowed dependencies, patterns, naming, the allow-list of approved ("certified") libraries; nothing outside it is added without asking | filled in |
+| **Testing** | Required kinds of test, where they live, what is written test-first | filled in |
+| **Git workflow** | Branches, commit message format, when the agent may push | the default is kept or replaced |
+| **Language** | The language of code, documentation, wiki and commit messages, and of the conversation | the default is kept or replaced |
+| **Definition of done** | The checks a change must pass before it counts as done | the default is kept or replaced |
+| **Boundaries** | Files, folders and systems the agent must not change, or only after asking (generated code, applied migrations, vendored code, CI/CD, production configuration) | project rules added; the two rules already there stay |
 | **Using the second brain** | How the wiki is used, and where its maintenance rules are | kept as it is |
 | **Commit AI-tooling folders to Git** | Which AI folders are committed | kept as it is |
 
 Some principles for filling it in:
 
+- **Each section starts as *Not defined yet*.** A section that has a safe default keeps it until the project replaces it.
 - **What is known now is written now.** A section that cannot be filled in yet stays *Not defined yet*, and the agent follows the safe default written there, for example "run the existing tests before declaring a change done".
 - **Rules are written so that a test or a reviewer can check them.** "Breakpoints at 600 and 1200 px; every screen tested at three widths" can be checked; "make it responsive" cannot.
 - **Approved libraries form an allow-list.** Anything not on it becomes a question for the developer, not a choice for the agent: this is what keeps a request like "make it elegant" from turning into five new dependencies.
@@ -469,9 +475,3 @@ The rule behind the left column is in `AGENTS.md` (*Commit AI-tooling folders to
 - VoltAgent subagents collection: https://github.com/VoltAgent/awesome-claude-code-subagents/tree/main/categories (single agents are copied; the collection is not installed as a whole)
 - Awesome Claude (menu of extensions): https://awesomeclaude.ai
 - MCP server registries: https://registry.modelcontextprotocol.io/, https://mcpservers.com/
-
-## To be evaluated
-
-- claude-plugins-official: frontend-design, code-review, code-simplifier
-- https://github.com/thedotmack/claude-mem — persistent memory across sessions
-- https://context7.com/ — up-to-date library documentation for Claude, Codex, Cursor and other agents
