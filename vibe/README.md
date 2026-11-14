@@ -56,7 +56,7 @@ cd my-project
 claude      # or: codex, gemini, opencode, …
 ```
 
-The setup starts with one prompt:
+The setup starts with the `vibe-setup` skill, which runs these steps the same way in every CLI: `/vibe-setup` in Claude Code and Antigravity, `$vibe-setup` in Codex, or just "run the setup" in any CLI that loads skills. For a CLI that does not, one prompt does the same:
 
 > "Run the setup from `vibe/README.md`, step by step. Ask me whenever you need to decide something, and stop when an action of mine is needed."
 
@@ -67,7 +67,7 @@ What happens next:
 - **Questions.** The CLI asks for every decision, one at a time: the licence, the layout preset (`services`, `single-app`, `library` or `data`), the sections of `AGENTS.md` (stack, commands, approved libraries, tests, boundaries), which skills, agents and MCP servers to add.
 - **Pauses for the developer.** The CLI stops for what only the developer can do: the interactive logins (`gh auth login`), the tokens of the MCP servers (set as environment variables, never written to a file), and the restart after step 2, because plugins and skills are loaded only when a session starts.
 - **Commits.** Each step ends with a commit, so the work done so far is safe and a new session can see where the setup stands.
-- **Resuming.** After the restart, or in any later session, the setup continues with: *"Continue the setup from `vibe/README.md`: check which steps are already done and go on from there."*
+- **Resuming.** After the restart, or in any later session, the setup continues with *"Continue the setup"* (or `/vibe-setup` again), or, without the skill, with: *"Continue the setup from `vibe/README.md`: check which steps are already done and go on from there."*
 - **Final checks.** The checks of step 8 that ask the CLI what it loaded are meaningful only in a new session, started after the last commit.
 
 The same prompt works for a developer joining an existing project: the CLI finds steps 1 and 3–7 already in the repository and only checks them.
@@ -244,6 +244,7 @@ A skill is a folder with a `SKILL.md`: instructions, and optionally scripts and 
 Part of the template:
 
 - `wiki-ingest`, `wiki-query`, `wiki-health`, `wiki-lint` — maintain and query the second brain in `docs/second-brain/`
+- `vibe-setup` — runs this guide's setup step by step (see *Setup run by the AI coding CLI*)
 
 Further skills depend on the project's stack and kind of work, for example:
 
@@ -409,7 +410,7 @@ These checks run from the repository root after the previous steps; each one tha
 2. **GitHub CLI.** `gh auth status` reports a logged-in account.
 3. **Instructions file.** In the AI coding CLI, the question *"Which instructions file did you load, and which sections are still Not defined yet?"* gets an answer that comes from `AGENTS.md`, directly or through `CLAUDE.md`/`GEMINI.md`.
 4. **Rules applied.** The question *"Which libraries may you add to this project?"* gets the allow-list of `AGENTS.md` back, or the answer that there is none yet.
-5. **Skills and Superpowers.** The question *"Which skills are available?"* lists the four `wiki-*` skills, the skills of step 4 and the Superpowers skills (`brainstorming`, `writing-plans`, `test-driven-development`, …). In Claude Code, typing `/` shows them as slash commands.
+5. **Skills and Superpowers.** The question *"Which skills are available?"* lists `vibe-setup`, the four `wiki-*` skills, the skills of step 4 and the Superpowers skills (`brainstorming`, `writing-plans`, `test-driven-development`, …). In Claude Code, typing `/` shows them as slash commands.
 6. **Second brain.** `/wiki-health` (in Codex `$wiki-health`; in any CLI just `health`) reports, on a new repository, an empty wiki with no errors.
 7. **Agents** (step 5). The CLI's list of subagents includes `code-reviewer`, `architect-reviewer` and, unless it was removed for a project without a UI, `ui-ux-tester`.
 8. **MCP servers** (if configured in step 6). In Claude Code, `claude mcp list` shows each server of `.mcp.json` as connected; other CLIs have an equivalent command.
