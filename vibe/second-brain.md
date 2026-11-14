@@ -118,7 +118,7 @@ Standards, handbooks, regulations and glossaries of the field the software works
 /wiki-query "What is the difference between a booking and a reservation in this domain?"
 ```
 
-The [tutorial](tutorial/README.md) does this with an excerpt of the NASA Systems Engineering Handbook.
+The [tutorial](https://github.com/frontiere-technologies/vibe/tree/development/vibe/tutorial) in the template repository does this with an excerpt of the NASA Systems Engineering Handbook.
 
 ---
 

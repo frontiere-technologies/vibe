@@ -4,6 +4,10 @@ Hands-on lessons on vibe coding with this template: each one is a short session 
 
 The thread running through all of them: let the agent write the code, but keep it inside boundaries you set — project knowledge in the second brain, technical constraints in `AGENTS.md`, plans as checklists, tests as the definition of done.
 
+## Where to run the lessons
+
+The tutorial lives in the template repository, [frontiere-technologies/vibe](https://github.com/frontiere-technologies/vibe), and is removed from new projects by step 1 of the guide. Run the lessons in a throwaway repository created from the template (`gh repo create vibe-trial --template frontiere-technologies/vibe --private --clone`), or on a throwaway branch of the template itself. Delete the repository or the branch when you are done.
+
 ## Before you start
 
 - Setup steps 0–2 of [`../README.md`](../README.md) done, Superpowers included: the lessons use its workflow for every change (lesson 00 needs only steps 0–1)
@@ -13,7 +17,7 @@ The thread running through all of them: let the agent write the code, but keep i
 
 ## Run each lesson on a throwaway branch
 
-A lesson changes the repository: it fills the wiki, writes rules into `AGENTS.md`, adds code, specs and plans. None of that belongs to your project, so start every lesson on its own branch and delete the branch at the end:
+A lesson changes the repository: it fills the wiki, writes rules into `AGENTS.md`, adds code, specs and plans. None of that belongs to a real project, so even in a throwaway repository start every lesson on its own branch and delete the branch at the end:
 
 ```bash
 git switch -c tutorial/01          # before the lesson, from the branch you build on
