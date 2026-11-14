@@ -245,6 +245,7 @@ Part of the template:
 
 - `wiki-ingest`, `wiki-query`, `wiki-health`, `wiki-lint` — maintain and query the second brain in `docs/second-brain/`
 - `vibe-setup` — runs this guide's setup step by step (see *Setup run by the AI coding CLI*)
+- `vibe-update` — brings the project up to a later template version (see *Keeping the environment up to date*)
 
 Further skills depend on the project's stack and kind of work, for example:
 
@@ -410,7 +411,7 @@ These checks run from the repository root after the previous steps; each one tha
 2. **GitHub CLI.** `gh auth status` reports a logged-in account.
 3. **Instructions file.** In the AI coding CLI, the question *"Which instructions file did you load, and which sections are still Not defined yet?"* gets an answer that comes from `AGENTS.md`, directly or through `CLAUDE.md`/`GEMINI.md`.
 4. **Rules applied.** The question *"Which libraries may you add to this project?"* gets the allow-list of `AGENTS.md` back, or the answer that there is none yet.
-5. **Skills and Superpowers.** The question *"Which skills are available?"* lists `vibe-setup`, the four `wiki-*` skills, the skills of step 4 and the Superpowers skills (`brainstorming`, `writing-plans`, `test-driven-development`, …). In Claude Code, typing `/` shows them as slash commands.
+5. **Skills and Superpowers.** The question *"Which skills are available?"* lists `vibe-setup`, `vibe-update`, the four `wiki-*` skills, the skills of step 4 and the Superpowers skills (`brainstorming`, `writing-plans`, `test-driven-development`, …). In Claude Code, typing `/` shows them as slash commands.
 6. **Second brain.** `/wiki-health` (in Codex `$wiki-health`; in any CLI just `health`) reports, on a new repository, an empty wiki with no errors.
 7. **Agents** (step 5). The CLI's list of subagents includes `code-reviewer`, `architect-reviewer` and, unless it was removed for a project without a UI, `ui-ux-tester`.
 8. **MCP servers** (if configured in step 6). In Claude Code, `claude mcp list` shows each server of `.mcp.json` as connected; other CLIs have an equivalent command.
@@ -452,7 +453,7 @@ The findings are new work items: they go back to the first point of the loop.
 | converted agent copies (`.codex/agents/`) | worktrees (`.claude/worktrees/`, `.worktrees/`) |
 | `.mcp.json` and the other CLIs' project MCP files, without secrets | build output and dependency folders |
 | `docs/second-brain/`, `docs/superpowers/`, `docs/reviews/` | |
-| `.github/` (CI workflow, pull request and issue templates), `.editorconfig` | |
+| `.github/` (CI workflow, pull request and issue templates), `.editorconfig`, `.vibe-template` | |
 
 The rule behind the left column is in `AGENTS.md` (*Commit AI-tooling folders to Git*): the agent and skill definitions, the specs and the plans are the traceable history of the AI-assisted work.
 
@@ -463,7 +464,12 @@ The rule behind the left column is in `AGENTS.md` (*Commit AI-tooling folders to
 - **CLIs and plugins** change often: they are updated every few weeks, followed by the checks of step 8.
 - **Skills and agents** copied from collections do not update by themselves: an update is a deliberate change, with the diff read before it is committed.
 - **`AGENTS.md`** grows with the project: a section is filled in as soon as it stops being *Not defined yet*, and every retrospective can add a rule.
-- **This guide** belongs to the project, not to the template: when the team's setup changes, the guide changes with it.
+- **This guide and the rest of `vibe/`** belong to the template: template updates bring in their new versions. Project-specific setup notes go in `AGENTS.md` or the project's `README.md`, not here.
+- **The template itself** gets new versions, each listed in [`CHANGELOG.md`](CHANGELOG.md) with what a project must do by hand. `.vibe-template` records the template repository, the version the project came from, the paths the template owns (`owned`) and those it only suggests (`advisory`). The `vibe-update` skill (`/vibe-update` in Claude Code and Antigravity, `$vibe-update` in Codex, or "update the template" in any CLI that loads skills) fetches a later version and:
+  - merges the owned paths three-way: a change the project made to them is kept, or shown as a conflict, never overwritten;
+  - shows each advisory change, and applies it only on the developer's yes;
+  - leaves out the paths the project deleted, such as `vibe/tutorial/`, unless the developer wants them back;
+  - asks before committing, and never pushes.
 
 ---
 
