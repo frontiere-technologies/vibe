@@ -87,7 +87,7 @@ Nothing to show: go to the next. Otherwise ask whether to apply it, and wait. On
 
 ## 6. Finish
 
-- Show `git status` and `git diff HEAD --stat`, then ask before committing. On yes: `git add -A`, then a commit with subject `Update the vibe template from <old> to <new>` and a body that lists the excluded paths and the advisory paths not applied.
+- Stage everything with `git add -A` and run `git diff --cached --check`: if it reports conflict markers, stop, show them and let the developer resolve them. Otherwise show `git status` and `git diff --cached --stat`, then ask before committing. On yes: a commit with subject `Update the vibe template from <old> to <new>` and a body that lists the excluded paths and the advisory paths not applied.
 - To abandon the update instead, `git reset --hard HEAD` brings the tree back to where step 1 left it (the tree was clean); it discards any conflict resolution, so it runs only on the developer's yes. Then switch back to the branch the update started from, and delete the update branch if step 1 made one.
 - Either way, clean up: `git update-ref -d refs/vibe/old; git update-ref -d refs/vibe/new; rm -rf "$(git rev-parse --git-path vibe-update)"`.
 - Never push, and never create a tag, remote or issue.
