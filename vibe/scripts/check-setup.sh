@@ -88,6 +88,10 @@ EOF
 
 check_skills() {
   local problems="" dir name
+  # The four wiki skills are required, whatever else is in the folder.
+  for name in wiki-ingest wiki-query wiki-health wiki-lint; do
+    [ -f ".agents/skills/$name/SKILL.md" ] || add_problem "$name/SKILL.md is missing"
+  done
   for dir in .agents/skills/*/; do
     [ -d "$dir" ] || continue
     name=$(basename "$dir")

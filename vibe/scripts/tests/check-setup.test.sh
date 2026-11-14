@@ -116,6 +116,13 @@ case_link_in_inline_code() {
   expect_result link-in-inline-code 0 '!FAIL'
 }
 
+case_missing_wiki_skill() {
+  fresh_clone || return
+  git -C "$clone" rm -q -r .agents/skills/wiki-lint && gitc -C "$clone" commit -q -m "remove wiki-lint"
+  run_check "$clone"
+  expect_result missing-wiki-skill 1 'FAIL skills:' 'wiki-lint'
+}
+
 case_not_a_repo() {
   rm -rf "$tmp/empty" && mkdir "$tmp/empty"
   run_check "$tmp/empty"
@@ -130,6 +137,7 @@ case_env_tracked
 case_broken_link
 case_link_in_fence_and_anchor
 case_link_in_inline_code
+case_missing_wiki_skill
 case_not_a_repo
 
 exit "$failed"
