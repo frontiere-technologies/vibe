@@ -22,7 +22,7 @@ Not defined yet (see Commands).
 
 ## Conventions
 
-Not defined yet. Do not add a dependency outside the approved libraries, once listed here, without asking the user.
+Not defined yet. Until it is defined: ask the user before adding any dependency; once approved libraries are listed here, ask before adding any other.
 
 ## Testing
 
@@ -42,7 +42,7 @@ Not defined yet. Until it is defined: the existing tests and linters pass, and t
 
 ## Boundaries
 
-Not defined yet. Always, in every project:
+Not defined yet. Until it is defined, these two rules apply, as in every project:
 
 - Never commit secrets: commit only templates (`*.example`, `.env.template`) and keep real values in ignored files.
 - Do not change other projects or shared infrastructure from this repository.
