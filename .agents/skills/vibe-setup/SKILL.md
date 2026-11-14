@@ -10,7 +10,7 @@ The guide is the only source for what each step contains: read `vibe/README.md` 
 ## Find where the setup stands
 
 1. Run `bash vibe/scripts/check-setup.sh` and read `git log --oneline`.
-2. Match them to the guide's steps 0 to 8: a step is done when its commit is in the log and the files it changes are in place (for example, step 1 is done when `vibe/tutorial/` is gone or kept on purpose, a layout is written in *Layout* of `AGENTS.md`, and the adaptation commit exists). A `FAIL` line is a problem to report, not a step to skip.
+2. Match them to the guide's steps 0 to 8: a step is done when its commit is in the log and the files it changes are in place (for example, step 1 is done when the adaptation commit exists and *Layout* of `AGENTS.md` lists code folders). Steps that change no file, such as 0, are checked with their commands (`git --version`, `gh auth status`). A `FAIL` line is a problem to report, not a step to skip.
 3. Say which steps are done and which comes next, then go on from there. For a developer joining an existing project, only check steps 1 and 3 to 7 and run steps 0, 2 and 8.
 
 ## Run a step
@@ -27,6 +27,7 @@ The guide is the only source for what each step contains: read `vibe/README.md` 
 | Licence of the project | 1 | MIT, the template's `LICENSE`, kept |
 | Layout preset: `services`, `single-app`, `library` or `data` (see `vibe/layouts.md`) | 1 | none: the developer must choose |
 | Keep `vibe/tutorial/` | 1 | no, remove it |
+| What the project does, for the root `README.md` (the *License* line follows the licence decision) | 1 | the *Fill in* text stays |
 | The `AGENTS.md` sections to fill in (Commands, Stack, Conventions, Testing, and the others the guide lists) | 3 | a section that is not known yet stays `Not defined yet.` |
 | Extra skills | 4 | none |
 | Agents: does the project have a UI | 5 | keep all three reviewers; if there is no UI, remove `ui-ux-tester` and its line in the guide's *Quality reviews* list |

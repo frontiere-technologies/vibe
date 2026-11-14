@@ -142,7 +142,7 @@ The new repository is ready to use: the second brain is empty, `AGENTS.md` has i
 
 - the root `README.md` — a skeleton for the project's README, whose sections are filled in
 - `LICENSE` — replaced with any licence the project chooses. It is the template's own MIT licence and binds the project to nothing. `.agents/skills/THIRD_PARTY_NOTICES.md` stays with the skills: the `wiki-*` skills and the second brain derive from MIT-licensed work, and the licence's only condition is that its notice stays with every copy (see the provenance note at the end of each skill)
-- the code folders — step 1 asks which preset of [`layouts.md`](layouts.md) fits (`services`, `single-app`, `library` or `data`); the setup creates only those folders and writes them into *Layout* in `AGENTS.md`
+- the code folders — step 1 asks which preset of [`layouts.md`](layouts.md) fits (`services`, `single-app`, `library` or `data`); the setup creates only those folders, each with an empty `.gitkeep` file so Git tracks it, and writes them into *Layout* in `AGENTS.md` (for `services`, also the description in `src/README.md`, and the *Project structure* line of the root `README.md`)
 - `vibe/tutorial/` — removed with `git rm -r vibe/tutorial`. The lessons are for learning the template, not part of a project; they stay in the [template repository](https://github.com/frontiere-technologies/vibe/tree/development/vibe/tutorial). Keep the folder only to do the lessons in this project itself, on throwaway branches (see its README)
 
 The rest of `vibe/` stays: this guide and the [second brain guide](second-brain.md) remain part of the project.
