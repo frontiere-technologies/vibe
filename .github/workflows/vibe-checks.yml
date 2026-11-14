@@ -14,6 +14,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
+          persist-credentials: false
 
       - name: Check the setup
         run: bash vibe/scripts/check-setup.sh
@@ -28,7 +29,7 @@ jobs:
       - name: Scan the full history for secrets
         run: |
           docker run --rm \
-            -v "$PWD:/repo" \
+            -v "$PWD:/repo:ro" \
             -e GIT_CONFIG_COUNT=1 \
             -e GIT_CONFIG_KEY_0=safe.directory \
             -e GIT_CONFIG_VALUE_0=/repo \

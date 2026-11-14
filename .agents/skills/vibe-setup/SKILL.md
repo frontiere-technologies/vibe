@@ -36,7 +36,7 @@ The guide is the only source for what each step contains: read `vibe/README.md` 
 
 The permissions and ignore rules of step 7 and the checks of step 8 follow the guide without a separate decision, except what step 7 asks about the project's own secret files.
 
-Keep `AGENTS.md` under 70 lines and in the guide's style. Write only what the developer has said; do not invent stack, commands or libraries.
+Keep `AGENTS.md` short, with detail in files read on demand (see step 3 of the guide), and in the guide's style. Write only what the developer has said; do not invent stack, commands or libraries.
 
 ## Stop for the developer
 
