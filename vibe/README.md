@@ -141,7 +141,7 @@ A local-only project skips the last two lines.
 The new repository is ready to use: the second brain is empty, `AGENTS.md` has its project sections still to fill in, and there is no sample code or data. What still describes the template rather than the project is then adapted:
 
 - the root `README.md` — a skeleton for the project's README, whose sections are filled in
-- `LICENSE` — replaced with the project's licence, keeping the SamurAIGPT copyright line and the MIT text (in the same file or a separate one): the `wiki-*` skills and the second brain derive from MIT-licensed work, and the licence's only condition is that this notice stays with every copy (see the provenance note at the end of each skill)
+- `LICENSE` — replaced with any licence the project chooses. It is the template's own MIT licence and binds the project to nothing. `.agents/skills/THIRD_PARTY_NOTICES.md` stays with the skills: the `wiki-*` skills and the second brain derive from MIT-licensed work, and the licence's only condition is that its notice stays with every copy (see the provenance note at the end of each skill)
 - `sources/` — the service-based layout is kept or replaced with the project's own folders (see *Layout* in `AGENTS.md`)
 
 The `vibe/` folder stays: this guide, the [second brain guide](second-brain.md) and the [tutorial](tutorial/README.md) remain part of the project. Tutorial lessons run only on a throwaway branch, never on the branch the project is built on (see the tutorial's README).

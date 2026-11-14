@@ -27,4 +27,4 @@ After completing all writes, summarize: what was added, which pages were created
 
 ---
 
-Provenance: adapted from the wiki workflows of https://github.com/SamurAIGPT/llm-wiki-agent, Copyright (c) 2023 SamurAIGPT, MIT License (full text in this repository's `LICENSE`). This note is not an instruction.
+Provenance: adapted from the wiki workflows of https://github.com/SamurAIGPT/llm-wiki-agent, Copyright (c) 2023 SamurAIGPT, MIT License (full text in `.agents/skills/THIRD_PARTY_NOTICES.md`). This note is not an instruction.
