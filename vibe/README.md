@@ -39,7 +39,7 @@ All of it is committed to Git: the environment is part of the project, not of on
 2. [ ] Install the Superpowers workflow plugin
 3. [ ] Fill in the instructions file (`AGENTS.md`)
 4. [ ] Add the project skills
-5. [ ] Add the project agents (subagents)
+5. [ ] Keep or remove the reviewer agents (subagents)
 6. [ ] Configure the MCP servers
 7. [ ] Set permissions and ignore local files
 8. [ ] Verify the setup
@@ -260,7 +260,7 @@ A skill is added by copying its whole folder (`SKILL.md` and everything next to 
 
 ---
 
-## 5. Add the project agents (subagents)
+## 5. Keep or remove the reviewer agents (subagents)
 
 A subagent is a specialised assistant the main agent hands a task to. It has its own instructions and starts with a clean context, so it can, for example, review code without the bias of having written it.
 
@@ -289,18 +289,20 @@ You are a senior code reviewer. …
 
 `name` and `description` tell every CLI what the agent is and when to use it; `mode: subagent` is needed by OpenCode. Without `tools` and `model`, each CLI gives the agent its default tools and model. The price is that the tools of an agent cannot be restricted in the shared file: a reviewer that must only read says so in its instructions.
 
-**The recommended reviewers.** The recommended set is the three reviewers of the [quality reviews](#quality-reviews): `code-reviewer`, `architect-reviewer`, and `ui-ux-tester` for projects with a UI. Their reference definitions are in the [VoltAgent subagents collection](https://github.com/VoltAgent/awesome-claude-code-subagents/tree/main/categories), in Claude Code's format. The download is pinned to a commit rather than `main`, so it is clear what was installed and nothing changes underneath:
+**The reviewers that come with the template.** `.agents/agents/` already holds the three reviewers of the [quality reviews](#quality-reviews): `code-reviewer`, `architect-reviewer` and `ui-ux-tester`. They derive from the [VoltAgent subagents collection](https://github.com/VoltAgent/awesome-claude-code-subagents/tree/main/categories) (MIT licence; origin and licence text in `.agents/skills/THIRD_PARTY_NOTICES.md`), downloaded at commit `ed74d115b7fb7026a22a4f816a8e3250f425e3b4`, reduced to the shared frontmatter, and trimmed of what assumes a specific stack, tool or MCP server. Keep or remove:
+
+- Keep `code-reviewer` and `architect-reviewer`.
+- Remove `ui-ux-tester` (`rm .agents/agents/ui-ux-tester.md`) if the project has no UI, and drop its line from the list in [quality reviews](#quality-reviews).
+- Read all three once. They are generic on purpose; add the project's own rules to their instructions where a review needs them.
+
+Updating is a deliberate download at a new commit, never a download of `main`, so it is clear what was installed and nothing changes underneath. Download the reference definition of the agent to a scratch folder, compare it with the commit recorded in the notices file, read the diff, carry over only what applies to this project, and record the new commit in `.agents/skills/THIRD_PARTY_NOTICES.md`:
 
 ```bash
-REF=main    # replace with a commit SHA of the collection
-BASE=https://raw.githubusercontent.com/VoltAgent/awesome-claude-code-subagents/$REF/categories/04-quality-security
-mkdir -p .agents/agents
-for agent in code-reviewer architect-reviewer ui-ux-tester; do
-  curl -fsSL "$BASE/$agent.md" -o ".agents/agents/$agent.md"
-done
+REF=<commit SHA of the collection>
+curl -fsSL "https://raw.githubusercontent.com/VoltAgent/awesome-claude-code-subagents/$REF/categories/04-quality-security/code-reviewer.md" -o "$(mktemp -d)/code-reviewer.md"
 ```
 
-Each definition is then reduced to the shared frontmatter (`tools` and `model` removed, `mode: subagent` added), and read before it is committed: what does not apply to the project is removed from its instructions.
+The reference definitions are in Claude Code's format: a new version is reduced again to the shared frontmatter (`tools` and `model` removed, `mode: subagent` added).
 
 **Other CLIs:**
 
@@ -409,7 +411,7 @@ These checks run from the repository root after the previous steps; each one tha
 4. **Rules applied.** The question *"Which libraries may you add to this project?"* gets the allow-list of `AGENTS.md` back, or the answer that there is none yet.
 5. **Skills and Superpowers.** The question *"Which skills are available?"* lists the four `wiki-*` skills, the skills of step 4 and the Superpowers skills (`brainstorming`, `writing-plans`, `test-driven-development`, …). In Claude Code, typing `/` shows them as slash commands.
 6. **Second brain.** `/wiki-health` (in Codex `$wiki-health`; in any CLI just `health`) reports, on a new repository, an empty wiki with no errors.
-7. **Agents** (if added in step 5). The CLI's list of subagents includes `code-reviewer`, `architect-reviewer` and `ui-ux-tester`.
+7. **Agents** (step 5). The CLI's list of subagents includes `code-reviewer`, `architect-reviewer` and, unless it was removed for a project without a UI, `ui-ux-tester`.
 8. **MCP servers** (if configured in step 6). In Claude Code, `claude mcp list` shows each server of `.mcp.json` as connected; other CLIs have an equivalent command.
 9. **Nothing personal committed.** The `no-secrets-tracked` line of the script says `PASS`, and `git status` is clean.
 
