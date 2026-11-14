@@ -31,7 +31,7 @@ The guide is the only source for what each step contains: read `vibe/README.md` 
 | What the project does, for the root `README.md` (the *License* line follows the licence decision) | 1 | the *Fill in* text stays |
 | The `AGENTS.md` sections to fill in (Commands, Stack, Conventions, Testing, and the others the guide lists) | 3 | a section that is not known yet stays `Not defined yet.` |
 | Extra skills | 4 | none |
-| Agents: does the project have a UI | 5 | keep all three reviewers; if there is no UI, remove `ui-ux-tester` and its line in the guide's *Quality reviews* list |
+| Agents: does the project have a UI | 5 | keep all three reviewers; if there is no UI, remove `.agents/agents/ui-ux-tester.md` (files under `vibe/` are never edited: they belong to the template) |
 | MCP servers | 6 | none |
 
 The permissions and ignore rules of step 7 and the checks of step 8 follow the guide without a separate decision, except what step 7 asks about the project's own secret files.

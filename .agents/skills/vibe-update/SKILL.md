@@ -45,7 +45,7 @@ cat "$d/owned" "$d/advisory" | xargs git diff --no-renames --name-only --diff-fi
 sed 's|^|:(exclude)|' "$d/deleted" > "$d/exclude"; cat "$d/deleted"
 ```
 
-Tell the developer these paths stay out, and for each one whether the template changed it (`git diff --stat refs/vibe/old refs/vibe/new -- <path>`). A path the developer wants back is restored as it is at `<new>` with `git checkout refs/vibe/new -- <path>`, and its line is removed from `$d/exclude`. Files the template added between the two versions are not in this list: they arrive with the merge, unless they sit in an excluded folder.
+Tell the developer these paths stay out, and for each one whether the template changed it (`git diff --stat refs/vibe/old refs/vibe/new -- <path>`). A path the developer wants back is restored as it is at `<new>` with `git checkout refs/vibe/new -- <path>`; its line stays in `$d/exclude`, because the path is already at the target version and the merge must not apply the template's changes to it a second time. Files the template added between the two versions are not in this list: they arrive with the merge, unless they sit in an excluded folder.
 
 ## 3. Owned paths: three-way merge
 

@@ -294,7 +294,7 @@ You are a senior code reviewer. …
 **The reviewers that come with the template.** `.agents/agents/` already holds the three reviewers of the [quality reviews](#quality-reviews): `code-reviewer`, `architect-reviewer` and `ui-ux-tester`. They derive from the [VoltAgent subagents collection](https://github.com/VoltAgent/awesome-claude-code-subagents/tree/main/categories) (MIT licence; origin and licence text in `.agents/skills/THIRD_PARTY_NOTICES.md`), downloaded at commit `ed74d115b7fb7026a22a4f816a8e3250f425e3b4`, reduced to the shared frontmatter, and trimmed of what assumes a specific stack, tool or MCP server. Keep or remove:
 
 - Keep `code-reviewer` and `architect-reviewer`.
-- Remove `ui-ux-tester` (`rm .agents/agents/ui-ux-tester.md`) if the project has no UI, and drop its line from the list in [quality reviews](#quality-reviews).
+- Remove `ui-ux-tester` (`rm .agents/agents/ui-ux-tester.md`) if the project has no UI. The guide is not edited: it belongs to the template (see *Keeping the environment up to date*), and the list in [quality reviews](#quality-reviews) already says the tester runs only where it was kept.
 - Read all three once. They are generic on purpose; add the project's own rules to their instructions where a review needs them.
 
 Updating is a deliberate download at a new commit, never a download of `main`, so it is clear what was installed and nothing changes underneath. Download the reference definition of the agent to a scratch folder, compare it with the commit recorded in the notices file, read the diff, carry over only what applies to this project, and record the new commit in `.agents/skills/THIRD_PARTY_NOTICES.md`:
@@ -437,7 +437,7 @@ As the code grows, the reviewers of step 5 are run on it, each as a subagent rat
 
 - `code-reviewer` → `docs/reviews/<YYYY-MM-DD>-code-reviewer.md`
 - `architect-reviewer` → `docs/reviews/<YYYY-MM-DD>-architect-reviewer.md`
-- `ui-ux-tester` → `docs/reviews/<YYYY-MM-DD>-ui-ux-tester.md`
+- `ui-ux-tester`, if the project kept it (step 5) → `docs/reviews/<YYYY-MM-DD>-ui-ux-tester.md`
 
 The findings are new work items: they go back to the first point of the loop.
 
