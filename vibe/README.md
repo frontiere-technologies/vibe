@@ -386,7 +386,7 @@ This step adds what the project's stack generates (build output, dependency fold
 
 These checks run from the repository root after the previous steps; each one that passes ticks the setup checklist.
 
-1. **Symlinks.** `ls .claude/skills/` lists `wiki-health`, `wiki-ingest`, `wiki-lint`, `wiki-query` and the skills added in step 4; `ls .claude/agents/` lists the agents added in step 5. If either fails, or shows a file instead of a folder, see *Symlinks on Windows* in step 1.
+1. **Mechanical checks.** `bash vibe/scripts/check-setup.sh` prints one line per check (`symlinks`, `imports`, `gitignore`, `no-secrets-tracked`, `skills`, `links`); every line says `PASS`. A `FAIL` line names the problem; for `symlinks`, see *Symlinks on Windows* in step 1.
 2. **GitHub CLI.** `gh auth status` reports a logged-in account.
 3. **Instructions file.** In the AI coding CLI, the question *"Which instructions file did you load, and which sections are still Not defined yet?"* gets an answer that comes from `AGENTS.md`, directly or through `CLAUDE.md`/`GEMINI.md`.
 4. **Rules applied.** The question *"Which libraries may you add to this project?"* gets the allow-list of `AGENTS.md` back, or the answer that there is none yet.
@@ -394,7 +394,7 @@ These checks run from the repository root after the previous steps; each one tha
 6. **Second brain.** `/wiki-health` (in Codex `$wiki-health`; in any CLI just `health`) reports, on a new repository, an empty wiki with no errors.
 7. **Agents** (if added in step 5). The CLI's list of subagents includes `code-reviewer`, `architect-reviewer` and `ui-ux-tester`.
 8. **MCP servers** (if configured in step 6). In Claude Code, `claude mcp list` shows each server of `.mcp.json` as connected; other CLIs have an equivalent command.
-9. **Nothing personal committed.** `git status` is clean, and `git ls-files | grep -E 'settings.local|\.env$'` prints nothing.
+9. **Nothing personal committed.** The `no-secrets-tracked` line of the script says `PASS`, and `git status` is clean.
 
 ---
 
@@ -451,6 +451,7 @@ The rule behind the left column is in `AGENTS.md` (*Commit AI-tooling folders to
 | Symptom | Likely cause | Fix |
 |---|---|---|
 | The CLI does not see the `wiki-*` skills or the agents | `.claude/skills` or `.claude/agents` is a text file instead of a symlink (Windows) | *Symlinks on Windows* in step 1 |
+| `FAIL links` in `check-setup.sh` | a document links to a file that was moved or deleted | fix the link, or restore the file; the line names the document and the missing target |
 | The agent ignores a rule | the rule is vague, or the session started before it was written | sharpen the rule, commit it, start a new session |
 | Superpowers' worktree does not have the latest changes | the worktree starts from the last commit | commit before starting a change |
 | Tests are green but prove nothing (`Ran 0 tests`) | the test runner found no tests (a missing `__init__.py`, a wrong path) | check the test count in the output, and point it out to the agent |
