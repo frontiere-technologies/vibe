@@ -387,6 +387,16 @@ The allowed commands are those of the *Commands* section of `AGENTS.md`; a proje
 
 This step adds what the project's stack generates (build output, dependency folders, IDE files) and the personal settings of any other CLI in use. Both `.gitignore` and `.claude/settings.json` are committed.
 
+**Secret scan.** The template's CI workflow (`.github/workflows/vibe-checks.yml`) scans the full Git history with gitleaks, run from its official container image. Optionally, add a local pre-commit hook so a secret is caught before it is committed; the template does not install one. With the [pre-commit](https://pre-commit.com) tool, add this to `.pre-commit-config.yaml` and run `pre-commit install`:
+
+```yaml
+repos:
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.30.1
+    hooks:
+      - id: gitleaks
+```
+
 ---
 
 ## 8. Verify the setup
@@ -439,6 +449,7 @@ The findings are new work items: they go back to the first point of the loop.
 | converted agent copies (`.codex/agents/`) | worktrees (`.claude/worktrees/`, `.worktrees/`) |
 | `.mcp.json` and the other CLIs' project MCP files, without secrets | build output and dependency folders |
 | `docs/second-brain/`, `docs/superpowers/`, `docs/reviews/` | |
+| `.github/` (CI workflow, pull request and issue templates), `.editorconfig` | |
 
 The rule behind the left column is in `AGENTS.md` (*Commit AI-tooling folders to Git*): the agent and skill definitions, the specs and the plans are the traceable history of the AI-assisted work.
 
