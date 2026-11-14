@@ -25,7 +25,7 @@ The guide is the only source for what each step contains: read `vibe/README.md` 
 
 | Decision | Guide step | Default |
 |---|---|---|
-| Licence of the project | 1 | MIT, the template's `LICENSE`, kept |
+| Licence of the project | 1 | MIT with the project's copyright holder and year: ask for the holder (no default name; suggest the git user or organisation as a hint) and rewrite the `Copyright (c)` line of `LICENSE`; another licence replaces the file |
 | Layout preset: `services`, `single-app`, `library` or `data` (see `vibe/layouts.md`) | 1 | none: the developer must choose |
 | Keep `vibe/tutorial/` | 1 | no, remove it |
 | What the project does, for the root `README.md` (the *License* line follows the licence decision) | 1 | the *Fill in* text stays |
