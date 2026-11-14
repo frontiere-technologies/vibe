@@ -9,9 +9,10 @@ The guide is the only source for what each step contains: read `vibe/README.md` 
 
 ## Find where the setup stands
 
-1. Run `git log --oneline | grep "Setup step"`: step N is done when a commit `Setup step <N>: …` exists. Step 0 changes no file; check it with its commands (`git --version`, `gh auth status`).
-2. Run `bash vibe/scripts/check-setup.sh` as a cross-check and for step 8. A `FAIL` line is a problem to report, not a step to skip.
-3. Say which steps are done and which comes next, then go on from there. For a developer joining an existing project, only check steps 1 and 3 to 7 and run steps 0, 2 and 8.
+1. For each step N, run `git log --oneline | grep "Setup step <N>:"`: the step is done when the commit exists. Step 0 changes no file; check it with its commands (`git --version`, `gh auth status`).
+2. A step with no such commit (a repository set up by hand or before this convention, or a developer joining an existing project) is judged from the files instead: the files the guide says that step adds or changes (for step 1: `vibe/tutorial/` removed or kept on purpose, a code layout from `vibe/layouts.md` present, *Layout* of `AGENTS.md` filled in; for step 3: sections no longer `Not defined yet.`). Ask the developer to confirm a step found done this way; do not redo it.
+3. Run `bash vibe/scripts/check-setup.sh` as a cross-check and for step 8. A `FAIL` line is a problem to report, not a step to skip.
+4. Say which steps are done and which comes next, then go on from there. A developer joining an existing project only confirms steps 1 and 3 to 7 and runs steps 0, 2 and 8.
 
 ## Run a step
 

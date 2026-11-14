@@ -70,7 +70,7 @@ What happens next:
 - **Resuming.** After the restart, or in any later session, the setup continues with *"Continue the setup"* (or `/vibe-setup` again), or, without the skill, with: *"Continue the setup from `vibe/README.md`: check which steps are already done and go on from there."*
 - **Final checks.** The checks of step 8 that ask the CLI what it loaded are meaningful only in a new session, started after the last commit.
 
-The same prompt works for a developer joining an existing project: the CLI finds steps 1 and 3–7 already in the repository and only checks them.
+The same prompt works for a developer joining an existing project: the CLI finds steps 1 and 3–7 already in the repository (from the `Setup step` commits, or from the files when the project has none) and only asks the developer to confirm them.
 
 ---
 
