@@ -49,14 +49,16 @@ Triggered by: *"ingest <file>"*
 
 **Supported formats:** Markdown (`.md`) and other text formats (`.txt`, `.html`, `.csv`, `.tsv`, `.json`, `.xml`, `.yaml`, `.yml`, `.rst`, `.ipynb`) are read directly; so are PDFs. Binary office and media formats (`.docx`, `.pptx`, `.xlsx`, `.epub`, `.rtf`, `.wav`, `.mp3`) must be converted to markdown first: if the [markitdown](https://github.com/microsoft/markitdown) CLI is installed, run `markitdown <file> -o <file>.md` and ingest the result; otherwise ask the user for a markdown or PDF version.
 
+Never modify files in docs/second-brain/raw/: they are immutable.
+
 Steps (in order):
 1. Read the source document fully (convert first if it is a binary format, see above)
 2. Read `docs/second-brain/wiki/index.md` and `docs/second-brain/wiki/overview.md` for current wiki context
-3. Write `docs/second-brain/wiki/sources/<slug>.md` — use the source page format below
+3. Write `docs/second-brain/wiki/sources/<slug>.md` — use the source page format below; fill `origin` from the document or the user's words, never guessing (use "unknown" otherwise)
 4. Update `docs/second-brain/wiki/index.md` — add entry under Sources section
 5. Update `docs/second-brain/wiki/overview.md` — revise synthesis if warranted
-6. Update/create entity pages for key people, companies, projects mentioned
-7. Update/create concept pages for key ideas and frameworks discussed
+6. Update/create entity pages for key people, companies, projects mentioned — use the [Entity Page Format](#entity-page-format)
+7. Update/create concept pages for key ideas and frameworks discussed — use the [Concept Page Format](#concept-page-format)
 8. Flag any contradictions with existing wiki content
 9. Append to `docs/second-brain/wiki/log.md`: `## [YYYY-MM-DD] ingest | <Title>`
 10. **Post-ingest validation** — check for broken `[[wikilinks]]`, verify all new pages are in `index.md`, print a change summary
@@ -69,6 +71,7 @@ title: "Source Title"
 type: source
 tags: []
 date: YYYY-MM-DD          # date of the source document, if known
+origin: ""                # where the document came from (URL, person, system), or "unknown"
 source_file: docs/second-brain/raw/...
 last_updated: YYYY-MM-DD  # date of the ingest
 ---
@@ -91,6 +94,60 @@ last_updated: YYYY-MM-DD  # date of the ingest
 - Contradicts [[OtherPage]] on: ...
 ```
 
+### Entity Page Format
+
+For people, companies, projects and products.
+
+```markdown
+---
+title: "Entity Name"
+type: entity
+tags: []
+sources: []       # slugs of the source pages that inform this page
+last_updated: YYYY-MM-DD
+---
+
+## Role
+One or two sentences: what this entity is and why it matters here.
+
+## Facts
+- Fact 1
+- Fact 2
+
+## Relationships
+- [[OtherEntity]] — how they relate
+
+## Mentioned in
+- [[source-slug]]
+```
+
+### Concept Page Format
+
+For ideas, frameworks, methods and theories.
+
+```markdown
+---
+title: "Concept Name"
+type: concept
+tags: []
+sources: []       # slugs of the source pages that inform this page
+last_updated: YYYY-MM-DD
+---
+
+## Definition
+One or two sentences.
+
+## How it works here
+How the project or domain applies the concept.
+
+## Related
+- [[OtherConcept]] — how they connect
+- [[EntityName]] — how they connect
+
+## Mentioned in
+- [[source-slug]]
+```
+
 ### Domain-Specific Templates
 
 If the source is of a specific kind (e.g. a specification, a decision record, meeting notes), the agent uses the matching template below instead of the generic one above. Projects add templates of their own here.
@@ -102,6 +159,7 @@ title: "Specification Title"
 type: source
 tags: [spec]
 date: YYYY-MM-DD
+origin: ""                # where the document came from, or "unknown"
 source_file: docs/second-brain/raw/...
 last_updated: YYYY-MM-DD
 ---
@@ -126,6 +184,7 @@ title: "Decision: <short title>"
 type: source
 tags: [decision]
 date: YYYY-MM-DD
+origin: ""                # where the document came from, or "unknown"
 source_file: docs/second-brain/raw/...
 last_updated: YYYY-MM-DD
 ---
@@ -148,6 +207,7 @@ title: "Meeting Title"
 type: source
 tags: [meeting]
 date: YYYY-MM-DD
+origin: ""                # where the document came from, or "unknown"
 source_file: docs/second-brain/raw/...
 last_updated: YYYY-MM-DD
 ---
