@@ -10,7 +10,7 @@
 
 ## Project structure
 
-- `sources/` — code and operations (see [`sources/README.md`](sources/README.md))
+- `src/` — code and operations; an example, as the folders depend on the layout preset chosen at setup (see [`vibe/layouts.md`](vibe/layouts.md))
 - `docs/` — project documents: specs, plans, reviews
 - `docs/second-brain/` — project knowledge, maintained by the coding agent (see [`vibe/second-brain.md`](vibe/second-brain.md))
 

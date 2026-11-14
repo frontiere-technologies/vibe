@@ -17,7 +17,7 @@ Prompts to type into the CLI are in quotes; shell commands are in code blocks. E
 
 ## Step 0 — Start from lesson 01's branch
 
-Lessons run on throwaway branches (see [the tutorial's README](README.md#run-each-lesson-on-a-throwaway-branch)). This one starts from `tutorial/01`, where lesson 01 left the wiki, the rules and `sources/libraries/trl/`:
+Lessons run on throwaway branches (see [the tutorial's README](README.md#run-each-lesson-on-a-throwaway-branch)). This one starts from `tutorial/01`, where lesson 01 left the wiki, the rules and `src/libraries/trl/`:
 
 ```bash
 git switch tutorial/01
@@ -41,7 +41,7 @@ flutter doctor
 ```markdown
 ## Commands
 
-- Flutter web app — from `sources/microservices/web-trl/`:
+- Flutter web app — from `src/microservices/web-trl/`:
   - install dependencies: `flutter pub get`
   - run for development (hot reload): `flutter run -d chrome`
   - build and serve on its own at http://localhost:8080: `./run.sh` (port as first argument)
@@ -50,15 +50,15 @@ flutter doctor
 
 ## Stack
 
-- Flutter stable 3.x with Dart 3, Material 3, **web target only**, responsive for phone, tablet and desktop browsers — apps in `sources/microservices/web-*/`. No real back end yet: back-end calls are simulated in the app.
+- Flutter stable 3.x with Dart 3, Material 3, **web target only**, responsive for phone, tablet and desktop browsers — apps in `src/microservices/web-*/`. No real back end yet: back-end calls are simulated in the app.
 
 ## Conventions
 
 Flutter:
 
-- One app per folder `sources/microservices/web-<name>/`, created with `flutter create --platforms=web`. Only the `web/` platform folder exists.
+- One app per folder `src/microservices/web-<name>/`, created with `flutter create --platforms=web`. Only the `web/` platform folder exists.
 - Layers in `lib/`, dependencies one way only: `ui/` → `state/` → `api/`. `api/` is the back-end contract (models with JSON, an abstract client); `mock_backend/` implements it and is imported only by `main.dart` and tests. The UI never computes domain results itself: it asks the API.
-- Back-end contracts follow the Python library in `sources/libraries/trl/`: same names (camelCase in Dart, snake_case on the wire), same fields, same rules and error messages.
+- Back-end contracts follow the Python library in `src/libraries/trl/`: same names (camelCase in Dart, snake_case on the wire), same fields, same rules and error messages.
 - State with `ChangeNotifier` controllers exposed through `InheritedNotifier`; no `setState` for app-wide state. Immutable models with value equality.
 - Responsive breakpoints: compact < 600 px, medium 600–1199 px, expanded ≥ 1200 px. Every screen works at all three.
 - Colours, typography and spacing come only from the theme files in `lib/ui/theme/`; no literal colours in widgets.
@@ -163,7 +163,7 @@ flutter analyze
 Start it the way any user would:
 
 ```bash
-cd sources/microservices/web-trl && ./run.sh
+cd src/microservices/web-trl && ./run.sh
 ```
 
 Open http://localhost:8080 and look at it at three widths. Chrome's device toolbar (DevTools → *Toggle device toolbar*) gives you a phone and a tablet; a wide window is the desktop.

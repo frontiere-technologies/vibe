@@ -10,7 +10,7 @@ A folder of the code can add its own `AGENTS.md`; its rules add to this file and
 
 - `docs/second-brain/` — knowledge base: source documents (`raw/`), the wiki (`wiki/`) and saved reports (`reports/`). `docs/second-brain/wiki/sources/` holds summaries of source documents, not code.
 - `docs/` — other project documents (see `docs/README.md`).
-- Code folders: not defined yet (chosen at setup, see `vibe/layouts.md`).
+- Code folders: not defined yet (chosen at setup from the presets in [`vibe/layouts.md`](vibe/layouts.md)).
 
 ## Commands
 

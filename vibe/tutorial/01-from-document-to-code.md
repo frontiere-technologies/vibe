@@ -50,7 +50,7 @@ Open `AGENTS.md` and replace the *Not defined yet* lines of four sections with t
 ```markdown
 ## Commands
 
-- Run the tests: `python3 -m unittest discover -s sources/libraries -t sources/libraries`
+- Run the tests: `python3 -m unittest discover -s src/libraries -t src/libraries`
 
 ## Stack
 
@@ -58,7 +58,7 @@ Python 3.9+ (the version macOS ships), standard library only.
 
 ## Conventions
 
-- Library code lives in `sources/libraries/<name>/`, one package per library, with its tests in `sources/libraries/<name>/tests/`. Both folders have an `__init__.py`.
+- Library code lives in `src/libraries/<name>/`, one package per library, with its tests in `src/libraries/<name>/tests/`. Both folders have an `__init__.py`.
 - Pure functions, type hints everywhere, no I/O in library code.
 - Approved libraries: the Python standard library. Nothing else.
 
@@ -104,7 +104,7 @@ Answer with your decisions as they come up, for example:
 
 Approve the design. Superpowers moves on to `writing-plans` and saves an implementation plan to `docs/superpowers/plans/YYYY-MM-DD-<feature>.md`.
 
-**Expect:** a list of the files to create, then small tasks; each task has checkbox steps — write the failing test, run it and see it fail, implement, run it and see it pass, commit. File locations and the test command should come from your `AGENTS.md` (`sources/libraries/trl/`, `__init__.py` in both folders, `python3 -m unittest …`).
+**Expect:** a list of the files to create, then small tasks; each task has checkbox steps — write the failing test, run it and see it fail, implement, run it and see it pass, commit. File locations and the test command should come from your `AGENTS.md` (`src/libraries/trl/`, `__init__.py` in both folders, `python3 -m unittest …`).
 
 The agent then asks you to review the plan and choose how to run it:
 
@@ -129,7 +129,7 @@ Then let it run. Answer when it asks, and interrupt if it drifts from the plan.
 Run the tests yourself, from the worktree folder the agent reports:
 
 ```bash
-python3 -m unittest discover -s sources/libraries -t sources/libraries
+python3 -m unittest discover -s src/libraries -t src/libraries
 ```
 
 **Check:** the output must say `Ran N tests` with N greater than zero. `Ran 0 tests … OK` means `unittest` found nothing, usually because an `__init__.py` is missing: a green result that proves nothing, and a good thing to point out to the agent.
@@ -163,7 +163,7 @@ This is the habit to keep: when the agent breaks a rule, fix the rule, not only 
 | Design before code | `docs/superpowers/specs/` | Your decisions written down and approved before anything was built |
 | Plan as a checklist | `docs/superpowers/plans/` | Small, verifiable tasks, and visible progress |
 | Isolated branch | git worktree | Work you could merge, open as a PR, or throw away |
-| Tests as definition of done | `sources/libraries/trl/tests/` | Proof, shown before every "done" |
+| Tests as definition of done | `src/libraries/trl/tests/` | Proof, shown before every "done" |
 
 If you go on to lesson 02, keep this branch: lesson 02 starts from it. Otherwise, when you are done, throw the lesson away and go back to a clean project:
 

@@ -64,7 +64,7 @@ The prompt works in any language, for example in Italian: *"Esegui il setup part
 
 What happens next:
 
-- **Questions.** The CLI asks for every decision, one at a time: the licence, the layout of `sources/`, the sections of `AGENTS.md` (stack, commands, approved libraries, tests, boundaries), which skills, agents and MCP servers to add.
+- **Questions.** The CLI asks for every decision, one at a time: the licence, the layout preset (`services`, `single-app`, `library` or `data`), the sections of `AGENTS.md` (stack, commands, approved libraries, tests, boundaries), which skills, agents and MCP servers to add.
 - **Pauses for the developer.** The CLI stops for what only the developer can do: the interactive logins (`gh auth login`), the tokens of the MCP servers (set as environment variables, never written to a file), and the restart after step 2, because plugins and skills are loaded only when a session starts.
 - **Commits.** Each step ends with a commit, so the work done so far is safe and a new session can see where the setup stands.
 - **Resuming.** After the restart, or in any later session, the setup continues with: *"Continue the setup from `vibe/README.md`: check which steps are already done and go on from there."*
@@ -142,7 +142,7 @@ The new repository is ready to use: the second brain is empty, `AGENTS.md` has i
 
 - the root `README.md` — a skeleton for the project's README, whose sections are filled in
 - `LICENSE` — replaced with any licence the project chooses. It is the template's own MIT licence and binds the project to nothing. `.agents/skills/THIRD_PARTY_NOTICES.md` stays with the skills: the `wiki-*` skills and the second brain derive from MIT-licensed work, and the licence's only condition is that its notice stays with every copy (see the provenance note at the end of each skill)
-- `sources/` — the service-based layout is kept or replaced with the project's own folders (see *Layout* in `AGENTS.md`)
+- the code folders — step 1 asks which preset of [`layouts.md`](layouts.md) fits (`services`, `single-app`, `library` or `data`); the setup creates only those folders and writes them into *Layout* in `AGENTS.md`
 
 The `vibe/` folder stays: this guide, the [second brain guide](second-brain.md) and the [tutorial](tutorial/README.md) remain part of the project. Tutorial lessons run only on a throwaway branch, never on the branch the project is built on (see the tutorial's README).
 
