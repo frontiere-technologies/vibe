@@ -11,7 +11,7 @@ The template ships no code folders. Step 1 of the [setup guide](README.md) asks 
 
 The code root of the `services` preset is `src/`, not `sources/`: the name `sources/` would clash with the wiki folder `docs/second-brain/wiki/sources/`, which holds summaries of source documents.
 
-Each preset below lists its folders and the lines to put in the *Layout* section of [`AGENTS.md`](../AGENTS.md). The two lines about `docs/` already there stay.
+Each preset below lists its folders and the lines to put in the *Layout* section of [`AGENTS.md`](../AGENTS.md). The two lines about `docs/` already there stay. Each preset also gives the lines for *Project structure* in the root [`README.md`](../README.md), which replace its example `src/` line. Empty folders get a `.gitkeep` file so Git tracks them.
 
 ## services
 
@@ -45,6 +45,12 @@ Conventions for `src/README.md`:
 - `src/` — code and operations, described in `src/README.md`: `microservices/` (one folder per deployable service), `libraries/` (shared code), `devops/` (build, deploy, operate), `tests/e2e/` (end-to-end tests).
 ```
 
+### README.md Project structure lines
+
+```markdown
+- `src/` — code and operations, described in `src/README.md`
+```
+
 ## single-app
 
 One application or monolith, with its tests next to it.
@@ -64,6 +70,13 @@ test/                               unit, integration and end-to-end tests
 ```markdown
 - `app/` — the application code, its package manifest and environment template.
 - `test/` — all tests, mirroring `app/`; end-to-end tests in `test/e2e/`.
+```
+
+### README.md Project structure lines
+
+```markdown
+- `app/` — the application code
+- `test/` — its tests
 ```
 
 ## library
@@ -90,6 +103,14 @@ example/                            small programs that use the library
 - `example/` — runnable examples that use only the public interface.
 ```
 
+### README.md Project structure lines
+
+```markdown
+- `lib/` — the library's code
+- `test/` — its tests
+- `example/` — runnable examples
+```
+
 ## data
 
 Data analysis, machine learning or data engineering.
@@ -112,4 +133,12 @@ pipelines/                          code that produces and transforms data
 - `notebooks/` — exploration and reports; proven logic moves into `pipelines/`.
 - `data/` — datasets: `raw/` is never edited, `processed/` comes from the pipelines; large or private data is not committed.
 - `pipelines/` — tested code that produces and transforms data and models.
+```
+
+### README.md Project structure lines
+
+```markdown
+- `notebooks/` — exploration and reports
+- `data/` — datasets
+- `pipelines/` — code that produces and transforms data
 ```
