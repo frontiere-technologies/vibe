@@ -66,7 +66,7 @@ What happens next:
 
 - **Questions.** The CLI asks for every decision, one at a time: the licence, the layout preset (`services`, `single-app`, `library` or `data`), the sections of `AGENTS.md` (stack, commands, approved libraries, tests, boundaries), which skills, agents and MCP servers to add.
 - **Pauses for the developer.** The CLI stops for what only the developer can do: the interactive logins (`gh auth login`), the tokens of the MCP servers (set as environment variables, never written to a file), and the restart after step 2, because plugins and skills are loaded only when a session starts.
-- **Commits.** Each step ends with a commit, so the work done so far is safe and a new session can see where the setup stands.
+- **Commits.** Each step ends with a commit whose subject is `Setup step <N>: <what was done>`, so the work done so far is safe and a new session finds where the setup stands with `git log --oneline | grep "Setup step"`. A step skipped by choice (for example no MCP servers) still gets a commit, which may be empty (`git commit --allow-empty`), saying so. A setup done by hand follows the same convention.
 - **Resuming.** After the restart, or in any later session, the setup continues with *"Continue the setup"* (or `/vibe-setup` again), or, without the skill, with: *"Continue the setup from `vibe/README.md`: check which steps are already done and go on from there."*
 - **Final checks.** The checks of step 8 that ask the CLI what it loaded are meaningful only in a new session, started after the last commit.
 
@@ -150,7 +150,7 @@ The rest of `vibe/` stays: this guide and the [second brain guide](second-brain.
 The template as it was copied is already the first commit of the new repository, so every later change can be compared with it. The adaptations above are committed on top of it, before the agent starts on the project's own work:
 
 ```bash
-git add -A && git commit -m "Adapt the vibe template to the project"
+git add -A && git commit -m "Setup step 1: adapt the vibe template to the project"
 ```
 
 ### Symlinks on Windows

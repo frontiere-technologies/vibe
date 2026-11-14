@@ -9,15 +9,15 @@ The guide is the only source for what each step contains: read `vibe/README.md` 
 
 ## Find where the setup stands
 
-1. Run `bash vibe/scripts/check-setup.sh` and read `git log --oneline`.
-2. Match them to the guide's steps 0 to 8: a step is done when its commit is in the log and the files it changes are in place (for example, step 1 is done when the adaptation commit exists and *Layout* of `AGENTS.md` lists code folders). Steps that change no file, such as 0, are checked with their commands (`git --version`, `gh auth status`). A `FAIL` line is a problem to report, not a step to skip.
+1. Run `git log --oneline | grep "Setup step"`: step N is done when a commit `Setup step <N>: …` exists. Step 0 changes no file; check it with its commands (`git --version`, `gh auth status`).
+2. Run `bash vibe/scripts/check-setup.sh` as a cross-check and for step 8. A `FAIL` line is a problem to report, not a step to skip.
 3. Say which steps are done and which comes next, then go on from there. For a developer joining an existing project, only check steps 1 and 3 to 7 and run steps 0, 2 and 8.
 
 ## Run a step
 
 - Ask one decision at a time. Offer the default and say it is the default; wait for the answer before the next question. Never batch questions.
 - Do the step's work with the commands and files the guide names. Do not add a dependency, skill, agent or MCP server the developer did not accept.
-- End each step with one commit, imperative subject and a body that says why. Check `git status` first, so a commit holds only that step's work.
+- End every step 1 to 8 with one commit, subject `Setup step <N>: <what was done>`, body saying why. Check `git status` first, so a commit holds only that step's work. A step skipped by choice (no extra skills, no MCP servers) still gets the commit, with `--allow-empty` if nothing changed, and the subject or body says it was skipped.
 - Never push, and never create a remote, tag or issue.
 
 ## Decisions, in order
