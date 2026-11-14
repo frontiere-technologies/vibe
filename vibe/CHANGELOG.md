@@ -4,7 +4,7 @@ What each version of the template changes for a project, newest first. A project
 
 Versions follow [semantic versioning](https://semver.org) and are tags `v<version>` of the template repository. Each version has a heading `## <version> — <YYYY-MM-DD>` and two lists: *Changes*, and *By hand*, what a project must do itself because an update does not do it.
 
-## Unreleased
+## 0.1.0 — 2026-11-14
 
 ### Changes
 
@@ -21,4 +21,4 @@ Versions follow [semantic versioning](https://semver.org) and are tags `v<versio
 
 ### By hand
 
-- Nothing yet.
+- **Projects created before 0.1.0.** They have no `.vibe-template`. Create it by hand: copy the template's file (`https://github.com/frontiere-technologies/vibe/blob/v0.1.0/.vibe-template`) to the root of the project, keeping `version: 0.1.0`. Use the `vibe-update` skill for later versions; it needs that file to start.
