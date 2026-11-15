@@ -56,7 +56,7 @@ cd my-project
 claude      # or: codex, gemini, opencode, …
 ```
 
-The setup starts with the `vibe-setup` skill, which runs these steps the same way in every CLI: `/vibe-setup` in Claude Code and Antigravity, `$vibe-setup` in Codex, or just "run the setup" in any CLI that loads skills. For a CLI that does not, one prompt does the same:
+The setup starts with one prompt, the same in every CLI:
 
 > "Run the setup from `vibe/README.md`, step by step. Ask me whenever you need to decide something, and stop when an action of mine is needed."
 
@@ -64,10 +64,10 @@ The prompt works in any language, for example in Italian: *"Esegui il setup part
 
 What happens next:
 
-- **Questions.** The CLI asks for every decision, one at a time: the licence, whether to remove the template's tutorial and design history, the sections of `AGENTS.md` (stack, commands, approved libraries, tests, boundaries), which skills, agents and MCP servers to add.
+- **Questions.** The CLI asks for every decision, one at a time: the licence, whether to remove the template's tutorial, the sections of `AGENTS.md` (stack, commands, approved libraries, tests, boundaries), which skills, agents and MCP servers to add.
 - **Pauses for the developer.** The CLI stops for what only the developer can do: the interactive logins (`gh auth login`), the tokens of the MCP servers (set as environment variables, never written to a file), and the restart after step 2, because plugins and skills are loaded only when a session starts.
 - **Commits.** Each step ends with a commit whose subject is `Setup step <N>: <what was done>`, so the work done so far is safe and a new session finds where the setup stands with `git log --oneline | grep "Setup step"`. A step skipped by choice (for example no MCP servers) still gets a commit, which may be empty (`git commit --allow-empty`), saying so. A setup done by hand follows the same convention.
-- **Resuming.** After the restart, or in any later session, the setup continues with *"Continue the setup"* (or `/vibe-setup` again), or, without the skill, with: *"Continue the setup from `vibe/README.md`: check which steps are already done and go on from there."*
+- **Resuming.** After the restart, or in any later session, the setup continues with: *"Continue the setup from `vibe/README.md`: check which steps are already done and go on from there."*
 - **Final checks.** The checks of step 8 that ask the CLI what it loaded are meaningful only in a new session, started after the last commit.
 
 The same prompt works for a developer joining an existing project: the CLI finds steps 1 and 3–7 already in the repository (from the `Setup step` commits, or from the files when the project has none) and only asks the developer to confirm them.
@@ -141,10 +141,9 @@ A local-only project skips the last two lines.
 The new repository is ready to use: the second brain is empty, `AGENTS.md` has its project sections still to fill in, and there is no sample code or data. What still describes the template rather than the project is then adapted:
 
 - the root `README.md` — a skeleton for the project's README, whose sections are filled in
-- `LICENSE` — by default the MIT licence with the project's own copyright line: the setup asks for the copyright holder (a person or an organisation; the git user or organisation is a hint, there is no default name) and rewrites `Copyright (c) <year> <holder>`, so the template author's name does not stay in the project. Any other licence the project chooses replaces the file. `.agents/skills/THIRD_PARTY_NOTICES.md` stays with the skills: the `wiki-*` skills and the second brain derive from MIT-licensed work, and the licence's only condition is that its notice stays with every copy (see the provenance note at the end of each skill)
+- `LICENSE` — by default the MIT licence with the project's own copyright line: the setup asks for the copyright holder (a person or an organisation; the git user or organisation is a hint, there is no default name) and rewrites `Copyright (c) <year> <holder>`, so the template author's name does not stay in the project. Any other licence the project chooses replaces the file. `.agents/THIRD_PARTY_NOTICES.md` stays with the skills and agents: the `wiki-*` skills, the second brain and the reviewer agents derive from MIT-licensed work, and the licence's only condition is that its notice stays with every copy (see the provenance note at the end of each skill)
 - the code folders — `sources/` ships with `microservices/`, `libraries/`, `devops/` and `tests/e2e/`, described in [`sources/README.md`](../sources/README.md); the empty ones hold a `.gitkeep` file so Git tracks them. The setup leaves them as they are. A project of another kind renames or removes them later, for example `app/` + `test/` for a single application, `lib/` + `test/` + `example/` for a published library, `notebooks/` + `data/` + `pipelines/` for data work, and then updates *Layout* in `AGENTS.md` and *Project structure* in the root `README.md`. The code folder `sources/` is not the wiki's `docs/second-brain/wiki/sources/`, which holds summaries of source documents
 - `vibe/tutorial/` — removed with `git rm -r vibe/tutorial`. The lessons are for learning the template, not part of a project; they stay in the [template repository](https://github.com/frontiere-technologies/vibe/tree/development/vibe/tutorial). Keep the folder only to do the lessons in this project itself, on throwaway branches (see its README)
-- `docs/superpowers/` — the template's own design history (the spec and plan of its generalisation) is removed with `git rm -r docs/superpowers`. Superpowers recreates the folder for the project's own specs and plans
 
 The rest of `vibe/` stays: this guide and the [second brain guide](second-brain.md) remain part of the project.
 
@@ -245,9 +244,6 @@ A skill is a folder with a `SKILL.md`: instructions, and optionally scripts and 
 Part of the template:
 
 - `wiki-ingest`, `wiki-query`, `wiki-health`, `wiki-lint` — maintain and query the second brain in `docs/second-brain/`
-- `vibe-setup` — runs this guide's setup step by step (see *Setup run by the AI coding CLI*)
-- `vibe-update` — brings the project up to a later template version (see *Keeping the environment up to date*)
-- `vibe-check-setup` — runs the mechanical checks of the setup and explains each failure (see step 8); its script also runs in CI
 
 Further skills depend on the project's stack and kind of work, for example:
 
@@ -293,13 +289,13 @@ You are a senior code reviewer. …
 
 `name` and `description` tell every CLI what the agent is and when to use it; `mode: subagent` is needed by OpenCode. Without `tools` and `model`, each CLI gives the agent its default tools and model. The price is that the tools of an agent cannot be restricted in the shared file: a reviewer that must only read says so in its instructions.
 
-**The reviewers that come with the template.** `.agents/agents/` already holds the three reviewers of the [quality reviews](#quality-reviews): `code-reviewer`, `architect-reviewer` and `ui-ux-tester`. They derive from the [VoltAgent subagents collection](https://github.com/VoltAgent/awesome-claude-code-subagents/tree/main/categories) (MIT licence; origin and licence text in `.agents/skills/THIRD_PARTY_NOTICES.md`), downloaded at commit `ed74d115b7fb7026a22a4f816a8e3250f425e3b4`, reduced to the shared frontmatter, and trimmed of what assumes a specific stack, tool or MCP server. Keep or remove:
+**The reviewers that come with the template.** `.agents/agents/` already holds the three reviewers of the [quality reviews](#quality-reviews): `code-reviewer`, `architect-reviewer` and `ui-ux-tester`. They derive from the [VoltAgent subagents collection](https://github.com/VoltAgent/awesome-claude-code-subagents/tree/main/categories) (MIT licence; origin and licence text in `.agents/THIRD_PARTY_NOTICES.md`), downloaded at commit `ed74d115b7fb7026a22a4f816a8e3250f425e3b4`, reduced to the shared frontmatter, and trimmed of what assumes a specific stack, tool or MCP server. Keep or remove:
 
 - Keep `code-reviewer` and `architect-reviewer`.
 - Remove `ui-ux-tester` (`rm .agents/agents/ui-ux-tester.md`) if the project has no UI. The guide is not edited: it belongs to the template (see *Keeping the environment up to date*), and the list in [quality reviews](#quality-reviews) already says the tester runs only where it was kept.
 - Read all three once. They are generic on purpose; add the project's own rules to their instructions where a review needs them.
 
-Updating is a deliberate download at a new commit, never a download of `main`, so it is clear what was installed and nothing changes underneath. Download the reference definition of the agent to a scratch folder, compare it with the commit recorded in the notices file, read the diff, carry over only what applies to this project, and record the new commit in `.agents/skills/THIRD_PARTY_NOTICES.md`:
+Updating is a deliberate download at a new commit, never a download of `main`, so it is clear what was installed and nothing changes underneath. Download the reference definition of the agent to a scratch folder, compare it with the commit recorded in the notices file, read the diff, carry over only what applies to this project, and record the new commit in `.agents/THIRD_PARTY_NOTICES.md`:
 
 ```bash
 REF=<commit SHA of the collection>
@@ -393,7 +389,7 @@ The allowed commands are those of the *Commands* section of `AGENTS.md`; a proje
 
 This step adds what the project's stack generates (build output, dependency folders, IDE files) and the personal settings of any other CLI in use. Both `.gitignore` and `.claude/settings.json` are committed.
 
-**Secret scan.** The template's CI workflow (`.github/workflows/vibe-checks.yml`) scans the full Git history with gitleaks, run from its official container image. Optionally, add a local pre-commit hook so a secret is caught before it is committed; the template does not install one. With the [pre-commit](https://pre-commit.com) tool, add this to `.pre-commit-config.yaml` and run `pre-commit install`:
+**Secret scan.** Optionally, add a local pre-commit hook with [gitleaks](https://github.com/gitleaks/gitleaks), so a secret is caught before it is committed; the template does not install one. With the [pre-commit](https://pre-commit.com) tool, add this to `.pre-commit-config.yaml` and run `pre-commit install`:
 
 ```yaml
 repos:
@@ -409,15 +405,15 @@ repos:
 
 These checks run from the repository root after the previous steps; each one that passes ticks the setup checklist.
 
-1. **Mechanical checks.** The `vibe-check-setup` skill (`/vibe-check-setup` in Claude Code and Antigravity, `$vibe-check-setup` in Codex, or "check the setup") runs `bash .agents/skills/vibe-check-setup/scripts/check-setup.sh`, which can also be run by hand. It prints one line per check (`symlinks`, `imports`, `gitignore`, `no-secrets-tracked`, `skills`, `links`); every line says `PASS`. A `FAIL` line names the problem; for `symlinks`, see *Symlinks on Windows* in step 1.
+1. **Symlinks.** `ls .claude/skills/` lists `wiki-health`, `wiki-ingest`, `wiki-lint`, `wiki-query` and the skills added in step 4; `ls .claude/agents/` lists the agents kept in step 5. If either fails, or shows a file instead of a folder, see *Symlinks on Windows* in step 1.
 2. **GitHub CLI.** `gh auth status` reports a logged-in account.
 3. **Instructions file.** In the AI coding CLI, the question *"Which instructions file did you load, and which sections are still Not defined yet?"* gets an answer that comes from `AGENTS.md`, directly or through `CLAUDE.md`/`GEMINI.md`.
 4. **Rules applied.** The question *"Which libraries may you add to this project?"* gets the allow-list of `AGENTS.md` back, or the answer that there is none yet.
-5. **Skills and Superpowers.** The question *"Which skills are available?"* lists `vibe-setup`, `vibe-update`, `vibe-check-setup`, the four `wiki-*` skills, the skills of step 4 and the Superpowers skills (`brainstorming`, `writing-plans`, `test-driven-development`, …). In Claude Code, typing `/` shows them as slash commands.
+5. **Skills and Superpowers.** The question *"Which skills are available?"* lists the four `wiki-*` skills, the skills of step 4 and the Superpowers skills (`brainstorming`, `writing-plans`, `test-driven-development`, …). In Claude Code, typing `/` shows them as slash commands.
 6. **Second brain.** `/wiki-health` (in Codex `$wiki-health`; in any CLI just `health`) reports, on a new repository, an empty wiki with no errors.
 7. **Agents** (step 5). The CLI's list of subagents includes `code-reviewer`, `architect-reviewer` and, unless it was removed for a project without a UI, `ui-ux-tester`.
 8. **MCP servers** (if configured in step 6). In Claude Code, `claude mcp list` shows each server of `.mcp.json` as connected; other CLIs have an equivalent command.
-9. **Nothing personal committed.** The `no-secrets-tracked` line of the script says `PASS`, and `git status` is clean.
+9. **Nothing personal committed.** `git status` is clean, and `git ls-files | grep -E 'settings\.local|(^|/)\.env($|\.)' | grep -vE '\.(example|template)$'` prints nothing.
 
 ---
 
@@ -455,7 +451,7 @@ The findings are new work items: they go back to the first point of the loop.
 | converted agent copies (`.codex/agents/`) | worktrees (`.claude/worktrees/`, `.worktrees/`) |
 | `.mcp.json` and the other CLIs' project MCP files, without secrets | build output and dependency folders |
 | `docs/second-brain/`, `docs/superpowers/`, `docs/reviews/` | |
-| `.github/` (CI workflow, pull request and issue templates), `.editorconfig`, `.vibe-template` | |
+| `.editorconfig` | |
 
 The rule behind the left column is in `AGENTS.md` (*Commit AI-tooling folders to Git*): the agent and skill definitions, the specs and the plans are the traceable history of the AI-assisted work.
 
@@ -466,14 +462,7 @@ The rule behind the left column is in `AGENTS.md` (*Commit AI-tooling folders to
 - **CLIs and plugins** change often: they are updated every few weeks, followed by the checks of step 8.
 - **Skills and agents** copied from collections do not update by themselves: an update is a deliberate change, with the diff read before it is committed.
 - **`AGENTS.md`** grows with the project: a section is filled in as soon as it stops being *Not defined yet*, and every retrospective can add a rule.
-- **This guide and the rest of `vibe/`** belong to the template: template updates bring in their new versions. Project-specific setup notes go in `AGENTS.md` or the project's `README.md`, not here.
-- **The template itself** gets new versions, each listed in [`CHANGELOG.md`](CHANGELOG.md) with what a project must do by hand. `.vibe-template` records the template repository, the version the project came from, the paths the template owns (`owned`) and those it only suggests (`advisory`). The `vibe-update` skill (`/vibe-update` in Claude Code and Antigravity, `$vibe-update` in Codex, or "update the template" in any CLI that loads skills) fetches a later version and:
-  - merges the owned paths three-way: a change the project made to them is kept, or shown as a conflict, never overwritten;
-  - shows each advisory change, and applies it only on the developer's yes;
-  - leaves out the paths the project deleted, such as `vibe/tutorial/`, unless the developer wants them back;
-  - asks before committing, and never pushes.
-
-For the template's maintainers: the template's default branch changes only at a release: every merge into it bumps `version` in `.vibe-template`, adds a CHANGELOG entry and is tagged `v<version>`; work in progress lives on other branches. A project created between releases would otherwise get false conflicts on update.
+- **The template itself** changes over time; [`CHANGELOG.md`](CHANGELOG.md) lists what each version changes. A project brings in the changes it wants by hand.
 
 ---
 
@@ -482,7 +471,6 @@ For the template's maintainers: the template's default branch changes only at a 
 | Symptom | Likely cause | Fix |
 |---|---|---|
 | The CLI does not see the `wiki-*` skills or the agents | `.claude/skills` or `.claude/agents` is a text file instead of a symlink (Windows) | *Symlinks on Windows* in step 1 |
-| `FAIL links` from `vibe-check-setup` | a document links to a file that was moved or deleted | fix the link, or restore the file; the line names the document and the missing target |
 | The agent ignores a rule | the rule is vague, or the session started before it was written | sharpen the rule, commit it, start a new session |
 | Superpowers' worktree does not have the latest changes | the worktree starts from the last commit | commit before starting a change |
 | Tests are green but prove nothing (`Ran 0 tests`) | the test runner found no tests (a missing `__init__.py`, a wrong path) | check the test count in the output, and point it out to the agent |

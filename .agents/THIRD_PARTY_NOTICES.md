@@ -1,11 +1,11 @@
 # Third-party notices
 
-The skills in this folder include material from third-party projects. Each section names the origin, what was derived from it, and the licence text that must stay with every copy.
+The files in this folder (the `wiki-*` skills in `skills/` and the agents in `agents/`) and `docs/second-brain/SCHEMA.md` include material from third-party projects. Each section names the origin, what was derived from it, and the licence text that must stay with every copy.
 
 ## LLM Wiki Agent
 
 - Origin: https://github.com/SamurAIGPT/llm-wiki-agent
-- Derived from it: the `wiki-*` skills in this folder and `docs/second-brain/SCHEMA.md`.
+- Derived from it: the `wiki-*` skills in `.agents/skills/` and `docs/second-brain/SCHEMA.md`.
 - Licence: MIT.
 
 ```
