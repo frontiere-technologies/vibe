@@ -10,8 +10,8 @@ The guide is the only source for what each step contains: read `vibe/README.md` 
 ## Find where the setup stands
 
 1. For each step N, run `git log --oneline | grep "Setup step <N>:"`: the step is done when the commit exists. Step 0 changes no file; check it with its commands (`git --version`, `gh auth status`).
-2. A step with no such commit (a repository set up by hand or before this convention, or a developer joining an existing project) is judged from the files instead: the files the guide says that step adds or changes (for step 1: `vibe/tutorial/` and `docs/superpowers/` removed or kept on purpose, a code layout from `vibe/layouts.md` present, *Layout* of `AGENTS.md` filled in; for step 3: sections no longer `Not defined yet.`). Ask the developer to confirm a step found done this way; do not redo it.
-3. Run `bash vibe/scripts/check-setup.sh` as a cross-check and for step 8. A `FAIL` line is a problem to report, not a step to skip.
+2. A step with no such commit (a repository set up by hand or before this convention, or a developer joining an existing project) is judged from the files instead: the files the guide says that step adds or changes (for step 1: `vibe/tutorial/` and `docs/superpowers/` removed or kept on purpose, `LICENSE` and the root `README.md` adapted; for step 3: sections no longer `Not defined yet.`). Ask the developer to confirm a step found done this way; do not redo it.
+3. Run the checks of the `vibe-check-setup` skill (`bash .agents/skills/vibe-check-setup/scripts/check-setup.sh`) as a cross-check and for step 8. A `FAIL` line is a problem to report, not a step to skip.
 4. Say which steps are done and which comes next, then go on from there. A developer joining an existing project only confirms steps 1 and 3 to 7 and runs steps 0, 2 and 8.
 
 ## Run a step
@@ -26,7 +26,6 @@ The guide is the only source for what each step contains: read `vibe/README.md` 
 | Decision | Guide step | Default |
 |---|---|---|
 | Licence of the project | 1 | MIT with the project's copyright holder and year: ask for the holder (no default name; suggest the git user or organisation as a hint) and rewrite the `Copyright (c)` line of `LICENSE`; another licence replaces the file |
-| Layout preset: `services`, `single-app`, `library` or `data` (see `vibe/layouts.md`) | 1 | none: the developer must choose |
 | Remove the template's tutorial and design history? (`git rm -r vibe/tutorial docs/superpowers`; one question for both) | 1 | yes, remove both |
 | What the project does, for the root `README.md` (the *License* line follows the licence decision) | 1 | the *Fill in* text stays |
 | The `AGENTS.md` sections to fill in (Commands, Stack, Conventions, Testing, and the others the guide lists) | 3 | a section that is not known yet stays `Not defined yet.` |

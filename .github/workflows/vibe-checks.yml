@@ -17,10 +17,10 @@ jobs:
           persist-credentials: false
 
       - name: Check the setup
-        run: bash vibe/scripts/check-setup.sh
+        run: bash .agents/skills/vibe-check-setup/scripts/check-setup.sh
 
       - name: Test the setup check
-        run: bash vibe/scripts/tests/check-setup.test.sh
+        run: bash .agents/skills/vibe-check-setup/scripts/tests/check-setup.test.sh
 
       # gitleaks runs from its official container image, not from the
       # gitleaks-action (the Action needs a paid licence for organisations).

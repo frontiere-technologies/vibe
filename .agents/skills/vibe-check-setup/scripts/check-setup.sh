@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Mechanical checks of the vibe setup (step 8 of vibe/README.md).
-# Usage: bash vibe/scripts/check-setup.sh [repo-root]
+# Usage: bash .agents/skills/vibe-check-setup/scripts/check-setup.sh [repo-root]
 # Prints "PASS <check>" or "FAIL <check>: <reason>" per check.
 # Exit 0 if every check passes, 1 otherwise.
 # Needs only bash, git and POSIX tools; works on bash 3.2 (macOS), Linux, Git Bash.

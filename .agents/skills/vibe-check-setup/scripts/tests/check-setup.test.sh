@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# Tests for vibe/scripts/check-setup.sh.
+# Tests for check-setup.sh (the vibe-check-setup skill).
 # Clones the repository this script lives in (at HEAD) into a temp folder
 # whose path contains a space, mutates the clone, and checks the verdict.
-# Usage: bash vibe/scripts/tests/check-setup.test.sh
+# Usage: bash .agents/skills/vibe-check-setup/scripts/tests/check-setup.test.sh
 
 here=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 check="$here/../check-setup.sh"
@@ -75,7 +75,7 @@ case_missing_import() {
 
 case_env_ignored_template() {
   fresh_clone || return
-  mkdir -p "$clone/src/api" && echo "KEY=" > "$clone/src/api/.env.test.example"
+  mkdir -p "$clone/sources/api" && echo "KEY=" > "$clone/sources/api/.env.test.example"
   commit_all
   run_check "$clone"
   expect_result env-ignored-template 0 '!FAIL'

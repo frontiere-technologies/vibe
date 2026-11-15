@@ -64,7 +64,7 @@ The prompt works in any language, for example in Italian: *"Esegui il setup part
 
 What happens next:
 
-- **Questions.** The CLI asks for every decision, one at a time: the licence, whether to remove the template's tutorial and design history, the layout preset (`services`, `single-app`, `library` or `data`), the sections of `AGENTS.md` (stack, commands, approved libraries, tests, boundaries), which skills, agents and MCP servers to add.
+- **Questions.** The CLI asks for every decision, one at a time: the licence, whether to remove the template's tutorial and design history, the sections of `AGENTS.md` (stack, commands, approved libraries, tests, boundaries), which skills, agents and MCP servers to add.
 - **Pauses for the developer.** The CLI stops for what only the developer can do: the interactive logins (`gh auth login`), the tokens of the MCP servers (set as environment variables, never written to a file), and the restart after step 2, because plugins and skills are loaded only when a session starts.
 - **Commits.** Each step ends with a commit whose subject is `Setup step <N>: <what was done>`, so the work done so far is safe and a new session finds where the setup stands with `git log --oneline | grep "Setup step"`. A step skipped by choice (for example no MCP servers) still gets a commit, which may be empty (`git commit --allow-empty`), saying so. A setup done by hand follows the same convention.
 - **Resuming.** After the restart, or in any later session, the setup continues with *"Continue the setup"* (or `/vibe-setup` again), or, without the skill, with: *"Continue the setup from `vibe/README.md`: check which steps are already done and go on from there."*
@@ -142,7 +142,7 @@ The new repository is ready to use: the second brain is empty, `AGENTS.md` has i
 
 - the root `README.md` — a skeleton for the project's README, whose sections are filled in
 - `LICENSE` — by default the MIT licence with the project's own copyright line: the setup asks for the copyright holder (a person or an organisation; the git user or organisation is a hint, there is no default name) and rewrites `Copyright (c) <year> <holder>`, so the template author's name does not stay in the project. Any other licence the project chooses replaces the file. `.agents/skills/THIRD_PARTY_NOTICES.md` stays with the skills: the `wiki-*` skills and the second brain derive from MIT-licensed work, and the licence's only condition is that its notice stays with every copy (see the provenance note at the end of each skill)
-- the code folders — step 1 asks which preset of [`layouts.md`](layouts.md) fits (`services`, `single-app`, `library` or `data`); the setup creates only those folders, each with an empty `.gitkeep` file so Git tracks it, and writes them into *Layout* in `AGENTS.md` (for `services`, also the description in `src/README.md`). The *Project structure* list of the root `README.md` is adapted for every preset from the lines in `layouts.md`
+- the code folders — `sources/` ships with `microservices/`, `libraries/`, `devops/` and `tests/e2e/`, described in [`sources/README.md`](../sources/README.md); the empty ones hold a `.gitkeep` file so Git tracks them. The setup leaves them as they are. A project of another kind renames or removes them later, for example `app/` + `test/` for a single application, `lib/` + `test/` + `example/` for a published library, `notebooks/` + `data/` + `pipelines/` for data work, and then updates *Layout* in `AGENTS.md` and *Project structure* in the root `README.md`. The code folder `sources/` is not the wiki's `docs/second-brain/wiki/sources/`, which holds summaries of source documents
 - `vibe/tutorial/` — removed with `git rm -r vibe/tutorial`. The lessons are for learning the template, not part of a project; they stay in the [template repository](https://github.com/frontiere-technologies/vibe/tree/development/vibe/tutorial). Keep the folder only to do the lessons in this project itself, on throwaway branches (see its README)
 - `docs/superpowers/` — the template's own design history (the spec and plan of its generalisation) is removed with `git rm -r docs/superpowers`. Superpowers recreates the folder for the project's own specs and plans
 
@@ -212,7 +212,7 @@ Its sections:
 | Section | Content | In a new project |
 |---|---|---|
 | Pointer to `README.md` | So the project overview is not duplicated | already there |
-| **Layout** | Where knowledge and code live; the code folders are chosen at setup from `vibe/layouts.md` | the code folders are filled in |
+| **Layout** | Where knowledge and code live (`docs/`, `sources/`) | already there; updated if the code folders change |
 | **Commands** | Install, run, build, lint, format, test, and from which folder | filled in |
 | **Stack** | Languages and versions, frameworks, runtime, in one or two lines | filled in |
 | **Conventions** | Architectural layers and allowed dependencies, patterns, naming, the allow-list of approved ("certified") libraries; nothing outside it is added without asking | filled in |
@@ -247,6 +247,7 @@ Part of the template:
 - `wiki-ingest`, `wiki-query`, `wiki-health`, `wiki-lint` — maintain and query the second brain in `docs/second-brain/`
 - `vibe-setup` — runs this guide's setup step by step (see *Setup run by the AI coding CLI*)
 - `vibe-update` — brings the project up to a later template version (see *Keeping the environment up to date*)
+- `vibe-check-setup` — runs the mechanical checks of the setup and explains each failure (see step 8); its script also runs in CI
 
 Further skills depend on the project's stack and kind of work, for example:
 
@@ -408,11 +409,11 @@ repos:
 
 These checks run from the repository root after the previous steps; each one that passes ticks the setup checklist.
 
-1. **Mechanical checks.** `bash vibe/scripts/check-setup.sh` prints one line per check (`symlinks`, `imports`, `gitignore`, `no-secrets-tracked`, `skills`, `links`); every line says `PASS`. A `FAIL` line names the problem; for `symlinks`, see *Symlinks on Windows* in step 1.
+1. **Mechanical checks.** The `vibe-check-setup` skill (`/vibe-check-setup` in Claude Code and Antigravity, `$vibe-check-setup` in Codex, or "check the setup") runs `bash .agents/skills/vibe-check-setup/scripts/check-setup.sh`, which can also be run by hand. It prints one line per check (`symlinks`, `imports`, `gitignore`, `no-secrets-tracked`, `skills`, `links`); every line says `PASS`. A `FAIL` line names the problem; for `symlinks`, see *Symlinks on Windows* in step 1.
 2. **GitHub CLI.** `gh auth status` reports a logged-in account.
 3. **Instructions file.** In the AI coding CLI, the question *"Which instructions file did you load, and which sections are still Not defined yet?"* gets an answer that comes from `AGENTS.md`, directly or through `CLAUDE.md`/`GEMINI.md`.
 4. **Rules applied.** The question *"Which libraries may you add to this project?"* gets the allow-list of `AGENTS.md` back, or the answer that there is none yet.
-5. **Skills and Superpowers.** The question *"Which skills are available?"* lists `vibe-setup`, `vibe-update`, the four `wiki-*` skills, the skills of step 4 and the Superpowers skills (`brainstorming`, `writing-plans`, `test-driven-development`, …). In Claude Code, typing `/` shows them as slash commands.
+5. **Skills and Superpowers.** The question *"Which skills are available?"* lists `vibe-setup`, `vibe-update`, `vibe-check-setup`, the four `wiki-*` skills, the skills of step 4 and the Superpowers skills (`brainstorming`, `writing-plans`, `test-driven-development`, …). In Claude Code, typing `/` shows them as slash commands.
 6. **Second brain.** `/wiki-health` (in Codex `$wiki-health`; in any CLI just `health`) reports, on a new repository, an empty wiki with no errors.
 7. **Agents** (step 5). The CLI's list of subagents includes `code-reviewer`, `architect-reviewer` and, unless it was removed for a project without a UI, `ui-ux-tester`.
 8. **MCP servers** (if configured in step 6). In Claude Code, `claude mcp list` shows each server of `.mcp.json` as connected; other CLIs have an equivalent command.
@@ -481,7 +482,7 @@ For the template's maintainers: the template's default branch changes only at a 
 | Symptom | Likely cause | Fix |
 |---|---|---|
 | The CLI does not see the `wiki-*` skills or the agents | `.claude/skills` or `.claude/agents` is a text file instead of a symlink (Windows) | *Symlinks on Windows* in step 1 |
-| `FAIL links` in `check-setup.sh` | a document links to a file that was moved or deleted | fix the link, or restore the file; the line names the document and the missing target |
+| `FAIL links` from `vibe-check-setup` | a document links to a file that was moved or deleted | fix the link, or restore the file; the line names the document and the missing target |
 | The agent ignores a rule | the rule is vague, or the session started before it was written | sharpen the rule, commit it, start a new session |
 | Superpowers' worktree does not have the latest changes | the worktree starts from the last commit | commit before starting a change |
 | Tests are green but prove nothing (`Ran 0 tests`) | the test runner found no tests (a missing `__init__.py`, a wrong path) | check the test count in the output, and point it out to the agent |

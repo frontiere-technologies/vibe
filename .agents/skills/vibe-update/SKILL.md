@@ -83,7 +83,7 @@ Nothing to show: go to the next. Otherwise ask whether to apply it, and wait. On
 
    Go through the *By hand* items with the developer; do each only on their yes.
 2. Set the version, and only that line: `sed 's/^version: .*/version: <new>/' .vibe-template > .vibe-template.new && mv .vibe-template.new .vibe-template`.
-3. Run `bash vibe/scripts/check-setup.sh` and report every `FAIL` line.
+3. Run `bash .agents/skills/vibe-check-setup/scripts/check-setup.sh` and report every `FAIL` line.
 
 ## 6. Finish
 
