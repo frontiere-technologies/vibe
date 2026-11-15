@@ -4,50 +4,45 @@ This repository holds project code and a **second brain**: a wiki of project kno
 
 Read also the ./README.md file.
 
-The sections marked *Fill in per project* start as "Not defined yet" and are completed for each project. A folder of the code (e.g. a service) can add its own `AGENTS.md` with rules that apply only there; those rules add to this file and win where they are more specific.
+A folder of the code can add its own `AGENTS.md`; its rules add to this file and win where they are more specific.
 
 ## Layout
 
-*Fill in per project.* Always present:
-
 - `docs/second-brain/` — knowledge base: source documents (`raw/`), the wiki (`wiki/`) and saved reports (`reports/`). `docs/second-brain/wiki/sources/` holds summaries of source documents, not code.
-- `docs/` — other project documents (specs, plans, reviews, work in progress).
-
-Code layout of this project:
-
-- `sources/` — code and operations: `microservices/`, `libraries/`, `devops/`, `tests/` (e2e). See `sources/README.md` for what goes where.
-
-The `sources/` layout fits service-based systems. For other kinds of project, replace the line above with the real folders, e.g. `app/` + `test/` for a single app or monolith, `lib/` + `test/` + `example/` for a published library, `notebooks/` + `data/` + `pipelines/` for data work, `infra/` + `modules/` for an infrastructure repository.
+- `docs/` — other project documents (see `docs/README.md`).
+- `sources/` — code and operations: `microservices/`, `libraries/`, `devops/`, `tests/e2e/`. See `sources/README.md` for what goes where.
 
 ## Commands
-
-*Fill in per project:* how to install, run, build, lint, format and test, and from which folder.
 
 Not defined yet: there is no code yet.
 
 ## Stack
 
-*Fill in per project:* languages and versions, frameworks, runtime and hosting, in one or two lines.
-
 Not defined yet (see Commands).
 
 ## Conventions
 
-*Fill in per project:* architectural rules (layers and allowed dependencies between them), patterns to use or avoid, naming and code style, and the allow-list of approved ("certified") libraries. Do not add a dependency outside the allow-list without asking the user.
-
-Not defined yet.
+Not defined yet. Until it is defined: ask the user before adding any dependency; once approved libraries are listed here, ask before adding any other.
 
 ## Testing
 
-*Fill in per project:* which kinds of test are required (unit, integration, end-to-end), where they live, what must be written test-first, and the checks that must pass before a change counts as done.
-
 Not defined yet. Until it is defined: run the existing tests and linters before declaring a change done, and report failures as they are.
+
+## Git workflow
+
+Not defined yet. Until it is defined: one branch per change, from the default branch; commit subject in the imperative, with a body that says why; no push without the developer's approval.
+
+## Language
+
+Not defined yet. Until it is defined: code, documentation, wiki and commit messages in English; conversation in the developer's language.
+
+## Definition of done
+
+Not defined yet. Until it is defined: the existing tests and linters pass, and the result has been shown, not claimed.
 
 ## Boundaries
 
-*Fill in per project:* files, folders and systems the agent must not change, or only change after asking (generated code, migrations already applied, vendored code, CI/CD, production configuration).
-
-Always, in every project:
+Not defined yet. Until it is defined, these two rules apply, as in every project:
 
 - Never commit secrets: commit only templates (`*.example`, `.env.template`) and keep real values in ignored files.
 - Do not change other projects or shared infrastructure from this repository.

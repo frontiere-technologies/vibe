@@ -7,7 +7,7 @@ How to use the project's second brain: a wiki of project knowledge in `docs/seco
 > Most knowledge tools make you search your own notes. This one reads everything you've collected and writes a structured wiki that compounds over time — cross-references already built, contradictions already flagged, synthesis already done.
 
 ```
-ingest docs/second-brain/raw/papers/attention-is-all-you-need.md
+ingest docs/second-brain/raw/specs/customer-requirements-v2.pdf
 ```
 
 ```
@@ -44,17 +44,17 @@ gemini      # reads GEMINI.md (→ AGENTS.md)
 All agents understand natural language and shorthand triggers:
 
 ```
-ingest docs/second-brain/raw/papers/my-paper.md              # ingest a markdown source
-ingest report.pdf                          # PDFs are read directly
-query: what are the main themes?           # synthesize answer from wiki pages
-health                                     # fast structural check (empty pages, index, log)
-lint                                       # find orphans, contradictions, gaps
+ingest docs/second-brain/raw/specs/api-guidelines.md    # ingest a markdown source
+ingest docs/second-brain/raw/specs/tender.pdf           # PDFs are read directly
+query: which requirements concern authentication?       # answer from wiki pages
+health                                                  # fast structural check (empty pages, index, log)
+lint                                                    # find orphans, contradictions, gaps
 ```
 
 Plain English works too:
 ```
-"Ingest this paper: docs/second-brain/raw/papers/llama2.md"
-"What does the wiki say about attention mechanisms?"
+"Ingest the meeting notes in docs/second-brain/raw/meetings/2026-03-02-kickoff.md"
+"What does the wiki say about the data retention rules?"
 "Check for contradictions across sources"
 ```
 
@@ -89,96 +89,63 @@ Works with markdown, PDF and other text formats directly. Office and media files
 
 ## Use Cases
 
-### Research
+The wiki holds what the agent needs to know about the project and its domain, so it does not have to be repeated in every prompt. Source documents always go in `docs/second-brain/raw/`, in subfolders by kind.
 
-Going deep on a topic over weeks — reading papers, articles, reports.
+### Requirements and specifications
+
+The documents that say what to build: a tender or contract, the customer's requirements, functional specifications, external API documentation.
 
 ```
-/wiki-ingest docs/second-brain/raw/papers/attention-is-all-you-need.md
-/wiki-ingest docs/second-brain/raw/papers/llama2.md
-/wiki-ingest docs/second-brain/raw/papers/rag-survey.md
+/wiki-ingest docs/second-brain/raw/specs/customer-requirements-v2.pdf
+/wiki-ingest docs/second-brain/raw/specs/payments-api-reference.md
 
-# Wiki builds entity pages (Meta AI, Google Brain) and
-# concept pages (Attention, RLHF, Context Window) automatically.
+/wiki-query "Which requirements concern user authentication?"
+/wiki-query "What does the payments API return when a card is declined?"
+```
 
-/wiki-query "What are the main approaches to reducing hallucination?"
-/wiki-query "How has context window size evolved across models?"
+When designing a feature, the agent reads the relevant pages first and cites them in the design document (see *Using the second brain* in `AGENTS.md`).
+
+---
+
+### Domain knowledge
+
+Standards, handbooks, regulations and glossaries of the field the software works in. Entity and concept pages become the project's shared vocabulary.
+
+```
+/wiki-ingest docs/second-brain/raw/domain/regulation-excerpt.pdf
+/wiki-ingest docs/second-brain/raw/domain/glossary.md
+
+/wiki-query "What is the difference between a booking and a reservation in this domain?"
+```
+
+The [tutorial](https://github.com/frontiere-technologies/vibe/tree/development/vibe/tutorial) in the template repository does this with an excerpt of the NASA Systems Engineering Handbook.
+
+---
+
+### Meetings and decisions
+
+Meeting notes, decisions and their reasons. The *Meeting Notes* and *Decision Record* templates in `SCHEMA.md` keep them comparable.
+
+```
+/wiki-ingest docs/second-brain/raw/meetings/2026-03-02-kickoff.md
+/wiki-ingest docs/second-brain/raw/decisions/2026-03-10-use-postgres.md
+
+/wiki-query "What did we decide about data retention, and why?"
 
 /wiki-lint
-# → "No sources on mixture-of-experts — consider the Mixtral paper"
+# → "The kickoff notes say 30 days of retention, the requirements say 90"
 ```
 
-By the end you have a structured, interlinked reference — not a folder of PDFs you'll never reopen.
+Contradictions between what was asked, what was said and what was decided surface at ingest time, before they become code.
 
 ---
 
-### Reading a Book
+### Onboarding
 
-File each chapter as you go. Build out pages for characters, themes, arguments.
-
-```
-/wiki-ingest docs/second-brain/raw/book/chapter-01.md
-/wiki-ingest docs/second-brain/raw/book/chapter-02.md
-
-# Wiki creates entity and theme pages automatically.
-
-/wiki-query "How has the protagonist's motivation evolved?"
-/wiki-query "What contradictions exist in the author's argument so far?"
-```
-
-Think fan wikis like Tolkien Gateway — built as you read, with the agent doing all the cross-referencing.
-
----
-
-### Personal Knowledge Base
-
-Track goals, health, habits, self-improvement — file journal entries, articles, podcast notes.
+A new developer, or a new agent session, starts from `docs/second-brain/wiki/overview.md` and `index.md` instead of reading every document.
 
 ```
-/wiki-ingest docs/second-brain/raw/journal/2026-01-week1.md
-/wiki-ingest docs/second-brain/raw/articles/huberman-sleep-protocol.md
-/wiki-ingest docs/second-brain/raw/articles/atomic-habits-summary.md
-
-/wiki-query "What patterns show up in my journal entries about energy?"
-/wiki-query "What habits have I tried and what was the outcome?"
-```
-
-The wiki builds a structured picture over time. Concepts like "Sleep", "Exercise", "Deep Work" accumulate evidence from every source filed.
-
----
-
-### Business / Team Intelligence
-
-Feed in meeting transcripts, project docs, customer calls.
-
-```
-/wiki-ingest docs/second-brain/raw/meetings/q1-planning-transcript.md
-/wiki-ingest docs/second-brain/raw/docs/product-roadmap-2026.md
-/wiki-ingest docs/second-brain/raw/calls/customer-interview-acme.md
-
-/wiki-query "What feature requests have come up most across customer calls?"
-/wiki-query "What decisions were made in Q1 and what was the rationale?"
-
-/wiki-lint
-# → "Project X mentioned in 5 pages but no dedicated page"
-# → "Roadmap contradicts customer interview on priority of feature Y"
-```
-
-The wiki stays current because the agent does the maintenance no one wants to do.
-
----
-
-### Competitive Analysis
-
-Track a company, market, or technology over time.
-
-```
-/wiki-ingest docs/second-brain/raw/competitors/openai-announcements.md
-/wiki-ingest docs/second-brain/raw/market/ai-funding-report-q1.md
-
-/wiki-query "How do OpenAI and Anthropic differ on safety approach?"
-/wiki-query "Which companies announced multimodal models in the last 6 months?"
-/wiki-query "Competitive landscape summary as of today"
+/wiki-query "Give me an overview of the project: goals, main actors, open questions"
 # → agent shows the answer, then asks if you want to save it as a synthesis page
 ```
 
@@ -222,7 +189,7 @@ If you want to keep this repository separate from your main personal vault, use 
 
 ### Recommended .obsidian Config
 - **Graph View:** Filter out `index.md` and `log.md` (e.g. `-file:index.md -file:log.md`) to avoid them becoming gravity wells in your Obsidian graph.
-- **Dataview:** Use the community plugin [Dataview](https://blacksmithgu.github.io/obsidian-dataview/) to query the YAML frontmatter the agent automatically injects (e.g., `type: source`, `tags: [diary]`).
+- **Dataview:** Use the community plugin [Dataview](https://blacksmithgu.github.io/obsidian-dataview/) to query the YAML frontmatter the agent automatically injects (e.g., `type: source`, `tags: [decision]`).
 
 ## Multi-Format Ingest
 
@@ -230,8 +197,8 @@ The agent reads these directly:
 `.md` `.pdf` `.txt` `.html` `.htm` `.csv` `.tsv` `.json` `.xml` `.yaml` `.yml` `.rst` `.ipynb`
 
 ```
-ingest report.pdf
-ingest page.html
+ingest docs/second-brain/raw/specs/report.pdf
+ingest docs/second-brain/raw/specs/page.html
 ```
 
 Binary office and media formats (`.docx`, `.pptx`, `.xlsx`, `.xls`, `.epub`, `.rtf`, `.wav`, `.mp3`) must be converted to markdown first. If [markitdown](https://github.com/microsoft/markitdown) is installed (`pip install 'markitdown[all]'`), the agent converts them for you:
