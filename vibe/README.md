@@ -348,7 +348,10 @@ Servers can be found in the [MCP registry](https://registry.modelcontextprotocol
 
 The agent runs commands on the developer's machine. This step decides what it may do without asking, and keeps personal and generated files out of Git.
 
-**Permissions.** In Claude Code, the project's rules are in `.claude/settings.json`, next to the plugin setting. The template already denies two things every project needs denied: reading files with real secret values (`.env`, `.env.local`, `.env.production`, …; the committed templates `.env.example` and `.env.template` stay readable), and editing the source documents in `docs/second-brain/raw/`, which are immutable. What this step adds is an `allow` list: the commands the agent runs all the time (tests, linters), so it does not stop to ask:
+**Permissions.** In Claude Code, the project's rules are in `.claude/settings.json`, next to the plugin setting. The template ships the file with the plugin setting only, and no permissions: this step adds them. Recommended:
+
+- a `deny` list for what every project should forbid: reading files with real secret values (`.env`, `.env.local`, `.env.production`, …; the committed templates `.env.example` and `.env.template` stay readable), and editing the source documents in `docs/second-brain/raw/`, which are immutable;
+- an `allow` list: the commands the agent runs all the time (tests, linters), so it does not stop to ask.
 
 ```json
 {
