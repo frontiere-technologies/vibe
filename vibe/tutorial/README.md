@@ -10,11 +10,10 @@ The tutorial lives in the template repository, [frontiere-technologies/vibe](htt
 
 ## Before you start
 
-- Setup steps 0–2 of [`../README.md`](../README.md) done, Superpowers included: the lessons use its workflow for every change (lessons 00 and 03 need only steps 0–1)
+- Setup steps 0–2 of [`../README.md`](../README.md) done, Superpowers included: the lessons use its workflow for every change (lesson 00 needs only steps 0–1)
 - Claude Code as the reference CLI; other CLIs work with the same prompts (skills are `$wiki-ingest` in Codex, plain `ingest …` anywhere)
 - `python3` (3.9 or later) for the lesson code — standard library only, nothing to install
 - for lesson 02: Flutter stable 3.x and Chrome (`flutter doctor` shows both with a green tick)
-- for lesson 03: Python 3.11 or later to run the version built with the skill (macOS ships 3.9)
 
 ## Run each lesson on a throwaway branch
 
@@ -58,12 +57,11 @@ Lessons copy the excerpt into `docs/second-brain/raw/` before ingesting it; it i
 | 00 | [First steps with the wiki](00-first-steps-with-the-wiki.md) | ~10 min | Ingest a one-page text, look at the pages it becomes, ask the wiki a question; no code |
 | 01 | [From a document to tested code](01-from-document-to-code.md) | ~45 min | Ingest a source, query the wiki, set constraints in `AGENTS.md`, then the Superpowers workflow: design, plan, isolated branch, test-first implementation, finish; check the agent stays inside the rules |
 | 02 | [From a document to a web app](02-from-document-to-web-app.md) | ~90 min | Add a second stack (Flutter) to `AGENTS.md` with its own allow-list and layers; a responsive web app with a simulated back end that follows the library's contracts, seed content, tests at three widths; check design requests do not break the rules |
-| 03 | [A Python skill, with and without](03-python-skill-with-and-without.md) | ~20 min | Read a third-party skill's rules (`python-pro`), install it in `.agents/skills/`, build the same small program from the same prompt without and with it, and check both against its rules; weigh what it adds against what it assumes |
 
 Planned:
 
-- 04 — Quality reviews with the reviewer agents (`code-reviewer`, `architect-reviewer`, `ui-ux-tester`)
-- 05 — Superpowers in depth: changing an existing feature, systematic debugging, receiving code review, parallel agents
-- 06 — Connecting MCP servers (GitHub, documentation, data)
-- 07 — Same repository, different CLIs (Claude Code, Codex, Gemini CLI) on the same `AGENTS.md`
-- 08 — A complete app: rebuilding a small version of the Mission Readiness Map
+- 03 — Quality reviews with the reviewer agents (`code-reviewer`, `architect-reviewer`, `ui-ux-tester`)
+- 04 — Superpowers in depth: changing an existing feature, systematic debugging, receiving code review, parallel agents
+- 05 — Connecting MCP servers (GitHub, documentation, data)
+- 06 — Same repository, different CLIs (Claude Code, Codex, Gemini CLI) on the same `AGENTS.md`
+- 07 — A complete app: rebuilding a small version of the Mission Readiness Map

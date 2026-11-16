@@ -226,4 +226,4 @@ git worktree prune
 
 To run this lesson again, delete only `tutorial/02` and start again from step 0.
 
-**Next:** [lesson 03](03-python-skill-with-and-without.md) — what a third-party Python skill changes in the code the agent writes.
+**Next:** lesson 03 (planned) — reviewing this code and this UI with the reviewer agents.
