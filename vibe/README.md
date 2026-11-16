@@ -16,7 +16,7 @@ The agent is free to write code, within four boundaries. Each one has a fixed pl
 |---|---|---|
 | **Knowledge** | What the project is about: domain, decisions, source documents | `docs/second-brain/` — a wiki the agent writes and keeps up to date |
 | **Rules** | Stack, commands, layout, conventions, approved libraries, test policy, boundaries | `AGENTS.md` — read by the agent on every interaction |
-| **Workflow** | How a change is made: design, plan, isolated branch, test-first build, review, finish | The Superpowers plugin (recommended, not required); specs and plans saved in `docs/superpowers/`, which it creates |
+| **Workflow** | How a change is made: design, plan, isolated branch, test-first build, review, finish | The Superpowers plugin (recommended), or another harness of the project's choice; Superpowers saves specs and plans in `docs/superpowers/`, which it creates |
 | **Tools** | Specialised abilities: skills, subagents (reviewers), MCP servers | `.agents/skills/`, `.agents/agents/`, the MCP configuration |
 
 All of it is committed to Git: the environment is part of the project, not of one developer's machine, so every developer and every CLI works the same way. Only personal settings and secrets stay out (see [Shared and personal files](#shared-and-personal-files)).
@@ -142,7 +142,7 @@ The new repository is ready to use: the second brain is empty, `AGENTS.md` has i
 
 - the root `README.md` — a skeleton for the project's README, whose sections are filled in
 - `LICENSE` — by default the MIT licence with the project's own copyright line: the setup asks for the copyright holder (a person or an organisation; the git user or organisation is a hint, there is no default name) and rewrites `Copyright (c) <year> <holder>`, so the template author's name does not stay in the project. Any other licence the project chooses replaces the file. `.agents/THIRD_PARTY_NOTICES.md` stays with the skills and agents: the `wiki-*` skills, the second brain and the reviewer agents derive from MIT-licensed work, and the licence's only condition is that its notice stays with every copy (see the provenance note at the end of each skill)
-- the code folders — `sources/` ships with `microservices/`, `libraries/`, `devops/` and `tests/e2e/`, described in [`sources/README.md`](../sources/README.md); the empty ones hold a `.gitkeep` file so Git tracks them. The setup leaves them as they are. A project of another kind renames or removes them later, for example `app/` + `test/` for a single application, `lib/` + `test/` + `example/` for a published library, `notebooks/` + `data/` + `pipelines/` for data work, and then updates *Layout* in `AGENTS.md` and *Project structure* in the root `README.md`. The code folder `sources/` is not the wiki's `docs/second-brain/wiki/sources/`, which holds summaries of source documents
+- the code folders — `sources/` ships with `microservices/`, `libraries/`, `devops/` and `tests/e2e/`, described in [`sources/README.md`](../sources/README.md); the empty ones hold a `.gitkeep` file so Git tracks them. The setup leaves them as they are. It is a generic, standard layout, and keeping it is recommended even for a project with a single web application (one microservice). A project of a different kind can rename or remove the folders later, for example `lib/` + `test/` + `example/` for a published library, `notebooks/` + `data/` + `pipelines/` for data work, and then updates *Layout* in `AGENTS.md` and *Project structure* in the root `README.md`. The code folder `sources/` is not the wiki's `docs/second-brain/wiki/sources/`, which holds summaries of source documents
 - `vibe/tutorial/` — removed with `git rm -r vibe/tutorial`. The lessons are for learning the template, not part of a project; they stay in the [template repository](https://github.com/frontiere-technologies/vibe/tree/development/vibe/tutorial). Keep the folder only to do the lessons in this project itself, on throwaway branches (see its README)
 
 The rest of `vibe/` stays: this guide and the [second brain guide](second-brain.md) remain part of the project.
@@ -173,6 +173,8 @@ The same applies to any other symlink added later, such as `.opencode/agents`. F
 Verified with Superpowers 7.0.0.
 
 [Superpowers](https://github.com/obra/superpowers) provides the workflow used for every non-trivial change: design before code, and tests before code. It is the recommended workflow, not a requirement: the rest of the template (the second brain, `AGENTS.md`, the skills and the agents) works without it. Superpowers creates `docs/superpowers/` the first time it saves a spec or a plan; the template does not ship the folder.
+
+**Without Superpowers.** A project that does not use Superpowers can use a different harness: another workflow plugin or framework for the AI coding CLI, or the team's own process written down. Whatever it is, the harness should cover the same ground (design before code, a plan, tests before code, review), and the choice is recorded in `AGENTS.md` (*Git workflow* and *Definition of done*), so every developer and every CLI follows it. Where the harness saves its documents, under `docs/`, they are committed like Superpowers' specs and plans.
 
 In Claude Code, the plugin is enabled for the project in `.claude/settings.json`, which is committed:
 
