@@ -359,7 +359,7 @@ The agent runs commands on the developer's machine. This step decides what it ma
     "superpowers@claude-plugins-official": true
   },
   "permissions": {
-    "allow": ["Bash(python3 -m unittest:*)", "Bash(flutter test:*)"],
+    "allow": ["Bash(python3 -m unittest:*)"],
     "deny": [
       "Read(./**/.env)",
       "Read(./**/.env.local)",
