@@ -16,7 +16,7 @@ The agent is free to write code, within four boundaries. Each one has a fixed pl
 |---|---|---|
 | **Knowledge** | What the project is about: domain, decisions, source documents | `docs/second-brain/` — a wiki the agent writes and keeps up to date |
 | **Rules** | Stack, commands, layout, conventions, approved libraries, test policy, boundaries | `AGENTS.md` — read by the agent on every interaction |
-| **Workflow** | How a change is made: design, plan, isolated branch, test-first build, review, finish | The Superpowers plugin (recommended, not required); specs and plans saved in `docs/superpowers/`, which it creates |
+| **Workflow** | How a change is made: design, plan, isolated branch, test-first build, review, finish | The Superpowers plugin (recommended), or another harness of the project's choice; Superpowers saves specs and plans in `docs/superpowers/`, which it creates |
 | **Tools** | Specialised abilities: skills, subagents (reviewers), MCP servers | `.agents/skills/`, `.agents/agents/`, the MCP configuration |
 
 All of it is committed to Git: the environment is part of the project, not of one developer's machine, so every developer and every CLI works the same way. Only personal settings and secrets stay out (see [Shared and personal files](#shared-and-personal-files)).
@@ -173,6 +173,8 @@ The same applies to any other symlink added later, such as `.opencode/agents`. F
 Verified with Superpowers 7.0.0.
 
 [Superpowers](https://github.com/obra/superpowers) provides the workflow used for every non-trivial change: design before code, and tests before code. It is the recommended workflow, not a requirement: the rest of the template (the second brain, `AGENTS.md`, the skills and the agents) works without it. Superpowers creates `docs/superpowers/` the first time it saves a spec or a plan; the template does not ship the folder.
+
+**Without Superpowers.** A project that does not use Superpowers can use a different harness: another workflow plugin or framework for the AI coding CLI, or the team's own process written down. Whatever it is, the harness should cover the same ground (design before code, a plan, tests before code, review), and the choice is recorded in `AGENTS.md` (*Git workflow* and *Definition of done*), so every developer and every CLI follows it. Where the harness saves its documents, under `docs/`, they are committed like Superpowers' specs and plans.
 
 In Claude Code, the plugin is enabled for the project in `.claude/settings.json`, which is committed:
 
