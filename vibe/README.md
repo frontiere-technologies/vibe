@@ -488,6 +488,9 @@ The rule behind the left column is in `AGENTS.md` (*Commit AI-tooling folders to
 
 - Superpowers plugin: https://github.com/obra/superpowers
 - AI Hero (an alternative to Superpowers): https://www.aihero.dev/
+- BMAD Method (an alternative to Superpowers): https://github.com/bmad-code-org/bmad-method
+- Spec Kit (an alternative to Superpowers): https://github.com/github/spec-kit
+- Get Shit Done (an alternative to Superpowers): https://github.com/gsd-build/get-shit-done
 - Agent Skills standard: https://agentskills.io
 - Anthropic official skills: https://github.com/anthropics/skills
 - Jeffallan's skills collection: https://github.com/Jeffallan/claude-skills
