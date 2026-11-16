@@ -2,6 +2,8 @@
 
 Everything that is built, deployed or tested: application code, shared libraries, infrastructure and cross-service tests. Project knowledge does not live here — it is in [`docs/second-brain/`](../docs/second-brain/).
 
+The structure below is a generic, standard layout. The project can change it if it needs to, but keeping it is recommended even when the application is a single web application (a single microservice): that service goes in `microservices/`, and the other folders are ready for when the project grows (shared code, deployment, end-to-end tests). If the structure changes, update *Layout* in [`AGENTS.md`](../AGENTS.md) and *Project structure* in the root [`README.md`](../README.md).
+
 ```
 sources/
 ├── microservices/                  one folder per deployable service
