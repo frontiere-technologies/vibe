@@ -174,7 +174,7 @@ Verified with Superpowers 7.0.0.
 
 [Superpowers](https://github.com/obra/superpowers) provides the workflow used for every non-trivial change: design before code, and tests before code. It is the recommended workflow, not a requirement: the rest of the template (the second brain, `AGENTS.md`, the skills and the agents) works without it. Superpowers creates `docs/superpowers/` the first time it saves a spec or a plan; the template does not ship the folder.
 
-**Without Superpowers.** A project that does not use Superpowers can use a different harness: another workflow plugin or framework for the AI coding CLI, or the team's own process written down. Whatever it is, the harness should cover the same ground (design before code, a plan, tests before code, review), and the choice is recorded in `AGENTS.md` (*Git workflow* and *Definition of done*), so every developer and every CLI follows it. Where the harness saves its documents, under `docs/`, they are committed like Superpowers' specs and plans.
+**Without Superpowers.** A project that does not use Superpowers can use a different harness: another workflow plugin or framework for the AI coding CLI, or the team's own process written down. One alternative is the material of [AI Hero](https://www.aihero.dev/), a site on AI engineering for developers. Whatever it is, the harness should cover the same ground (design before code, a plan, tests before code, review), and the choice is recorded in `AGENTS.md` (*Git workflow* and *Definition of done*), so every developer and every CLI follows it. Where the harness saves its documents, under `docs/`, they are committed like Superpowers' specs and plans.
 
 In Claude Code, the plugin is enabled for the project in `.claude/settings.json`, which is committed:
 
@@ -359,7 +359,7 @@ The agent runs commands on the developer's machine. This step decides what it ma
     "superpowers@claude-plugins-official": true
   },
   "permissions": {
-    "allow": ["Bash(python3 -m unittest:*)", "Bash(flutter test:*)"],
+    "allow": ["Bash(python3 -m unittest:*)"],
     "deny": [
       "Read(./**/.env)",
       "Read(./**/.env.local)",
@@ -487,6 +487,7 @@ The rule behind the left column is in `AGENTS.md` (*Commit AI-tooling folders to
 ## Resources
 
 - Superpowers plugin: https://github.com/obra/superpowers
+- AI Hero (an alternative to Superpowers): https://www.aihero.dev/
 - Agent Skills standard: https://agentskills.io
 - Anthropic official skills: https://github.com/anthropics/skills
 - Jeffallan's skills collection: https://github.com/Jeffallan/claude-skills
