@@ -1,6 +1,6 @@
 # Project name
 
-> This is the README of the project built from this template. Replace every *Fill in* section with the project's own content. The template's documentation — environment setup and second brain — is in [`vibe/`](vibe/README.md) and stays there. The tutorial lives in the [template repository](https://github.com/frontiere-technologies/vibe/tree/development/vibe/tutorial).
+> This is the README of the project built from this template. Replace every *Fill in* section with the project's own content. The template's documentation — environment setup and second brain — is in [`vibe/`](vibe/README.md) and stays there.
 
 *Fill in:* what the project does, for whom, and why, in two or three sentences.
 
