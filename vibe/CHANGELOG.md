@@ -9,6 +9,6 @@ What each version of the template changes, newest first. Each version has a head
 - **`AGENTS.md`.** It holds only the project's rules: the explanations for the template's user moved to step 3 of the guide. New sections *Git workflow*, *Language* and *Definition of done*, each with a default. `docs/README.md` maps the `docs/` folder. The guide names the Superpowers version it was verified with (7.0.0) and no longer has a *To be evaluated* list.
 - **Code layout.** `sources/` stays the default code layout. Step 1 of the guide says how a project of another kind replaces it.
 - **Tutorial.** Step 1 removes `vibe/tutorial/` by default; the guide links to the lessons in the template repository.
-- **Superpowers folder.** `docs/superpowers/` ships empty (only a `.gitkeep`); Superpowers fills it with the project's own specs and plans.
+- **Superpowers folder.** The template does not ship `docs/superpowers/`: Superpowers, the recommended workflow, creates it with the project's own specs and plans, and a project that does without Superpowers never has it.
 - **Hygiene.** An `.editorconfig`. The guide describes an optional local gitleaks pre-commit hook for secrets.
 - **Reviewer agents.** `.agents/agents/` ships `code-reviewer`, `architect-reviewer` and `ui-ux-tester`; step 5 keeps or removes them instead of downloading them.

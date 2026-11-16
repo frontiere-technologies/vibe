@@ -16,7 +16,7 @@ The agent is free to write code, within four boundaries. Each one has a fixed pl
 |---|---|---|
 | **Knowledge** | What the project is about: domain, decisions, source documents | `docs/second-brain/` — a wiki the agent writes and keeps up to date |
 | **Rules** | Stack, commands, layout, conventions, approved libraries, test policy, boundaries | `AGENTS.md` — read by the agent on every interaction |
-| **Workflow** | How a change is made: design, plan, isolated branch, test-first build, review, finish | The Superpowers plugin; specs and plans saved in `docs/superpowers/` |
+| **Workflow** | How a change is made: design, plan, isolated branch, test-first build, review, finish | The Superpowers plugin (recommended, not required); specs and plans saved in `docs/superpowers/`, which it creates |
 | **Tools** | Specialised abilities: skills, subagents (reviewers), MCP servers | `.agents/skills/`, `.agents/agents/`, the MCP configuration |
 
 All of it is committed to Git: the environment is part of the project, not of one developer's machine, so every developer and every CLI works the same way. Only personal settings and secrets stay out (see [Shared and personal files](#shared-and-personal-files)).
@@ -172,7 +172,7 @@ The same applies to any other symlink added later, such as `.opencode/agents`. F
 
 Verified with Superpowers 7.0.0.
 
-[Superpowers](https://github.com/obra/superpowers) provides the workflow used for every non-trivial change: design before code, and tests before code.
+[Superpowers](https://github.com/obra/superpowers) provides the workflow used for every non-trivial change: design before code, and tests before code. It is the recommended workflow, not a requirement: the rest of the template (the second brain, `AGENTS.md`, the skills and the agents) works without it. Superpowers creates `docs/superpowers/` the first time it saves a spec or a plan; the template does not ship the folder.
 
 In Claude Code, the plugin is enabled for the project in `.claude/settings.json`, which is committed:
 
@@ -450,7 +450,7 @@ The findings are new work items: they go back to the first point of the loop.
 | `.agents/skills/` and `.agents/agents/`, with their symlinks (`.claude/skills`, `.claude/agents`, `.opencode/agents`, …) | credentials and API keys, `.env` files |
 | converted agent copies (`.codex/agents/`) | worktrees (`.claude/worktrees/`, `.worktrees/`) |
 | `.mcp.json` and the other CLIs' project MCP files, without secrets | build output and dependency folders |
-| `docs/second-brain/`, `docs/superpowers/`, `docs/reviews/` | |
+| `docs/second-brain/`, `docs/reviews/`, and `docs/superpowers/` when Superpowers creates it | |
 | `.editorconfig` | |
 
 The rule behind the left column is in `AGENTS.md` (*Commit AI-tooling folders to Git*): the agent and skill definitions, the specs and the plans are the traceable history of the AI-assisted work.
