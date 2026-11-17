@@ -208,7 +208,7 @@ Two requests that break a rule, each in a new session:
 
 | Practice | Where it lives | What it gave you |
 |---|---|---|
-| A second stack in the rules | `AGENTS.md` (+ the app's own `AGENTS.md`) | Flutter rules applied without repeating them; Python rules untouched |
+| A second stack in the rules | `AGENTS.md` | Flutter rules applied without repeating them; Python rules untouched |
 | Allow-list under design pressure | `AGENTS.md` → *Approved packages* | "Make it elegant" did not turn into new dependencies |
 | Contract first | `lib/api/`, contract table in the spec | UI independent of the back end; Python vocabulary kept |
 | Simulated back end | `lib/mock_backend/` | A full app with no server, ready to swap |
@@ -219,7 +219,7 @@ Two requests that break a rule, each in a new session:
 When you are done, throw both lessons away:
 
 ```bash
-git switch main                    # or the branch you started lesson 01 from
+git switch development             # or the branch you started lesson 01 from
 git branch -D tutorial/02 tutorial/01
 git worktree prune
 ```

@@ -16,7 +16,7 @@ docs/second-brain/
 ├── raw/                  your source documents — drop files here
 ├── wiki/
 │   ├── index.md          catalog of all pages — updated on every ingest
-│   ├── log.md            append-only record of every operation
+│   ├── log.md            append-only record of ingests, filed queries and lints
 │   ├── overview.md       living synthesis across all sources
 │   ├── sources/          one summary page per source document
 │   ├── entities/         people, companies, projects — auto-created
@@ -77,11 +77,11 @@ Works with markdown, PDF and other text formats directly. Office and media files
 
 **Persistent wiki** — structured markdown pages that accumulate across sessions. Unlike chat, nothing is lost.
 
-**Entity pages** — auto-created for every person, company, or project mentioned across sources. Updated each time a new source references them.
+**Entity pages** — auto-created for the key people, companies and projects in each source. Updated each time a new source references them; `lint` flags names mentioned in three or more pages that still have no page of their own.
 
 **Concept pages** — auto-created for every key idea or framework. Cross-referenced to every source that discusses them.
 
-**Living overview** — `docs/second-brain/wiki/overview.md` is revised on every ingest to reflect the current synthesis across everything you've read.
+**Living overview** — `docs/second-brain/wiki/overview.md` is revised at ingest whenever a new source changes the current synthesis across everything you've read.
 
 **Contradiction flags** — when a new source contradicts an existing claim, it's flagged at ingest time, not buried until query time.
 

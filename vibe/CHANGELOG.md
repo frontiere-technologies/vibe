@@ -2,9 +2,14 @@
 
 What each version of the template changes, newest first. Each version has a heading `## <version> — <YYYY-MM-DD>` and a list of changes. A project started from an older version brings a change in by hand, if it wants it.
 
+## 0.2.0 — 2026-11-17
+
+- **Shorter setup.** The guide has steps 0–4: the steps that added project skills, kept or removed the reviewer agents, configured the MCP servers, and set permissions and ignored files are gone, and *Verify the setup* is step 4. This replaces the *Permissions*, *Hygiene* (the gitleaks pre-commit hook) and *Reviewer agents* notes of 0.1.0 that pointed to steps 5 and 7; the reviewer agents still ship in `.agents/agents/`, and `.editorconfig` stays.
+- **Consistent documentation.** The guide, the second-brain pages and the tutorial no longer contradict each other: `log.md` records only ingests, filed queries and lints; `overview.md` is revised at ingest when a source changes the synthesis; reviewer agents only report, and the session that runs them saves the report; `executing-plans` has one review of the whole branch at the end; setup commits go straight to the default branch; `SCHEMA.md` lists the same formats as `second-brain.md` and names the markitdown output `<name>.md`.
+
 ## 0.1.0 — 2026-11-15
 
-- **Licence.** `LICENSE` is the template's own MIT licence, which a project replaces with any licence. The notices of the third-party files (the `wiki-*` skills, the second-brain schema, the reviewer agents) are in `.agents/THIRD_PARTY_NOTICES.md`, which stays.
+- **Licence.** `LICENSE` is the MIT licence; the setup asks for the project's copyright holder and rewrites the copyright line, and a project may replace the file with any other licence. The notices of the third-party files (the `wiki-*` skills, the second-brain schema, the reviewer agents) are in `.agents/THIRD_PARTY_NOTICES.md`, which stays.
 - **Second brain.** `docs/second-brain/SCHEMA.md` has a format for entity pages and one for concept pages, and source pages record where the document came from (`origin:`).
 - **`AGENTS.md`.** It holds only the project's rules: the explanations for the template's user moved to step 3 of the guide. New sections *Git workflow*, *Language* and *Definition of done*, each with a default. `docs/README.md` maps the `docs/` folder. The guide names the Superpowers version it was verified with (7.0.0) and no longer has a *To be evaluated* list.
 - **Code layout.** `sources/` stays the default code layout. Step 1 of the guide says how a project of another kind replaces it.

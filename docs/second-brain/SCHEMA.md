@@ -39,6 +39,8 @@ last_updated: YYYY-MM-DD
 
 Source pages use the [Source Page Format](#source-page-format) instead, which records the source file and date.
 
+`overview.md` uses `type: synthesis`, as the synthesis of the whole wiki; its `last_updated` stays empty until the first ingest revises it.
+
 Use `[[PageName]]` wikilinks to link to other wiki pages. `[[PageName]]` is the file `PageName.md` in any folder under `docs/second-brain/wiki/`, so a page name is unique across `sources/`, `entities/`, `concepts/` and `syntheses/`.
 
 ---
@@ -47,7 +49,7 @@ Use `[[PageName]]` wikilinks to link to other wiki pages. `[[PageName]]` is the 
 
 Triggered by: *"ingest <file>"*
 
-**Supported formats:** Markdown (`.md`) and other text formats (`.txt`, `.html`, `.csv`, `.tsv`, `.json`, `.xml`, `.yaml`, `.yml`, `.rst`, `.ipynb`) are read directly; so are PDFs. Binary office and media formats (`.docx`, `.pptx`, `.xlsx`, `.epub`, `.rtf`, `.wav`, `.mp3`) must be converted to markdown first: if the [markitdown](https://github.com/microsoft/markitdown) CLI is installed, run `markitdown <file> -o <file>.md` and ingest the result; otherwise ask the user for a markdown or PDF version.
+**Supported formats:** Markdown (`.md`) and other text formats (`.txt`, `.html`, `.htm`, `.csv`, `.tsv`, `.json`, `.xml`, `.yaml`, `.yml`, `.rst`, `.ipynb`) are read directly; so are PDFs. Binary office and media formats (`.docx`, `.pptx`, `.xlsx`, `.xls`, `.epub`, `.rtf`, `.wav`, `.mp3`) must be converted to markdown first: if the [markitdown](https://github.com/microsoft/markitdown) CLI is installed, run `markitdown <name>.<ext> -o <name>.md` (same folder, same name, `.md` extension) and ingest the result; otherwise ask the user for a markdown or PDF version.
 
 Never modify files in docs/second-brain/raw/: they are immutable.
 

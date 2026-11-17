@@ -1,6 +1,6 @@
 # Wiki Log
 
-Append-only chronological record of all operations.
+Append-only chronological record of the operations that change or review the wiki: `ingest`, `query` (only when the answer is filed as a synthesis page) and `lint`. `health` is not logged.
 
 Format: `## [YYYY-MM-DD] <operation> | <title>`
 

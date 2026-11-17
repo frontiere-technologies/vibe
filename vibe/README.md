@@ -62,7 +62,7 @@ What happens next:
 
 - **Questions.** The CLI asks for every decision, one at a time: the licence, whether to remove the template's tutorial, the sections of `AGENTS.md` (stack, commands, approved libraries, tests, boundaries).
 - **Pauses for the developer.** The CLI stops for what only the developer can do: the interactive logins (`gh auth login`) and the restart after step 2, because plugins and skills are loaded only when a session starts.
-- **Commits.** Each step ends with a commit whose subject is `Setup step <N>: <what was done>`, so the work done so far is safe and a new session finds where the setup stands with `git log --oneline | grep "Setup step"`. A step skipped by choice (for example no Superpowers) still gets a commit, which may be empty (`git commit --allow-empty`), saying so. A setup done by hand follows the same convention.
+- **Commits.** Each step ends with a commit whose subject is `Setup step <N>: <what was done>`, so the work done so far is safe and a new session finds where the setup stands with `git log --oneline | grep "Setup step"`. A step skipped by choice (for example no Superpowers) still gets a commit, which may be empty (`git commit --allow-empty`), saying so. A setup done by hand follows the same convention. The setup commits go straight to the default branch: they write the rules, so the *Git workflow* of `AGENTS.md` (one branch per change, a commit body that says why) applies from the first change after the setup.
 - **Resuming.** After the restart, or in any later session, the setup continues with: *"Continue the setup from `vibe/README.md`: check which steps are already done and go on from there."*
 - **Final checks.** The checks of step 4 that ask the CLI what it loaded are meaningful only in a new session, started after the last commit.
 
@@ -191,7 +191,7 @@ The workflow has one skill per step:
 1. `brainstorming` — questions one at a time, until the idea is a design document the developer approves; no code before that
 2. `using-git-worktrees` — the work moves to its own branch, in a separate worktree
 3. `writing-plans` — the design becomes small tasks with exact files, tests and commands
-4. `subagent-driven-development` or `executing-plans` — the tasks are built one by one, with a review after each one or in batches
+4. `subagent-driven-development` or `executing-plans` — the tasks are built one by one: by a fresh subagent per task, with a review after each one and one of the whole branch at the end, or by the session itself, with one review of the whole branch at the end
 5. `test-driven-development` — for every task: failing test, then code, then passing test, then commit
 6. `requesting-code-review` — the work is reviewed against the plan before going on
 7. `finishing-a-development-branch` — the tests run again, then the branch is merged, opened as a pull request, or kept
@@ -265,7 +265,7 @@ Once the environment is set up, the work follows a loop:
 
 ### Quality reviews
 
-As the code grows, the reviewer agents in `.agents/agents/` are run on it, each as a subagent rather than inline, so that it reviews with a fresh context. Each review is saved:
+As the code grows, the reviewer agents in `.agents/agents/` are run on it, each as a subagent rather than inline, so that it reviews with a fresh context. The agents only read and report; the session that ran them saves each report:
 
 - `code-reviewer` → `docs/reviews/<YYYY-MM-DD>-code-reviewer.md`
 - `architect-reviewer` → `docs/reviews/<YYYY-MM-DD>-architect-reviewer.md`
