@@ -69,7 +69,7 @@ The workflows are also packaged as [Agent Skills](https://agentskills.io) in `.a
 
 Every agent can also pick a skill on its own when your request matches it, and the natural language triggers above always work. The `/wiki-…` examples below use the slash form.
 
-> On Windows, `.claude/skills` must be a real symlink: see [Symlinks on Windows](README.md#symlinks-on-windows).
+> On Windows, the CLIs' links to `.agents/` (such as `.claude/skills`) must be real symlinks: see [Symlinks on Windows](README.md#symlinks-on-windows).
 
 Works with markdown, PDF and other text formats directly. Office and media files (DOCX, PPTX, XLSX, EPUB, audio) need a markdown version first — see [Multi-Format Ingest](#multi-format-ingest).
 

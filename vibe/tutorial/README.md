@@ -6,7 +6,7 @@ The thread running through all of them: let the agent write the code, but keep i
 
 ## Where to run the lessons
 
-The tutorial lives in the template repository, [frontiere-technologies/vibe](https://github.com/frontiere-technologies/vibe), and is removed from new projects by step 1 of the guide. Run the lessons in a throwaway repository created from the template (`gh repo create vibe-trial --template frontiere-technologies/vibe --private --clone`), or on a throwaway branch of the template itself. Delete the repository or the branch when you are done.
+The tutorial lives in the template repository, [frontiere-technologies/vibe](https://github.com/frontiere-technologies/vibe), and is not part of a project's own work. Run the lessons in a throwaway repository created from the template (`gh repo create vibe-trial --template frontiere-technologies/vibe --private --clone`), or on a throwaway branch of the template itself. Delete the repository or the branch when you are done.
 
 ## Before you start
 
