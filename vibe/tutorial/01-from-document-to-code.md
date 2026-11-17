@@ -20,7 +20,7 @@ Copy the sample source into the second brain:
 
 ```bash
 mkdir -p docs/second-brain/raw/examples
-cp vibe/tutorial/examples/nasa_systems_engineering_handbook_0_excerpt_TRL.pdf docs/second-brain/raw/examples/
+cp vibe/tutorial/raw-docs/nasa_systems_engineering_handbook_0_excerpt_TRL.pdf docs/second-brain/raw/examples/
 ```
 
 Start the CLI from the repository root and ingest it:

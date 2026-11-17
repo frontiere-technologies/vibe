@@ -1,8 +1,8 @@
-# 00 — First steps with the wiki
+# 00 — Simple second brain: Orders release process
 
 **Time:** about 10 minutes · **Needs:** setup steps 0–1 · **Result:** a tiny wiki built from a one-page text, and an answer to a question about it
 
-The smallest possible lesson: give the agent a short text, let it turn it into wiki pages, and ask it a question. No code, no rules, no Superpowers. The text is [`examples/release-process.md`](examples/release-process.md): how a fictional team ships a change to its service, in fifteen lines.
+The simplest second-brain lesson: give the agent a short text about how the Orders team ships a change to `orders-api`, let it turn the text into wiki pages, and ask it a question. No code, no rules, no Superpowers. The text is [`raw-docs/orders-release-process.md`](raw-docs/orders-release-process.md).
 
 Start on a throwaway branch (see [the tutorial's README](README.md#run-each-lesson-on-a-throwaway-branch)):
 
@@ -18,16 +18,16 @@ Copy the text into the second brain:
 
 ```bash
 mkdir -p docs/second-brain/raw/examples
-cp vibe/tutorial/examples/release-process.md docs/second-brain/raw/examples/
+cp vibe/tutorial/raw-docs/orders-release-process.md docs/second-brain/raw/examples/orders-release-process.md
 ```
 
 ## Step 2 — Ingest it
 
 Start the CLI from the repository root:
 
-> `/wiki-ingest docs/second-brain/raw/examples/release-process.md`
+> `/wiki-ingest docs/second-brain/raw/examples/orders-release-process.md`
 
-**Expect:** within a minute, a summary page in `docs/second-brain/wiki/sources/`, a few pages in `entities/` (the team, the service, the people) and `concepts/` (the release process, the deploy rules), and `index.md` and `log.md` updated.
+**Expect:** within a minute, a summary page in `docs/second-brain/wiki/sources/`, a few pages in `entities/` (the Orders team, `orders-api`, and its developers) and `concepts/` (the release process and deploy rules), and `index.md` and `log.md` updated.
 
 **Look at:** open `docs/second-brain/wiki/index.md`, then one entity page. Fifteen lines of text became linked pages that any later session reads instead of the original.
 
