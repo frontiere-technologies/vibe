@@ -84,7 +84,7 @@ Start a new session, so the agent loads the rules you just wrote, and describe t
 
 > "I'd like a small library that tells me the Technology Readiness Level of a component from a short yes/no questionnaire, and whether it meets a target TRL. Use what the wiki says about TRL."
 
-Superpowers starts its `brainstorming` skill. It does not write code: it asks questions, one at a time, to find out what you actually want. It also tells you that you can skip the questions; don't, the conversation is the point of this step.
+Superpowers starts its `brainstorming` skill. It does not write code: it asks questions, one at a time, to find out what you actually want. Answer them all: the conversation is the point of this step.
 
 Answer with your decisions as they come up, for example:
 

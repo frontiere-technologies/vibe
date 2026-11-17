@@ -9,4 +9,4 @@ Add one row per source document, with its origin.
 | File | Origin |
 |---|---|
 
-A sample source for trying the wiki is in `vibe/tutorial/raw-docs/` (see `vibe/tutorial/README.md`).
+Sample sources for trying the wiki are in the tutorial of the template repository, [`vibe/tutorial/raw-docs/`](https://github.com/frontiere-technologies/vibe/tree/development/vibe/tutorial/raw-docs) (step 1 of the guide removes the tutorial from new projects).
