@@ -27,9 +27,9 @@ All of it is committed to Git: the environment is part of the project, not of on
 
 | Situation | Steps |
 |---|---|
-| A new project started from this template | all of them, 0 to 8 |
-| A developer joining a project already started from this template | 0, 2 and 8. Steps 1 and 3–7 are already in the repository, to be cloned and checked |
-| A second AI coding CLI added to the project | 0 for the new CLI, the *Other CLIs* notes of steps 2 and 4–7, then 8 |
+| A new project started from this template | all of them, 0 to 4 |
+| A developer joining a project already started from this template | 0, 2 and 4. Steps 1 and 3 are already in the repository, to be cloned and checked |
+| A second AI coding CLI added to the project | 0 for the new CLI, the *Other CLIs* notes of step 2, then 4 |
 | A first trial of the approach | Create a throwaway repository from the template (step 1, without the adaptations), do steps 0–2, then follow the [tutorial](https://github.com/frontiere-technologies/vibe/tree/development/vibe/tutorial) there |
 
 ## Setup checklist
@@ -38,11 +38,7 @@ All of it is committed to Git: the environment is part of the project, not of on
 1. [ ] Bootstrap the repository from this template
 2. [ ] Install the Superpowers workflow plugin
 3. [ ] Fill in the instructions file (`AGENTS.md`)
-4. [ ] Add the project skills
-5. [ ] Keep or remove the reviewer agents (subagents)
-6. [ ] Configure the MCP servers
-7. [ ] Set permissions and ignore local files
-8. [ ] Verify the setup
+4. [ ] Verify the setup
 
 ## Setup run by the AI coding CLI
 
@@ -64,13 +60,13 @@ The prompt works in any language, for example in Italian: *"Esegui il setup part
 
 What happens next:
 
-- **Questions.** The CLI asks for every decision, one at a time: the licence, whether to remove the template's tutorial, the sections of `AGENTS.md` (stack, commands, approved libraries, tests, boundaries), which skills, agents and MCP servers to add.
-- **Pauses for the developer.** The CLI stops for what only the developer can do: the interactive logins (`gh auth login`), the tokens of the MCP servers (set as environment variables, never written to a file), and the restart after step 2, because plugins and skills are loaded only when a session starts.
-- **Commits.** Each step ends with a commit whose subject is `Setup step <N>: <what was done>`, so the work done so far is safe and a new session finds where the setup stands with `git log --oneline | grep "Setup step"`. A step skipped by choice (for example no MCP servers) still gets a commit, which may be empty (`git commit --allow-empty`), saying so. A setup done by hand follows the same convention.
+- **Questions.** The CLI asks for every decision, one at a time: the licence, whether to remove the template's tutorial, the sections of `AGENTS.md` (stack, commands, approved libraries, tests, boundaries).
+- **Pauses for the developer.** The CLI stops for what only the developer can do: the interactive logins (`gh auth login`) and the restart after step 2, because plugins and skills are loaded only when a session starts.
+- **Commits.** Each step ends with a commit whose subject is `Setup step <N>: <what was done>`, so the work done so far is safe and a new session finds where the setup stands with `git log --oneline | grep "Setup step"`. A step skipped by choice (for example no Superpowers) still gets a commit, which may be empty (`git commit --allow-empty`), saying so. A setup done by hand follows the same convention.
 - **Resuming.** After the restart, or in any later session, the setup continues with: *"Continue the setup from `vibe/README.md`: check which steps are already done and go on from there."*
-- **Final checks.** The checks of step 8 that ask the CLI what it loaded are meaningful only in a new session, started after the last commit.
+- **Final checks.** The checks of step 4 that ask the CLI what it loaded are meaningful only in a new session, started after the last commit.
 
-The same prompt works for a developer joining an existing project: the CLI finds steps 1 and 3–7 already in the repository (from the `Setup step` commits, or from the files when the project has none) and only asks the developer to confirm them.
+The same prompt works for a developer joining an existing project: the CLI finds steps 1 and 3 already in the repository (from the `Setup step` commits, or from the files when the project has none) and only asks the developer to confirm them.
 
 ---
 
@@ -239,185 +235,18 @@ Some principles for filling it in:
 
 ---
 
-## 4. Add the project skills
-
-A skill is a folder with a `SKILL.md`: instructions, and optionally scripts and references, that the agent loads only when a task needs them. Project skills live in `.agents/skills/<name>/SKILL.md`, the [Agent Skills](https://agentskills.io) folder read by Codex, Antigravity and OpenCode. Claude Code reads the same files through the `.claude/skills` symlink, so each skill is written once.
-
-Part of the template:
-
-- `wiki-ingest`, `wiki-query`, `wiki-health`, `wiki-lint` — maintain and query the second brain in `docs/second-brain/`
-
-Further skills depend on the project's stack and kind of work, for example:
-
-| Need | Skill | Source |
-|---|---|---|
-| Python | `python-pro` (type hints, async, pytest, mypy strict, black and ruff) | [Jeffallan/claude-skills](https://github.com/Jeffallan/claude-skills/tree/main/skills/python-pro) |
-| Flutter | `flutter-expert` | [Jeffallan/claude-skills](https://github.com/Jeffallan/claude-skills/tree/main/skills) |
-| Web front ends | `webapp-testing` (checks the UI in a real browser with Playwright) | [anthropics/skills](https://github.com/anthropics/skills/tree/main/skills/webapp-testing) |
-| Other stacks | the collections | [anthropics/skills](https://github.com/anthropics/skills), [Jeffallan/claude-skills](https://github.com/Jeffallan/claude-skills) |
-
-A skill is added by copying its whole folder (`SKILL.md` and everything next to it, licence included) into `.agents/skills/`, then read and committed. A skill is a set of instructions the agent will follow, so it is read before being committed, like code.
-
-**Other CLIs:** Copilot CLI and Gemini CLI use their own folders (see the table in step 0); they are pointed at the same files where they allow it, or the files are copied.
-
----
-
-## 5. Keep or remove the reviewer agents (subagents)
-
-A subagent is a specialised assistant the main agent hands a task to. It has its own instructions and starts with a clean context, so it can, for example, review code without the bias of having written it.
-
-**One folder for the agents.** Agent definitions live in `.agents/agents/<name>.md`, next to `.agents/skills/`: one Markdown file per agent, with a YAML frontmatter and the instructions as its body. Each CLI reads them from its own folder (see the *Agents* column in step 0), which is a symlink to `.agents/agents/` wherever the format allows it:
-
-- Claude Code reads `.claude/agents`, a symlink already in the template
-- OpenCode reads `.opencode/agents`, a symlink created when OpenCode is used:
-
-```bash
-mkdir -p .opencode && ln -s ../.agents/agents .opencode/agents
-```
-
-Unlike `.agents/skills/`, which the CLIs read as a standard, `.agents/agents/` is a convention of this template, held together by the symlinks.
-
-**A frontmatter the CLIs share.** The CLIs agree on the Markdown body, not on the frontmatter: tool names, permissions and models differ from one CLI to the next. A shared definition therefore keeps only the fields they have in common:
-
-```markdown
----
-name: code-reviewer
-description: Reviews code changes for correctness, security and maintainability. Use after a feature or a fix is implemented.
-mode: subagent
----
-
-You are a senior code reviewer. …
-```
-
-`name` and `description` tell every CLI what the agent is and when to use it; `mode: subagent` is needed by OpenCode. Without `tools` and `model`, each CLI gives the agent its default tools and model. The price is that the tools of an agent cannot be restricted in the shared file: a reviewer that must only read says so in its instructions.
-
-**The reviewers that come with the template.** `.agents/agents/` already holds the three reviewers of the [quality reviews](#quality-reviews): `code-reviewer`, `architect-reviewer` and `ui-ux-tester`. They derive from the [VoltAgent subagents collection](https://github.com/VoltAgent/awesome-claude-code-subagents/tree/main/categories) (MIT licence; origin and licence text in `.agents/THIRD_PARTY_NOTICES.md`), downloaded at commit `ed74d115b7fb7026a22a4f816a8e3250f425e3b4`, reduced to the shared frontmatter, and trimmed of what assumes a specific stack, tool or MCP server. Keep or remove:
-
-- Keep `code-reviewer` and `architect-reviewer`.
-- Remove `ui-ux-tester` (`rm .agents/agents/ui-ux-tester.md`) if the project has no UI. The guide is not edited: it belongs to the template (see *Keeping the environment up to date*), and the list in [quality reviews](#quality-reviews) already says the tester runs only where it was kept.
-- Read all three once. They are generic on purpose; add the project's own rules to their instructions where a review needs them.
-
-Updating is a deliberate download at a new commit, never a download of `main`, so it is clear what was installed and nothing changes underneath. Download the reference definition of the agent to a scratch folder, compare it with the commit recorded in the notices file, read the diff, carry over only what applies to this project, and record the new commit in `.agents/THIRD_PARTY_NOTICES.md`:
-
-```bash
-REF=<commit SHA of the collection>
-curl -fsSL "https://raw.githubusercontent.com/VoltAgent/awesome-claude-code-subagents/$REF/categories/04-quality-security/code-reviewer.md" -o "$(mktemp -d)/code-reviewer.md"
-```
-
-The reference definitions are in Claude Code's format: a new version is reduced again to the shared frontmatter (`tools` and `model` removed, `mode: subagent` added).
-
-**Other CLIs:**
-
-- Codex reads TOML files from `.codex/agents/`, so it cannot share the Markdown files. Each definition gets a converted copy, `.codex/agents/<name>.toml`, with `name`, `description`, and the Markdown body as `developer_instructions`. The Markdown file stays the source: the copy is regenerated whenever it changes, and an AI coding CLI can do the conversion.
-- Gemini CLI reads Markdown files from `.gemini/agents/`. A `.gemini/agents` symlink to `.agents/agents` should work, but it has not been tried with the shared frontmatter: `/agents` in Gemini CLI shows whether the agents are loaded.
-- GitHub Copilot uses `.agent.md` files in `.github/agents/`; check its docs.
-
-Only the agents the project actually uses are added, one file each; a whole collection is never installed.
-
----
-
-## 6. Configure the MCP servers
-
-MCP servers give the agent access to external systems: GitHub issues and pull requests, up-to-date library documentation, databases, browsers, mail, calendars, documents. A server is added only when the project needs it: each one is more context for the agent and more access to keep under control.
-
-In Claude Code, the project's servers are in `.mcp.json` at the repository root, committed so the whole team gets them. The file is created with the first server, by hand or with `claude mcp add --scope project …`:
-
-```json
-{
-  "mcpServers": {
-    "example": {
-      "command": "npx",
-      "args": ["-y", "example-mcp-server"],
-      "env": { "EXAMPLE_TOKEN": "${EXAMPLE_TOKEN}" }
-    }
-  }
-}
-```
-
-- **No secrets in the file.** It refers to environment variables (`${EXAMPLE_TOKEN}`), set in the shell or in an ignored `.env`.
-- **Project and personal servers are kept apart.** Servers the whole team needs go in the project file; servers only one developer uses (their mail, their calendar) go in that developer's user configuration.
-- **Only trusted servers.** A server runs code on the developer's machine and can act on the systems it reaches: official servers from the vendor of the system are preferred.
-
-Servers can be found in the [MCP registry](https://registry.modelcontextprotocol.io/) and on [mcpservers.com](https://mcpservers.com/).
-
-**Other CLIs:** each one has its own file and format (see the *MCP servers* column in step 0). The same servers are configured in every CLI the team uses.
-
----
-
-## 7. Set permissions and ignore local files
-
-The agent runs commands on the developer's machine. This step decides what it may do without asking, and keeps personal and generated files out of Git.
-
-**Permissions.** In Claude Code, the project's rules are in `.claude/settings.json`, next to the plugin setting. The template ships the file with the plugin setting only, and no permissions: this step adds them. Recommended:
-
-- a `deny` list for what every project should forbid: reading files with real secret values (`.env`, `.env.local`, `.env.production`, …; the committed templates `.env.example` and `.env.template` stay readable), and editing the source documents in `docs/second-brain/raw/`, which are immutable;
-- an `allow` list: the commands the agent runs all the time (tests, linters), so it does not stop to ask.
-
-```json
-{
-  "enabledPlugins": {
-    "superpowers@claude-plugins-official": true
-  },
-  "permissions": {
-    "allow": ["Bash(python3 -m unittest:*)"],
-    "deny": [
-      "Read(./**/.env)",
-      "Read(./**/.env.local)",
-      "Read(./**/.env.*.local)",
-      "Read(./**/.env.development)",
-      "Read(./**/.env.staging)",
-      "Read(./**/.env.production)",
-      "Edit(./docs/second-brain/raw/**)"
-    ]
-  }
-}
-```
-
-The allowed commands are those of the *Commands* section of `AGENTS.md`; a project with other secret files (keys, certificates, `secrets.*`) adds them to `deny`. The deny rules cover the agent's file tools, not every shell command, so they are a safety net, not a guarantee. Personal preferences go in `.claude/settings.local.json`, which is not committed. The agent is not run with all permission checks turned off on a developer's own machine; fully unattended runs belong in a container or a disposable cloud environment.
-
-**Other CLIs:** they have equivalent approval and sandbox modes, described in their docs.
-
-**Ignored files.** The template's `.gitignore` already lists the local files the AI tools create and the files with real secret values; the templates (`.env.example`, `.env.test.example`, `.env.template`, …) stay committed:
-
-```gitignore
-# AI coding tools: personal settings and local worktrees
-.claude/settings.local.json
-.claude/worktrees/
-.worktrees/
-
-# Secrets: real values stay local, templates are committed
-.env
-.env.*
-!.env*.example
-!.env*.template
-```
-
-This step adds what the project's stack generates (build output, dependency folders, IDE files) and the personal settings of any other CLI in use. Both `.gitignore` and `.claude/settings.json` are committed.
-
-**Secret scan.** Optionally, add a local pre-commit hook with [gitleaks](https://github.com/gitleaks/gitleaks), so a secret is caught before it is committed; the template does not install one. With the [pre-commit](https://pre-commit.com) tool, add this to `.pre-commit-config.yaml` and run `pre-commit install`:
-
-```yaml
-repos:
-  - repo: https://github.com/gitleaks/gitleaks
-    rev: v8.30.1
-    hooks:
-      - id: gitleaks
-```
-
----
-
-## 8. Verify the setup
+## 4. Verify the setup
 
 These checks run from the repository root after the previous steps; each one that passes ticks the setup checklist.
 
-1. **Symlinks.** `ls .claude/skills/` lists `wiki-health`, `wiki-ingest`, `wiki-lint`, `wiki-query` and the skills added in step 4; `ls .claude/agents/` lists the agents kept in step 5. If either fails, or shows a file instead of a folder, see *Symlinks on Windows* in step 1.
+1. **Symlinks.** `ls .claude/skills/` lists `wiki-health`, `wiki-ingest`, `wiki-lint` and `wiki-query`; `ls .claude/agents/` lists `architect-reviewer`, `code-reviewer` and `ui-ux-tester`. If either fails, or shows a file instead of a folder, see *Symlinks on Windows* in step 1.
 2. **GitHub CLI.** `gh auth status` reports a logged-in account.
 3. **Instructions file.** In the AI coding CLI, the question *"Which instructions file did you load, and which sections are still Not defined yet?"* gets an answer that comes from `AGENTS.md`, directly or through `CLAUDE.md`/`GEMINI.md`.
 4. **Rules applied.** The question *"Which libraries may you add to this project?"* gets the allow-list of `AGENTS.md` back, or the answer that there is none yet.
-5. **Skills and Superpowers.** The question *"Which skills are available?"* lists the four `wiki-*` skills, the skills of step 4 and the Superpowers skills (`brainstorming`, `writing-plans`, `test-driven-development`, …). In Claude Code, typing `/` shows them as slash commands.
+5. **Skills and Superpowers.** The question *"Which skills are available?"* lists the four `wiki-*` skills and the Superpowers skills (`brainstorming`, `writing-plans`, `test-driven-development`, …). In Claude Code, typing `/` shows them as slash commands.
 6. **Second brain.** `/wiki-health` (in Codex `$wiki-health`; in any CLI just `health`) reports, on a new repository, an empty wiki with no errors.
-7. **Agents** (step 5). The CLI's list of subagents includes `code-reviewer`, `architect-reviewer` and, unless it was removed for a project without a UI, `ui-ux-tester`.
-8. **MCP servers** (if configured in step 6). In Claude Code, `claude mcp list` shows each server of `.mcp.json` as connected; other CLIs have an equivalent command.
+7. **Agents.** The CLI's list of subagents includes `code-reviewer`, `architect-reviewer` and `ui-ux-tester`.
+8. **MCP servers** (if the project has any). In Claude Code, `claude mcp list` shows each server of `.mcp.json` as connected; other CLIs have an equivalent command.
 9. **Nothing personal committed.** `git status` is clean, and `git ls-files | grep -E 'settings\.local|(^|/)\.env($|\.)' | grep -vE '\.(example|template)$'` prints nothing.
 
 ---
@@ -436,11 +265,11 @@ Once the environment is set up, the work follows a loop:
 
 ### Quality reviews
 
-As the code grows, the reviewers of step 5 are run on it, each as a subagent rather than inline, so that it reviews with a fresh context. Each review is saved:
+As the code grows, the reviewer agents in `.agents/agents/` are run on it, each as a subagent rather than inline, so that it reviews with a fresh context. Each review is saved:
 
 - `code-reviewer` → `docs/reviews/<YYYY-MM-DD>-code-reviewer.md`
 - `architect-reviewer` → `docs/reviews/<YYYY-MM-DD>-architect-reviewer.md`
-- `ui-ux-tester`, if the project kept it (step 5) → `docs/reviews/<YYYY-MM-DD>-ui-ux-tester.md`
+- `ui-ux-tester`, if the project has a UI → `docs/reviews/<YYYY-MM-DD>-ui-ux-tester.md`
 
 The findings are new work items: they go back to the first point of the loop.
 
@@ -464,7 +293,7 @@ The rule behind the left column is in `AGENTS.md` (*Commit AI-tooling folders to
 
 ## Keeping the environment up to date
 
-- **CLIs and plugins** change often: they are updated every few weeks, followed by the checks of step 8.
+- **CLIs and plugins** change often: they are updated every few weeks, followed by the checks of step 4.
 - **Skills and agents** copied from collections do not update by themselves: an update is a deliberate change, with the diff read before it is committed.
 - **`AGENTS.md`** grows with the project: a section is filled in as soon as it stops being *Not defined yet*, and every retrospective can add a rule.
 - **The template itself** changes over time; [`CHANGELOG.md`](CHANGELOG.md) lists what each version changes. A project brings in the changes it wants by hand.
