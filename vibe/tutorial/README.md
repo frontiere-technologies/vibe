@@ -33,9 +33,9 @@ Never merge a tutorial branch into your project's branches. When a lesson asks y
 
 ## Sample sources
 
-`examples/release-process.md` is a one-page fictional text (how a small team ships a change to its service), used by lesson 00.
+`raw-docs/orders-release-process.md` is a one-page text describing how the Orders team ships a change to `orders-api`, used by lesson 00.
 
-`examples/nasa_systems_engineering_handbook_0_excerpt_TRL.pdf` is a 15-page excerpt of the [NASA Systems Engineering Handbook (SP-2016-6105 Rev2)](https://www.nasa.gov/wp-content/uploads/2018/09/nasa_systems_engineering_handbook_0.pdf), with what the lessons need and nothing more (page numbers of the original PDF):
+`raw-docs/nasa_systems_engineering_handbook_0_excerpt_TRL.pdf` is a 15-page excerpt of the [NASA Systems Engineering Handbook (SP-2016-6105 Rev2)](https://www.nasa.gov/wp-content/uploads/2018/09/nasa_systems_engineering_handbook_0.pdf), with what the lessons need and nothing more (page numbers of the original PDF):
 
 - pages 1–2 — cover and imprint, to identify the document
 - page 8 — Preface: what the handbook is and how it evolved
@@ -54,7 +54,7 @@ Lessons copy the excerpt into `docs/second-brain/raw/` before ingesting it; it i
 
 | # | Lesson | Time | What you learn |
 |---|---|---|---|
-| 00 | [First steps with the wiki](00-first-steps-with-the-wiki.md) | ~10 min | Ingest a one-page text, look at the pages it becomes, ask the wiki a question; no code |
+| 00 | [Simple second brain: Orders release process](00-simple-second-brain-orders-release-process.md) | ~10 min | Ingest the Orders release process, look at the pages it becomes, ask the wiki a question; no code |
 | 01 | [From a document to tested code](01-from-document-to-code.md) | ~45 min | Ingest a source, query the wiki, set constraints in `AGENTS.md`, then the Superpowers workflow: design, plan, isolated branch, test-first implementation, finish; check the agent stays inside the rules |
 | 02 | [From a document to a web app](02-from-document-to-web-app.md) | ~90 min | Add a second stack (Flutter) to `AGENTS.md` with its own allow-list and layers; a responsive web app with a simulated back end that follows the library's contracts, seed content, tests at three widths; check design requests do not break the rules |
 
