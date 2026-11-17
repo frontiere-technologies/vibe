@@ -23,50 +23,13 @@ All of it is committed to Git: the environment is part of the project, not of on
 
 ---
 
-## Which steps apply
-
-| Situation | Steps |
-|---|---|
-| A new project started from this template | all of them, 0 to 4 |
-| A developer joining a project already started from this template | 0, 2 and 4. Steps 1 and 3 are already in the repository, to be cloned and checked |
-| A second AI coding CLI added to the project | 0 for the new CLI, the *Other CLIs* notes of step 2, then 4 |
-| A first trial of the approach | Create a throwaway repository from the template (step 1, without the adaptations), do steps 0–2, then follow the [tutorial](https://github.com/frontiere-technologies/vibe/tree/development/vibe/tutorial) there |
-
 ## Setup checklist
 
 0. [ ] Install the prerequisites: `git`, `gh`, an AI coding CLI
 1. [ ] Bootstrap the repository from this template
-2. [ ] Install the Superpowers workflow plugin
+2. [ ] Install the Superpowers workflow plugin (recommended)
 3. [ ] Fill in the instructions file (`AGENTS.md`)
 4. [ ] Verify the setup
-
-## Setup run by the AI coding CLI
-
-The steps can be followed by hand, or run by the AI coding CLI itself: it reads this guide, runs the commands, and asks the developer for every decision. Only what the CLI cannot do on its own stays with the developer.
-
-Before the CLI can take over, the developer installs `git`, `gh` and one AI coding CLI and logs in to them (a CLI cannot install itself), then creates the project's repository from the template (step 1) and starts the CLI in it:
-
-```bash
-gh repo create my-project --template frontiere-technologies/vibe --private --clone
-cd my-project
-claude      # or: codex, gemini, opencode, …
-```
-
-The setup starts with one prompt, the same in every CLI:
-
-> "Run the setup from `vibe/README.md`, step by step. Ask me whenever you need to decide something, and stop when an action of mine is needed."
-
-The prompt works in any language, for example in Italian: *"Esegui il setup partendo da `vibe/README.md`, passo per passo. Fammi le domande quando devi decidere qualcosa, e fermati quando serve un'azione mia."*
-
-What happens next:
-
-- **Questions.** The CLI asks for every decision, one at a time: the licence, whether to remove the template's tutorial, the sections of `AGENTS.md` (stack, commands, approved libraries, tests, boundaries).
-- **Pauses for the developer.** The CLI stops for what only the developer can do: the interactive logins (`gh auth login`) and the restart after step 2, because plugins and skills are loaded only when a session starts.
-- **Commits.** Each step ends with a commit whose subject is `Setup step <N>: <what was done>`, so the work done so far is safe and a new session finds where the setup stands with `git log --oneline | grep "Setup step"`. A step skipped by choice (for example no Superpowers) still gets a commit, which may be empty (`git commit --allow-empty`), saying so. A setup done by hand follows the same convention. The setup commits go straight to the default branch: they write the rules, so the *Git workflow* of `AGENTS.md` (one branch per change, a commit body that says why) applies from the first change after the setup.
-- **Resuming.** After the restart, or in any later session, the setup continues with: *"Continue the setup from `vibe/README.md`: check which steps are already done and go on from there."*
-- **Final checks.** The checks of step 4 that ask the CLI what it loaded are meaningful only in a new session, started after the last commit.
-
-The same prompt works for a developer joining an existing project: the CLI finds steps 1 and 3 already in the repository (from the `Setup step` commits, or from the files when the project has none) and only asks the developer to confirm them.
 
 ---
 
@@ -90,11 +53,6 @@ The CLIs change often: where a cell and the tool's docs disagree, the docs win, 
 
 The login uses a personal or organisation account: a subscription login, or an API key kept in the shell or the system keychain. Keys are never stored in a file of the repository.
 
-Optional tools:
-
-- [`markitdown`](https://github.com/microsoft/markitdown) (`pip install 'markitdown[all]'`), to ingest `.docx`, `.pptx`, `.xlsx` and other binary files into the second brain (see `docs/second-brain/SCHEMA.md`)
-- [`uv`](https://docs.astral.sh/uv/), if the project has Python code; Python is then run through `uv run …` rather than by calling `python`/`pip` directly
-
 A quick check of what is installed:
 
 ```bash
@@ -106,23 +64,16 @@ claude --version        # or: codex --version, gemini --version, opencode --vers
 
 ## 1. Bootstrap the repository
 
-This repository is a [GitHub template](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template): a new project gets its own repository, created from the template's files, with a fresh history of its own (one initial commit) and no link back to the template.
-
-From the command line, with `gh` logged in:
+This repository is a [GitHub template](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template). A new project gets its own repository from it, with a fresh history:
 
 ```bash
 gh repo create my-project --template frontiere-technologies/vibe --private --clone
 cd my-project
 ```
 
-- `my-project` is created under the logged-in account; `my-org/my-project` creates it under an organisation.
-- `--private` can be `--public` or `--internal` (organisations only); `gh` needs one of them when it is given the name on the command line.
-- `--clone` clones the new repository into `./my-project`. Without it, the repository is only created on GitHub, and is cloned later with `gh repo clone my-project`.
-- Only the template's default branch is copied; the template's other branches, if any, are not.
+On GitHub, the same is **Use this template → Create a new repository** on the template's page.
 
-The same can be done on GitHub: **Use this template → Create a new repository** on the template's page, then `gh repo clone <owner>/my-project`.
-
-Outside GitHub (GitLab, Bitbucket, a local-only project), or with `git` alone, the template is cloned and given a fresh history by hand, then pushed to the project's own remote, an empty repository created beforehand on the hosting service:
+Outside GitHub, or with `git` alone, the template is cloned and given a fresh history by hand:
 
 ```bash
 git clone https://github.com/frontiere-technologies/vibe.git my-project
@@ -130,23 +81,6 @@ cd my-project
 rm -rf .git && git init && git add -A && git commit -m "Start the project from the vibe template"
 git remote add origin <url-of-the-empty-repository>
 git push -u origin HEAD
-```
-
-A local-only project skips the last two lines.
-
-The new repository is ready to use: the second brain is empty, `AGENTS.md` has its project sections still to fill in, and there is no sample code or data. What still describes the template rather than the project is then adapted:
-
-- the root `README.md` — a skeleton for the project's README, whose sections are filled in
-- `LICENSE` — by default the MIT licence with the project's own copyright line: the setup asks for the copyright holder (a person or an organisation; the git user or organisation is a hint, there is no default name) and rewrites `Copyright (c) <year> <holder>`, so the template author's name does not stay in the project. Any other licence the project chooses replaces the file. `.agents/THIRD_PARTY_NOTICES.md` stays with the skills and agents: the `wiki-*` skills, the second brain and the reviewer agents derive from MIT-licensed work, and the licence's only condition is that its notice stays with every copy (see the provenance note at the end of each skill)
-- the code folders — `sources/` ships with `microservices/`, `libraries/`, `devops/` and `tests/e2e/`, described in [`sources/README.md`](../sources/README.md); the empty ones hold a `.gitkeep` file so Git tracks them. The setup leaves them as they are. It is a generic, standard layout, and keeping it is recommended even for a project with a single web application (one microservice). A project of a different kind can rename or remove the folders later, for example `lib/` + `test/` + `example/` for a published library, `notebooks/` + `data/` + `pipelines/` for data work, and then updates *Layout* in `AGENTS.md` and *Project structure* in the root `README.md`. The code folder `sources/` is not the wiki's `docs/second-brain/wiki/sources/`, which holds summaries of source documents
-- `vibe/tutorial/` — removed with `git rm -r vibe/tutorial`. The lessons are for learning the template, not part of a project; they stay in the [template repository](https://github.com/frontiere-technologies/vibe/tree/development/vibe/tutorial). Keep the folder only to do the lessons in this project itself, on throwaway branches (see its README)
-
-The rest of `vibe/` stays: this guide and the [second brain guide](second-brain.md) remain part of the project.
-
-The template as it was copied is already the first commit of the new repository, so every later change can be compared with it. The adaptations above are committed on top of it, before the agent starts on the project's own work:
-
-```bash
-git add -A && git commit -m "Setup step 1: adapt the vibe template to the project"
 ```
 
 ### Symlinks on Windows
@@ -166,37 +100,9 @@ The same applies to any other symlink added later, such as `.opencode/agents`. F
 
 ## 2. Install the Superpowers workflow plugin
 
-Verified with Superpowers 7.0.0.
+[Superpowers](https://github.com/obra/superpowers) is the recommended workflow for every non-trivial change: design before code, a plan, tests before code, review. It is not required, and the template does not preconfigure it: the rest of the template works without it. To install it, follow the [Superpowers documentation](https://github.com/obra/superpowers), which covers Claude Code and the other CLIs it supports. Superpowers saves its specs and plans in `docs/superpowers/`, which is committed.
 
-[Superpowers](https://github.com/obra/superpowers) provides the workflow used for every non-trivial change: design before code, and tests before code. It is the recommended workflow, not a requirement: the rest of the template (the second brain, `AGENTS.md`, the skills and the agents) works without it. Superpowers creates `docs/superpowers/` the first time it saves a spec or a plan; the template does not ship the folder.
-
-**Without Superpowers.** A project that does not use Superpowers can use a different harness: another workflow plugin or framework for the AI coding CLI, or the team's own process written down. One alternative is the material of [AI Hero](https://www.aihero.dev/), a site on AI engineering for developers. Whatever it is, the harness should cover the same ground (design before code, a plan, tests before code, review), and the choice is recorded in `AGENTS.md` (*Git workflow* and *Definition of done*), so every developer and every CLI follows it. Where the harness saves its documents, under `docs/`, they are committed like Superpowers' specs and plans.
-
-In Claude Code, the plugin is enabled for the project in `.claude/settings.json`, which is committed:
-
-```json
-{
-  "enabledPlugins": {
-    "superpowers@claude-plugins-official": true
-  }
-}
-```
-
-The template already contains this file, so Claude Code offers to install the plugin when the project is first opened. In a repository without the file, `claude plugin install superpowers@claude-plugins-official --scope project` writes it, and the file is then committed.
-
-**Other CLIs:** Superpowers has ports for some of them, installed as described in their READMEs. Without a port, the same steps can be followed as a written process, asking the agent for each one by name.
-
-The workflow has one skill per step:
-
-1. `brainstorming` — questions one at a time, until the idea is a design document the developer approves; no code before that
-2. `using-git-worktrees` — the work moves to its own branch, in a separate worktree
-3. `writing-plans` — the design becomes small tasks with exact files, tests and commands
-4. `subagent-driven-development` or `executing-plans` — the tasks are built one by one: by a fresh subagent per task, with a review after each one and one of the whole branch at the end, or by the session itself, with one review of the whole branch at the end
-5. `test-driven-development` — for every task: failing test, then code, then passing test, then commit
-6. `requesting-code-review` — the work is reviewed against the plan before going on
-7. `finishing-a-development-branch` — the tests run again, then the branch is merged, opened as a pull request, or kept
-
-This sequence is the default for features and bug fixes; it is skipped only for truly trivial changes, such as a typo or a version bump.
+A project that does without Superpowers can use another harness, such as [AI Hero](https://www.aihero.dev/), or the team's own written process covering the same ground, and records the choice in `AGENTS.md` (*Git workflow* and *Definition of done*).
 
 ---
 
@@ -243,7 +149,7 @@ These checks run from the repository root after the previous steps; each one tha
 2. **GitHub CLI.** `gh auth status` reports a logged-in account.
 3. **Instructions file.** In the AI coding CLI, the question *"Which instructions file did you load, and which sections are still Not defined yet?"* gets an answer that comes from `AGENTS.md`, directly or through `CLAUDE.md`/`GEMINI.md`.
 4. **Rules applied.** The question *"Which libraries may you add to this project?"* gets the allow-list of `AGENTS.md` back, or the answer that there is none yet.
-5. **Skills and Superpowers.** The question *"Which skills are available?"* lists the four `wiki-*` skills and the Superpowers skills (`brainstorming`, `writing-plans`, `test-driven-development`, …). In Claude Code, typing `/` shows them as slash commands.
+5. **Skills.** The question *"Which skills are available?"* lists the four `wiki-*` skills and, when Superpowers is installed, its skills (`brainstorming`, `writing-plans`, `test-driven-development`, …). In Claude Code, typing `/` shows them as slash commands.
 6. **Second brain.** `/wiki-health` (in Codex `$wiki-health`; in any CLI just `health`) reports, on a new repository, an empty wiki with no errors.
 7. **Agents.** The CLI's list of subagents includes `code-reviewer`, `architect-reviewer` and `ui-ux-tester`.
 8. **MCP servers** (if the project has any). In Claude Code, `claude mcp list` shows each server of `.mcp.json` as connected; other CLIs have an equivalent command.
@@ -280,7 +186,7 @@ The findings are new work items: they go back to the first point of the loop.
 | Committed (shared by the team) | Not committed (personal or generated) |
 |---|---|
 | `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, nested `AGENTS.md` files | `.claude/settings.local.json` and the other CLIs' personal settings |
-| `.claude/settings.json` (plugins, permissions) | user configuration (`~/.claude/`, `~/.codex/`, …) |
+| `.claude/settings.json`, when the project has one (plugins, permissions) | user configuration (`~/.claude/`, `~/.codex/`, …) |
 | `.agents/skills/` and `.agents/agents/`, with their symlinks (`.claude/skills`, `.claude/agents`, `.opencode/agents`, …) | credentials and API keys, `.env` files |
 | converted agent copies (`.codex/agents/`) | worktrees (`.claude/worktrees/`, `.worktrees/`) |
 | `.mcp.json` and the other CLIs' project MCP files, without secrets | build output and dependency folders |
